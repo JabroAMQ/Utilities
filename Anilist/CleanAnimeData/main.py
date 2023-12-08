@@ -4,8 +4,8 @@ import json
 from typing import Any, Final
 
 # Modify constants if needed
-INPUT_DIRECTORY : Final = os.getcwd()
-OUTPUT_DIRECTORY : Final = os.path.join(INPUT_DIRECTORY, 'Output')
+INPUT_DIRECTORY : Final[str] = os.getcwd()
+OUTPUT_DIRECTORY : Final[str] = os.path.join(INPUT_DIRECTORY, 'Output')
 
 
 def get_json_file(directory : str) -> dict | None:
