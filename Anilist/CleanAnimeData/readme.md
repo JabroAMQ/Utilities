@@ -34,7 +34,7 @@ This script will remove all your custom lists and, for each anime, the next data
 
 # Requirements
 
-Python3.9+
+Python3.10+
 
 
 # How to use
