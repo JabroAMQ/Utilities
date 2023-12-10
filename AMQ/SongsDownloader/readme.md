@@ -37,9 +37,10 @@ python main.py
 
 ## "Duplicates"
 
-As you can see in the image above, the mp3s are downloaded with file name "ANIME_NAME SONG_TYPE NUMBER". If you were to download Gintama's OP 1, and then Gintama's OP 1 rebroad, the original OP 1 file will be overwriten as the file name would be the same.
-
-This is specially annoying for the Inserts case, as trying to download any 2 inserts from the same anime will overwrite the first one.
+> [!NOTE]
+> As you can see in the image above, the mp3s are downloaded with file name "ANIME_NAME SONG_TYPE NUMBER".
+> If you were to download Gintama's OP 1, and then Gintama's OP 1 rebroad, the original OP 1 file will be overwriten as the file name would be the same.
+> This is specially annoying for the Inserts case, as trying to download any 2 inserts from the same anime will overwrite the first one.
 
 You could solve this issue by modifying the content of the "demo.txt" file before executing the script so that the "Anime name" (first field) of the "duplicated" is different.
 
@@ -60,11 +61,17 @@ def save_as_mp3(anime_name : str, song_url : str, song_name : str, song_artist :
 
 ## AMQ Script
 
-The AMQ script used to obtain the "demo.txt" data will always download a "demo.txt" file after a game round has ended while it is active. You may want to turn it off when you are not planning to download the songs, or ideally, modify it so that the "demo.txt" file is only downloaded when requested by the user (i.e. clicking a button that will have to be added to the UI).
+> [!NOTE]
+> The AMQ script used to obtain the "demo.txt" data will always download a "demo.txt" file after a game round has ended while it is active.
+
+You may want to turn it off when you are not planning to download the songs, or ideally, modify it so that the "demo.txt" file is only downloaded when requested by the user (i.e. clicking a button that will have to be added to the UI).
 
 ## Catbox
 
-[Catbox](https://catbox.moe/), the site from where the songs are downloaded from, doesn't seem to rate limit your requests directly, but please do not try to download hundreds of songs at once. If you are going to, plase modify the [main.py](main.py) file to wait a bit between songs downloading.
+> [!NOTE]
+> [Catbox](https://catbox.moe/), the site from where the songs are downloaded from, doesn't seem to rate limit your requests directly, but please do not try to download hundreds of songs at once.
+
+If you are going to, plase modify the [main.py](main.py) file to wait a bit between songs downloading.
 
 Something like:
 
