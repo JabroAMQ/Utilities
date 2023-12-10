@@ -1,6 +1,6 @@
 # Script description
 
-Given a txt file like [songsInfo.txt](songsInfo.txt), which contain some song's info obtained using Spitzell's AMQ script ([AMQSongInfoDownloader](AMQSongInfoDownloader.js)), download the songs from the file in MP3 format while tagging them with song name and artist info:
+Given a txt file like [songsInfo.txt](songsInfo.txt), which contain some song's info obtained using Spitzell's AMQ script ([AMQSongInfoDownloader](AMQSongInfoDownloader.user.js)), download the songs from the file in MP3 format while tagging them with song name and artist info:
 
 ![OutputExample](images/output.png)
 
@@ -21,7 +21,7 @@ Given a txt file like [songsInfo.txt](songsInfo.txt), which contain some song's 
 
 # How to use
 
-- Install Spitzell's [AMQSongInfoDownloader](AMQSongInfoDownloader.js) with [Tampermonkey](https://www.tampermonkey.net/) (or any other alternative option) as you would with any other AMQ script.
+- Install Spitzell's [AMQSongInfoDownloader](AMQSongInfoDownloader.user.js) with [Tampermonkey](https://www.tampermonkey.net/) (or any other alternative option) as you would with any other AMQ script.
 
 - Play an AMQ game while having Spitzell's AMQ script active. Once the game ends, the "songsInfo.txt" file will automatically be downloaded (in your default Downloads directory) with the information of all the songs that played during the game you just played.
 
