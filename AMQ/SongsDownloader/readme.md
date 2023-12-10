@@ -9,11 +9,14 @@ Given a txt file like [demo.txt](demo.txt), which contain some song's info obtai
 
 - Python3.9+
 
-- Third-party modules are also used. You can check them in the [requirements.txt](requirements.txt) file and automatically install them through `pip`:
+- Third-party modules are also used. You can check them in the [requirements.txt](requirements.txt) file.
 
-```
-pip install -r requirements.txt
-```
+> [!TIP]
+> You can automatically install them through `pip`:
+> 
+> ```
+> pip install -r requirements.txt
+> ```
 
 
 # How to use
