@@ -2,7 +2,8 @@
 
 Given a JSON with the data from an **anime list** (not manga) obtained as a result of exporting an Anilist's anime list using automail, cleans some media fields so that the anime list can be reimported or imported to another anilist account without the cleaned data.
 
-It is recommended that even if you want to reimport the data in your original account, to import it in a different one to make sure you are not cleaning some info that you would like to keep.
+> [!WARNING]
+> It is recommended that even if you want to reimport the data in your original account, to import it in a different one to make sure you are not cleaning some info that you would like to keep.
 
 
 # Cleaned data
