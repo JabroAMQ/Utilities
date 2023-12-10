@@ -10,10 +10,9 @@ Retrieve some (custom) info from all of Anilist's animes using their API and sav
 
 > [!TIP]
 > You can automatically install them through `pip`:
-
-```
-pip install -r requirements.txt
-```
+> ```
+> pip install -r requirements.txt
+> ```
 
 # How to use
 
