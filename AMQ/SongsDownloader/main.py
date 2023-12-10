@@ -9,7 +9,7 @@ import eyed3
 
 
 # Modify constants if needed
-INPUT_FILE_PATH : Final[str] = os.path.join(os.getcwd(), 'demo.txt')
+INPUT_FILE_PATH : Final[str] = os.path.join(os.getcwd(), 'songsInfo.txt')
 OUTPUT_DIRECTORY_PATH : Final[str] = os.path.join(os.getcwd(), 'output')
 
 
@@ -65,10 +65,6 @@ def process_anime_name(anime_name: str, song_type: str) -> str:
     elif ':' in anime_name:
         anime_name = anime_name.replace(':', ' -') + '-'
 
-    # If Song type == IN, remove number as it is always 0 (IN 0 --> IN)
-    if song_type.lower().startswith('in'):
-        song_type = song_type[:2]
-
     # We add song type to anime name
     anime_name = f'{anime_name.strip()} {song_type}'
     return anime_name
@@ -79,8 +75,7 @@ def save_as_mp3(anime_name : str, song_url : str, song_name : str, song_artist :
     output_file_path = os.path.join(OUTPUT_DIRECTORY_PATH, f'{anime_name}.mp3')
     print(f'Downloading: {anime_name} || {song_name} || {song_artist}')
 
-    # According to kitty you don't get rate limited so we can do the requests without having to
-    # wait between requests / catching 'too many requests' errors / getting IP banned
+    # According to kitty you don't get rate limited
     response = requests.get(song_url)
     with open(output_file_path, 'wb') as fd:
         fd.write(response.content)
