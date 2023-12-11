@@ -23,17 +23,26 @@ Given a txt file like [songsInfo.txt](songsInfo.txt), which contain some song's 
 
 - Install Spitzell's [AMQSongInfoDownloader](AMQSongInfoDownloader.user.js) with [Tampermonkey](https://www.tampermonkey.net/) (or any other alternative option) as you would with any other AMQ script.
 
-- Play an AMQ game while having Spitzell's AMQ script active. Once the game ends, the "songsInfo.txt" file will automatically be downloaded (in your default Downloads directory) with the information of all the songs that played during the game you just played.
+- When you are in an AMQ game, a "download" button will appear:
 
-- Copy the content of the downloaded "songsInfo.txt" file and paste it into the "songsInfo.txt" file from this repository.
+![DownloadButton](images/download_button.png)
 
-- Execute this script with python once the "songsInfo.txt" file from this repository contains the information of the desired songs to be downloaded as MP3s.
+- When you click on it, the "songsInfo.txt" file will be downloaded (in your default Downloads directory) with the information of all the songs that played.
+
+> [!IMPORTANT]
+> You can modify how the AMQ script behaves from the own userscript:
+>
+> ![ScriptConfiguration](images/configuration.png)
+
+- Copy the content of the downloaded "songsInfo.txt" file and paste it into the "songsInfo.txt" file from this directory.
+
+- Execute [main.py](main.py) with python once the "songsInfo.txt" file from this directory contains the information of the desired songs to be downloaded as MP3s.
 
 ```
 python main.py
 ```
 
-- A subdirectory called "output" will be created, containing all the downloaded songs as MP3s, just like in the image above.
+- A subdirectory called "output" will be created, containing all the downloaded songs as MP3s, just like in the image shown at the beginning of this document.
 
 
 # Limitations
@@ -61,13 +70,6 @@ def save_as_mp3(anime_name : str, song_url : str, song_name : str, song_artist :
 
     ...
 ```
-
-## AMQ Script
-
-> [!NOTE]
-> The AMQ script used to obtain the "songsInfo.txt" data will always download a "songsInfo.txt" file after a game round has ended while it is active.
-
-You may want to turn it off when you are not planning to download the songs, or ideally, modify it so that the "songsInfo.txt" file is only downloaded when requested by the user (i.e. clicking a button that will have to be added to the UI).
 
 ## Catbox
 
