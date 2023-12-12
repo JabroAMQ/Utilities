@@ -20,10 +20,18 @@ const DOMAIN = 'https://nl.catbox.video/';
 
 
 // MODIFY THE NEXT VALUES IF YOU WANT TO
-// Whether songs info is downloaded automatically each time a quiz ends (no need to click the in-game button)
-const ALWAYS_DOWNLOAD_ON_QUIZ_OVER = false
 // Whether songs info is reseted when a new quiz starts (avoid downloading songs info from previous rounds)
 const CLEAR_SONGS_INFO_ON_NEW_QUIZ = false  // songs info will always clear if closing/refreshing the AMQ browser tab
+// Whether songs info is downloaded automatically each time a quiz ends by reaching the last song
+const ALWAYS_DOWNLOAD_ON_QUIZ_OVER = false
+// Whether songs info is downloaded automatically each time a quiz ends by a successfull returning to lobby vote
+// TODO const ALWAYS_DOWNLOAD_ON_RETURNING_TO_LOBBY = false
+// Whether songs info is downloaded automatically when you manually leaves the lobby
+// TODO const ALWAYS_DOWNLOAD_ON_LEAVING_LOBBY = false
+// Whether songs info is downloaded automatically when you are kicked from the lobby
+// TODO const ALWAYS_DOWNLOAD_WHEN_BEING_KICKED = false
+// Whether songs info is downloaded automatically during a server restart
+// TODO const ALWAYS_DOWNLOAD_WHEN_SERVER_RESTART = false
 
 
 // DO NOT MODIFY ANYTHING FROM HERE
@@ -68,8 +76,7 @@ function setupDownloadButton() {
 	    });
 
     // '#qpOptionContainer' is the in-game container where you can check song list, settings, modify volume, etc.
-    // We simply add our button at the last (left) position of this container.
-    // As this container is only visible when a game is active, we don't need to configure anything else
+    // We simply add our button at the last (left) position of this container (only visible when a game is active)
     let currentWidth = $('#qpOptionContainer').width();
     let extraWidth = downloadButtonWidth + downloadButtonMarginRight;
     $('#qpOptionContainer').width(currentWidth + extraWidth);
