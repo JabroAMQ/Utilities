@@ -1,18 +1,28 @@
 # Script description
 
-Given a txt file like [songsInfo.txt](songsInfo.txt), which contain some song's info obtained using Spitzell's AMQ script ([AMQSongInfoDownloader](AMQSongInfoDownloader.user.js)), download the songs from the file in MP3 format while tagging them with song name and artist info:
+This script consist of 2 parts:
+
+- An userscript for AMQ ([AMQSongInfoDownloader.user.js](AMQSongInfoDownloader.user.js)) that allows you to download a txt file with some info about the songs that played while you were playing.
+
+- A python script ([main.py](main.py)) that takes as input the downloaded txt file, downloading all the songs from the file in MP3 format while tagging them with song name and artist info:
 
 ![OutputExample](images/output.png)
 
 
 # Requirements
 
+## Userscript
+
+- [Tampermonkey](https://www.tampermonkey.net/) (or any other alternative option) for installing the AMQ script.
+
+## Python script
+
 - Python3.9+
 
-- Third-party modules are also used. You can check them in the [requirements.txt](requirements.txt) file.
+- Third-party modules.
 
 > [!TIP]
-> You can automatically install them through `pip`:
+> You can check them in the [requirements.txt](requirements.txt) file and automatically install them through `pip`:
 > 
 > ```
 > pip install -r requirements.txt
@@ -21,22 +31,23 @@ Given a txt file like [songsInfo.txt](songsInfo.txt), which contain some song's 
 
 # How to use
 
-- Install Spitzell's [AMQSongInfoDownloader](AMQSongInfoDownloader.user.js) with [Tampermonkey](https://www.tampermonkey.net/) (or any other alternative option) as you would with any other AMQ script.
+## Userscript
 
-- When you are in an AMQ game, a "download" button will appear:
+- Join to an AMQ game. Once there, a "download" button will appear:
 
 ![DownloadButton](images/download_button.png)
 
-- When you click on it, the "songsInfo.txt" file will be downloaded (in your default Downloads directory) with the information of all the songs that played.
+- When you click on it, a file like [songsInfo.txt](songsInfo.txt) will be downloaded (in your default Downloads directory) with the information of all the songs that played while you were in the lobby.
 
-> [!IMPORTANT]
-> You can modify how the AMQ script behaves from the own userscript:
->
-> ![ScriptConfiguration](images/configuration.png)
+- You can also modify how the AMQ script behaves. Your configuration will automatically be applied and save for future sessions: 
 
-- Copy the content of the downloaded "songsInfo.txt" file and paste it into the "songsInfo.txt" file from this directory.
+![ScriptConfiguration](images/configuration.png)
 
-- Execute [main.py](main.py) with python once the "songsInfo.txt" file from this directory contains the information of the desired songs to be downloaded as MP3s.
+## Python script
+
+- Once you have downloaded your "songsInfo.txt" file, copy its content and paste it into the "songsInfo.txt" file from this directory.
+
+- Execute then the [main.py](main.py) script:
 
 ```
 python main.py
@@ -56,7 +67,7 @@ python main.py
 
 You could solve this issue by modifying the content of the "songsInfo.txt" file before executing the script so that the "Anime name" (first field) of the "duplicated" is different.
 
-Of course you could also modify the [main.py](main.py) file as well so that the files's name are not "ANIME_NAME SONG_TYPE NUMBER". For instance, adding some random substring at the end of the MP3's file name:
+Of course you could also modify the [main.py](main.py) file so that the files's name are not "ANIME_NAME SONG_TYPE NUMBER". For instance, adding some random substring at the end of the MP3's file name:
 
 ```
 import secrets                                                                                          # ADD THIS LINE
@@ -76,7 +87,7 @@ def save_as_mp3(anime_name : str, song_url : str, song_name : str, song_artist :
 > [!NOTE]
 > [Catbox](https://catbox.moe/), the site from where the songs are downloaded from, doesn't seem to rate limit your requests directly, but please do not try to download hundreds of songs at once.
 
-If you are going to, plase modify the [main.py](main.py) file to wait a bit between songs downloading.
+If you are going to, please modify the [main.py](main.py) file to wait a bit between songs downloading.
 
 Something like:
 
