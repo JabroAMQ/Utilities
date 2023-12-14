@@ -181,7 +181,7 @@ function createConfigWindow() {
     });
 
     configWindow.addPanel({
-        id: 'testConfigWindowPanel',
+        id: 'configWindowPanel',
         width: 1.0,
         height: 'calc(100%)',
         scrollable: { x: false, y: false }
