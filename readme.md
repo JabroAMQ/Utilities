@@ -2,9 +2,11 @@
 
 ## [Songs Downloader](AMQ/SongsDownloader/)
 
-Given a plain text file with information about some songs, download these songs in mp3 format while tagging them with song name and artist info.
+Contains:
 
-The repository also contains the AMQ script needed to obtain the plain text file with the songs info.
+- An userscript for AMQ that allows you to download a txt file with some info about the songs that played while you were playing.
+
+- A python script that takes as input the downloaded txt file, downloading all the songs from the file in MP3 format while tagging them with song name and artist info.
 
 
 # Anilist
