@@ -131,17 +131,15 @@ function setupListeners() {
     quizReadyListener = new Listener('quiz ready', () => {
         clearSongsInfo();
     });
-    if (clearSongsInfoOnNewQuiz) {
+    if (clearSongsInfoOnNewQuiz)
         quizReadyListener.bindListener();
-    }
 
     // Download the songs once the quiz is over
     quizOverListener = new Listener('quiz over', () => {
         downloadSongsInfo();
     });
-    if (autoDownloadOnQuizOver) {
+    if (autoDownloadOnQuizOver)
         quizOverListener.bindListener();
-    }
 }
 
 function updateClearSongsInfoOnNewQuizListener() {
@@ -237,10 +235,8 @@ function addSelectBox(label, options, onChangeCallback, defaultValue) {
                 'color': 'black'
             });
 
-        if (option === defaultValue) {
+        if (option === defaultValue)
             optionElement.attr('selected', 'selected');
-        }
-
         select.append(optionElement);
     });
 
