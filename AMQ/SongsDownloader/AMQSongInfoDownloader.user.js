@@ -28,7 +28,6 @@ TODO LIST:
     - It should only require to  modify `createConfigWindow()` in CONFIGURATION WINDOW STUFF (and delete `setupConfigWindowButton()`)
 
 - Add more functionallity (event listeners), and add these new options to the Configuration Window:
-    - autoDownloadOnReturningToLobby
     - autoDownloadOnKickedFromLobby
     - autoDownloadOnServerRestart
 
