@@ -58,30 +58,6 @@ python main.py
 
 # Limitations
 
-## "Duplicates"
-
-> [!NOTE]
-> As you can see in the image above, the MP3s are downloaded with file name "ANIME_NAME SONG_TYPE NUMBER".
-> If you were to download Gintama's OP 1, and then Gintama's OP 1 rebroad, the original OP 1 file will be overwriten as the file name would be the same.
-> This is specially annoying for the Inserts case, as trying to download any 2 inserts from the same anime will overwrite the first one.
-
-You could solve this issue by modifying the content of the "songsInfo.txt" file before executing the script so that the "Anime name" (first field) of the "duplicated" is different.
-
-Of course you could also modify the [main.py](main.py) file so that the files's name are not "ANIME_NAME SONG_TYPE NUMBER". For instance, adding some random substring at the end of the MP3's file name:
-
-```
-import secrets                                                                                          # ADD THIS LINE
-
-...
-
-def save_as_mp3(anime_name : str, song_url : str, song_name : str, song_artist : str) -> None:
-    """Download the MP3 file from the given URL and save it with the provided song info."""
-    random_substring = secrets.token_hex(nbytes=2)                                                      # ADD THIS LINE
-    output_file_path = os.path.join(OUTPUT_DIRECTORY_PATH, f'{anime_name} {random_substring}.mp3')      # MODIFY THIS LINE
-
-    ...
-```
-
 ## Catbox
 
 > [!NOTE]
@@ -108,6 +84,6 @@ if __name__ == '__main__':
         save_as_mp3(*song)
         time.sleep(5)                                           # ADD THIS LINE
 
-    print(f'Done! It took: {str(datetime.now() - start_time)}')
+    print(f'\nDone! It took: {str(datetime.now() - start_time)}')
 
 ```

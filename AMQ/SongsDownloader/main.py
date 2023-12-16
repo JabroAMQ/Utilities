@@ -72,7 +72,18 @@ def process_anime_name(anime_name: str, song_type: str) -> str:
 
 def save_as_mp3(anime_name : str, song_url : str, song_name : str, song_artist : str) -> None:
     """Download the MP3 file from the given URL and save it with the provided song info."""
+    counter = 1
     output_file_path = os.path.join(OUTPUT_DIRECTORY_PATH, f'{anime_name}.mp3')
+
+    # Avoid overwriting files
+    while os.path.exists(output_file_path):
+        counter += 1
+        output_file_path = os.path.join(OUTPUT_DIRECTORY_PATH, f'{anime_name} ({counter}).mp3')
+    
+    # Inform the user if a file with the same name was found
+    if counter > 1:
+        print(f'\nWARNING\n"{anime_name}.mp3" was found duplicated, renaming the file name to "{anime_name} ({counter}).mp3"\n')
+
     print(f'Downloading: {anime_name} || {song_name} || {song_artist}')
 
     # According to kitty you don't get rate limited
@@ -98,4 +109,4 @@ if __name__ == '__main__':
     for song in songs:
         save_as_mp3(*song)
 
-    print(f'Done! It took: {str(datetime.now() - start_time)}')
+    print(f'\nDone! It took: {str(datetime.now() - start_time)}')
