@@ -36,9 +36,6 @@ TODO list:
 - Add functions to convert ":free:" into the free emoji (also for AMQ custom emojis (marSurrender))
     - Check nyamu's EmojiAnswer userscript: https://github.com/nyamu-amq/amq_scripts/blob/master/amqEmojiAnswer.user.js
 
-- Add a modal to optionsContainer to be able to open the window if not in game
-    - Check TheJoseph98's RigTracker userscript: https://github.com/joske2865/AMQ-Scripts/blob/master/amqRigTracker.user.js
-
 - Add a warning popup window in sendMessageToGameChat() function rather than using console.error
 
 - Fix the issue where very long saved messages surpass the button's limit dimensions
