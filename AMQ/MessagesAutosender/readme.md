@@ -2,7 +2,9 @@
 
 An userscript for AMQ that allow the player to save custom messages and, once they are clicked, autosend them to game chat:
 
-![ExampleGIF](images/ExampleGIF.mp4)
+<div align='center'>
+    <img src='images/ExampleGIF.gif' width='500' height='500' />
+</div>
 
 # Requirements
 
