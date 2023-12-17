@@ -9,14 +9,17 @@
 // @grant        none
 // @require      https://raw.githubusercontent.com/TheJoseph98/AMQ-Scripts/master/common/amqScriptInfo.js
 // @require      https://raw.githubusercontent.com/TheJoseph98/AMQ-Scripts/master/common/amqWindows.js
+// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/MessagesAutosender/AMQMessagesAutosender.user.js
+// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/MessagesAutosender/AMQMessagesAutosender.user.js
 // ==/UserScript==
 
 AMQ_addScriptData({
     name: 'AMQ Messages Autosender',
     author: 'Jabro',
-    link: 'https://github.com/JabroAMQ/Utilities/AMQ/',
+    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/MessagesAutosender/AMQMessagesAutosender.user.js',
     description: `
-        <p>Allow the player to save custom messages and, once they are clicked, autosend them to game chat.</p>
+        <p>Allow the player to save custom messages and, once they are clicked, autosend them to game chat</p>
+        ![ExampleGIF](https://github.com/JabroAMQ/Utilities/blob/main/AMQ/MessagesAutosender/images/ExampleGIF.gif)
     `
 });
 
@@ -35,10 +38,6 @@ TODO list:
 - Add a warning popup window in sendMessageToGameChat() function rather than using console.error
 
 - Fix the issue where very long saved messages surpass the button's limit dimensions
-
-- Add description for AMQ_addScriptData() function
-
-- @downloadURL, @updateURL and AMQ_addScriptData()'s link argument
 
 */
 
