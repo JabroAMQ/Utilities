@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Messages Autosender
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.1
+// @version      0.2
 // @description  Allow the user to store some messages and autosend them when clicked
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
@@ -20,6 +20,10 @@ AMQ_addScriptData({
     description: `
         <p>Allow the player to save custom messages and, once they are clicked, autosend them to game chat</p>
         <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/MessagesAutosender/images/ExampleGIF.gif' alt='ExampleGIF'>
+        You can open the window from an in-game button:
+        <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/MessagesAutosender/images/SavedMessagesWindow1.png' alt='OpenButton'>
+        Or from the options container:
+        <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/MessagesAutosender/images/SavedMessagesWindow2.png' alt='OptionsContainer'>
     `
 });
 

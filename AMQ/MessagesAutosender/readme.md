@@ -2,7 +2,7 @@
 
 An userscript for AMQ that allow the player to save custom messages and, once they are clicked, autosend them to game chat:
 
-<div align='center'>
+<div>
     <img src='images/ExampleGIF.gif' width='500' height='500' />
 </div>
 
@@ -12,12 +12,28 @@ An userscript for AMQ that allow the player to save custom messages and, once th
 
 # How to use
 
-- Join to an AMQ game. Once there, a "message" button will appear.
+- Open the `Saved Messages` window:
 
-- When you click on it, the "Saved Messages" window will open.
+    - You can either open the window through an in-game button.
+    <div>
+        <img src='images/OpenButton.png' width='300', height='70' />
+    </div>
 
-- You can write messages in the text field of the first panel and save them for future sessions by clicking on the "Save" button.
+    - Or through the options container at any moment (no need to be playing).
+    <div>
+        <img src='images/OptionsContainer.png' width='150', height='300' />
+    </div>
 
-- A new line will then appear in the second panel, allowing you to autosend the saved message when clicking on it or delete the saved message.
+- You can write messages in the text field of the first panel and save them for future sessions by clicking on the "Save" button:
 
-- A graphical example can be found in the gif above.
+<div>
+    <img src='images/SavedMessagesWindow1.png' width='300', height='300' />
+</div>
+
+- Once the save button is clicked, the message will be stored in the second panel, allowing you to autosend the saved message when clicking on it or delete the saved message:
+
+<div>
+    <img src='images/SavedMessagesWindow2.png' width='300', height='300' />
+</div>
+
+For more information, check the GIF from the beginning of this document.
