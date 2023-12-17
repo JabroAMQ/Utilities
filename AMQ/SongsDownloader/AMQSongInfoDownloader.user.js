@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Song Info Downloader
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.3
+// @version      0.3.1
 // @description  Download some info from the songs that played while playing AMQ
 // @author       Jabro, Spitzell
 // @match        https://animemusicquiz.com/*
@@ -28,14 +28,15 @@ TODO LIST:
     - It should only require to  modify `createConfigWindow()` in CONFIGURATION WINDOW STUFF (and delete `setupConfigWindowButton()`)
 
 - Add more functionallity (event listeners), and add these new options to the Configuration Window:
+    - autoDownloasOnLeavingLobby
     - autoDownloadOnKickedFromLobby
     - autoDownloadOnServerRestart
 
 */
 
 const CHECK_INTERVAL = 500;
-const buttonWidth = 30;
-const buttonMarginRight = 5;
+const BUTTON_WIDTH = 30;
+const BUTTON_MARGIN_RIGHT = 5;
 const DOMAINS = {
     'EU': 'https://nl.catbox.video/',
     'NA1': 'https://ladst1.catbox.video/',
@@ -98,9 +99,9 @@ function setupDownloadButton() {
             <i aria-hidden='true' class='fa fa-download qpMenuItem'></i>
         </div>`)
         .css({
-            width: `${buttonWidth}px`,
+            width: `${BUTTON_WIDTH}px`,
             height: '100%',
-            'margin-right': `${buttonMarginRight}px`
+            'margin-right': `${BUTTON_MARGIN_RIGHT}px`
         })
         .click(function () {
             downloadSongsInfo();
@@ -112,7 +113,7 @@ function setupDownloadButton() {
 	    });
 
     let currentWidth = $('#qpOptionContainer').width();
-    let extraWidth = buttonWidth + buttonMarginRight;
+    let extraWidth = BUTTON_WIDTH + BUTTON_MARGIN_RIGHT;
     $('#qpOptionContainer').width(currentWidth + extraWidth);
     $('#qpOptionContainer > div').append(downloadButton);
 }
@@ -151,6 +152,10 @@ function updateAutoDownloadOnQuizOverListener() {
 
 
 function downloadSongsInfo() {
+    // Make sure there are songs to avoid downloading an empty TXT file
+    if (allSongs.length <= 0)
+        return;
+
     const allSongsString = allSongs.map(song => song.getSongInfo()).join('\n');
     const downloadLink = document.createElement('a');
     downloadLink.href = window.URL.createObjectURL(new Blob([allSongsString], {type: 'text/plain'}));
@@ -292,9 +297,9 @@ function setupConfigWindowButton() {
             <i aria-hidden='true' class='fa fa-cogs qpMenuItem'></i>
         </div>`)
         .css({
-            width: `${buttonWidth}px`,
+            width: `${BUTTON_WIDTH}px`,
             height: '100%',
-            'margin-right': `${buttonMarginRight}px`
+            'margin-right': `${BUTTON_MARGIN_RIGHT}px`
         })
         .click(() => configWindow.isVisible() ? configWindow.close() : configWindow.open())
         .popover({
@@ -304,7 +309,7 @@ function setupConfigWindowButton() {
 	    });
 
     let currentWidth = $('#qpOptionContainer').width();
-    let extraWidth = buttonWidth + buttonMarginRight;
+    let extraWidth = BUTTON_WIDTH + BUTTON_MARGIN_RIGHT;
     $('#qpOptionContainer').width(currentWidth + extraWidth);
     $('#qpOptionContainer > div').append(configWindowButton);
 }
