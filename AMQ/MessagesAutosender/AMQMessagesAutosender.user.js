@@ -16,7 +16,7 @@
 AMQ_addScriptData({
     name: 'AMQ Messages Autosender',
     author: 'Jabro',
-    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/MessagesAutosender/AMQMessagesAutosender.user.js',
+    link: 'https://github.com/JabroAMQ/Utilities/raw/main/AMQ/MessagesAutosender/AMQMessagesAutosender.user.js',
     description: `
         <p>Allow the player to save custom messages and, once they are clicked, autosend them to game chat</p>
         ![ExampleGIF](https://github.com/JabroAMQ/Utilities/blob/main/AMQ/MessagesAutosender/images/ExampleGIF.gif)
