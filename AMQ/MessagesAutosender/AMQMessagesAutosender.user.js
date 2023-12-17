@@ -21,9 +21,9 @@ AMQ_addScriptData({
         <p>Allow the player to save custom messages and, once they are clicked, autosend them to game chat</p>
         <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/MessagesAutosender/images/ExampleGIF.gif' alt='ExampleGIF'>
         You can open the window from an in-game button:
-        <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/MessagesAutosender/images/SavedMessagesWindow1.png' alt='OpenButton'>
+        <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/MessagesAutosender/images/OpenButton.png' alt='OpenButton'>
         Or from the options container:
-        <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/MessagesAutosender/images/SavedMessagesWindow2.png' alt='OptionsContainer'>
+        <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/MessagesAutosender/images/OptionsContainer.png' alt='OptionsContainer'>
     `
 });
 
