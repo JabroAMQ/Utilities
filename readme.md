@@ -1,5 +1,9 @@
 # AMQ
 
+## [Messages Autosender](AMQ/MessagesAutosender/)
+
+An userscript for AMQ that allow the player to save custom messages and, once they are clicked, autosend them to game chat.
+
 ## [Songs Downloader](AMQ/SongsDownloader/)
 
 Contains:
