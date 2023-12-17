@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Messages Autosender
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.3
+// @version      0.3.1
 // @description  Allow the user to store some messages and autosend them when clicked
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
@@ -32,8 +32,6 @@ AMQ_addScriptData({
 TODO list:
 
 - Prettify the window stuff
-
-- Add a warning popup window in sendMessageToGameChat() function rather than using console.error
 
 - Fix the issue where very long saved messages surpass the button's limit dimensions
 
@@ -233,6 +231,17 @@ function setupSavedMessagesWindowButton() {
 }
 
 
+function showErrorModal() {
+    Swal.fire({
+        title: 'Unable to send the message',
+        text: 'You can\'t send a message if you are not in a lobby.',
+        showConfirmButton: true,
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
+}
+
+
 ///////////////////////////////////////////////////////////////////
 //////////////////////////  FUNCTIONALITY   ///////////////////////
 ///////////////////////////////////////////////////////////////////
@@ -246,7 +255,7 @@ function sendMessageToGameChat(content) {
     // Make sure we are in game
     let gameChatPage = document.getElementById('gameChatPage');
     if (!gameChatPage || gameChatPage.classList.contains('hidden')) {
-        console.error('You cannot send a message to chat if you are not inside a lobby');
+        showErrorModal();
         return; 
     }
 
