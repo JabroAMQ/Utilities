@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Messages Autosender
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.2
+// @version      0.3
 // @description  Allow the user to store some messages and autosend them when clicked
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
@@ -32,9 +32,6 @@ AMQ_addScriptData({
 TODO list:
 
 - Prettify the window stuff
-
-- Add functions to convert ":free:" into the free emoji (also for AMQ custom emojis (marSurrender))
-    - Check nyamu's EmojiAnswer userscript: https://github.com/nyamu-amq/amq_scripts/blob/master/amqEmojiAnswer.user.js
 
 - Add a warning popup window in sendMessageToGameChat() function rather than using console.error
 
@@ -225,7 +222,7 @@ function setupSavedMessagesWindowButton() {
         .click(openSavedMessagesWindow)
         .popover({
 			placement: 'bottom',
-			content: 'Open Saved Messages Window',
+			content: 'Saved Messages',
 			trigger: 'hover'
 	    });
 
@@ -265,6 +262,10 @@ function sendMessageToGameChat(content) {
 
 function saveMessage() {
     let textFieldValue = document.getElementById('newMessageTextField').value;
+
+    // Find and convert emojis
+    textFieldValue = translateShortcodeToUnicode(textFieldValue).text;
+
     addMessageContainerToPanel(textFieldValue);
 
     // Log the changes for future sessions
