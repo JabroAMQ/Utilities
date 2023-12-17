@@ -83,6 +83,7 @@ function createSavedMessagesWindow() {
 
     addNewMessagePanel();
     addSavedMessagesPanel();
+    addSavedMessagesWindowToOptions();
     setupSavedMessagesWindowButton();
 }
 
@@ -195,6 +196,21 @@ function createSeparatorLine() {
 }
 
 
+function addSavedMessagesWindowToOptions() {
+    // Add a new list item to the optionsContainer
+    let optionsContainer = document.getElementById('optionsContainer');
+
+    let savedMessagesOption = document.createElement('li');
+    savedMessagesOption.className = 'clickAble';
+    savedMessagesOption.textContent = 'Saved Messages';
+    savedMessagesOption.onclick = openSavedMessagesWindow;
+
+    // Insert the new list item after the "Installed Userscripts" one
+    let installedUserscriptsLi = optionsContainer.querySelector('ul [data-target="#installedModal"]');
+    installedUserscriptsLi.parentNode.insertBefore(savedMessagesOption, installedUserscriptsLi.nextSibling);
+}
+
+
 function setupSavedMessagesWindowButton() {
     savedMessagesWindowButton = $(`
         <div id='savedMessagesWindowButton' class='clickAble qpOption'>
@@ -205,7 +221,7 @@ function setupSavedMessagesWindowButton() {
             height: '100%',
             'margin-right': `${BUTTON_MARGIN_RIGHT}px`
         })
-        .click(() => savedMessagesWindow.isVisible() ? savedMessagesWindow.close() : savedMessagesWindow.open())
+        .click(openSavedMessagesWindow)
         .popover({
 			placement: 'bottom',
 			content: 'Open Saved Messages Window',
@@ -222,6 +238,11 @@ function setupSavedMessagesWindowButton() {
 ///////////////////////////////////////////////////////////////////
 //////////////////////////  FUNCTIONALITY   ///////////////////////
 ///////////////////////////////////////////////////////////////////
+
+function openSavedMessagesWindow() {
+    // Open the window if not visible and close it otherwise
+    savedMessagesWindow.isVisible() ? savedMessagesWindow.close() : savedMessagesWindow.open()
+}
 
 function sendMessageToGameChat(content) {
     // Make sure we are in game
