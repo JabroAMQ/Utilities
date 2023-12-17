@@ -19,7 +19,7 @@ AMQ_addScriptData({
     link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/MessagesAutosender/AMQMessagesAutosender.user.js',
     description: `
         <p>Allow the player to save custom messages and, once they are clicked, autosend them to game chat</p>
-        ![ExampleGIF](https://github.com/JabroAMQ/Utilities/blob/main/AMQ/MessagesAutosender/images/ExampleGIF.gif)
+        <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/MessagesAutosender/images/ExampleGIF.gif' alt='ExampleGIF'>
     `
 });
 
