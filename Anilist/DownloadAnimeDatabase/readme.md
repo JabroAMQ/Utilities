@@ -4,7 +4,7 @@ Retrieve some (custom) info from all of Anilist's animes using their API and sav
 
 # Requirements
 
-- Python3.9+
+- Python3.11+
 
 - Third-party modules are also used. You can check them in the [requirements.txt](requirements.txt) file.
 
