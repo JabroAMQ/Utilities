@@ -1,15 +1,30 @@
 // ==UserScript==
 // @name         AMQ Song Info Downloader
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.4
+// @version      0.4.1
 // @description  Download some info from the songs that played while playing AMQ
 // @author       Jabro, Spitzell
 // @match        https://animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
 // @grant        none
+// @require      https://github.com/joske2865/AMQ-Scripts/raw/master/common/amqScriptInfo.js
 // @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/AMQSongInfoDownloader.user.js
 // @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/AMQSongInfoDownloader.user.js
 // ==/UserScript==
+
+AMQ_addScriptData({
+    name: 'AMQ Song Info Downloader',
+    author: 'Jabro & Spitzell',
+    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/AMQSongInfoDownloader.user.js',
+    description: `
+        <p>Allow the player to download a TXT file with some info about the songs that played.</p>
+        <p>You can download the TXT file at any point during the game:</p>
+        <img src='https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/images/download_button.png' alt='DownloadButton'>
+        <p>You can also modify how the script behaves:</p>
+        <img src='https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/images/open_configuration.png' alt='OpeningConfiguration'>
+        <img src='https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/images/configuration.png' alt='ConfigurationOptions'>
+    `
+});
 
 /*
 TODO LIST:
@@ -34,13 +49,16 @@ let autoDownloadOnQuizOver = false;
 let clearSongsInfoOnNewQuiz = false;
 let allSongs = [];
 
-// Load the script once the game has been loaded (after log in)
+
+// Do not load the script in the login page
+if (document.getElementById('loginPage'))
+    return;
+
+// Wait until the LOADING... screen is hidden and load script
 let loadInterval = setInterval(() => {
-    let loadingScreen = document.getElementById('loadingScreen');
-    if (loadingScreen && loadingScreen.classList.contains('hidden')) {
-        loadUserConfig();
-        setup();
+    if ($('#loadingScreen').hasClass('hidden')) {
         clearInterval(loadInterval);
+        setup();
     }
 }, 500);
 
