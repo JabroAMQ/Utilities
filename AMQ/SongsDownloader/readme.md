@@ -41,6 +41,8 @@ This script consist of 2 parts:
 
 - You can also modify how the AMQ script behaves. Your configuration will automatically be applied and save for future sessions: 
 
+![OpenConfiguration](images/open_configuration.png)
+
 ![ScriptConfiguration](images/configuration.png)
 
 ## Python script

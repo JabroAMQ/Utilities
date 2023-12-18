@@ -1,50 +1,32 @@
 // ==UserScript==
 // @name         AMQ Song Info Downloader
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.3.1
+// @version      0.4
 // @description  Download some info from the songs that played while playing AMQ
 // @author       Jabro, Spitzell
 // @match        https://animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
 // @grant        none
-// @require      https://raw.githubusercontent.com/TheJoseph98/AMQ-Scripts/master/common/amqWindows.js
 // @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/AMQSongInfoDownloader.user.js
 // @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/AMQSongInfoDownloader.user.js
 // ==/UserScript==
 
 /*
 TODO LIST:
-
-- Prettify the output of `addSelectBox()` and `addCheckBox()` in CONFIGURATION WINDOW STUFF
-
-- Modify the way the user can access to the Configuration Window:
-    - Rather than having an in-game button that open a window for configuration (using TheJoseph98's `AMQWindow()` function)
-    - Make so that the configuration window can be opened from the Settings like in nyamu's amqHighlightFriends script case:
-    - https://github.com/nyamu-amq/amq_scripts/blob/master/amqHighlightFriends.user.js
-    - This is:
-        - https://i.imgur.com/iyEGnZm.png
-        - https://i.imgur.com/WkkvJkg.png
-    - Ideally we want to create a new Tab for this script
-    - It should only require to  modify `createConfigWindow()` in CONFIGURATION WINDOW STUFF (and delete `setupConfigWindowButton()`)
-
-- Add more functionallity (event listeners), and add these new options to the Configuration Window:
-    - autoDownloasOnLeavingLobby
+- Add more functionallity (event listeners), and add these new options to the Configuration Tab:
+    - autoDownloasOnLeavingLobby (while playing game only)
     - autoDownloadOnKickedFromLobby
     - autoDownloadOnServerRestart
 
+- Prettify Configuration Tab
 */
 
-const CHECK_INTERVAL = 500;
-const BUTTON_WIDTH = 30;
-const BUTTON_MARGIN_RIGHT = 5;
 const DOMAINS = {
     'EU': 'https://nl.catbox.video/',
     'NA1': 'https://ladst1.catbox.video/',
     'NA2': 'https://abdist1.catbox.video/'
 };
 
-let configWindow;
-let configWindowButton;
 let quizReadyListener;
 let quizOverListener;
 let selectedDomain = 'EU';
@@ -52,7 +34,7 @@ let autoDownloadOnQuizOver = false;
 let clearSongsInfoOnNewQuiz = false;
 let allSongs = [];
 
-// Load the script once the game has started
+// Load the script once the game has been loaded (after log in)
 let loadInterval = setInterval(() => {
     let loadingScreen = document.getElementById('loadingScreen');
     if (loadingScreen && loadingScreen.classList.contains('hidden')) {
@@ -60,12 +42,12 @@ let loadInterval = setInterval(() => {
         setup();
         clearInterval(loadInterval);
     }
-}, CHECK_INTERVAL);
+}, 500);
 
 function setup() {
     setupDownloadButton();
     setupListeners();
-    createConfigWindow();
+    addDownloaderSettingsTab();
 }
 
 
@@ -94,14 +76,17 @@ class SongInfo {
 
 
 function setupDownloadButton() {
+    const buttonWidth = 30;
+    const buttonMarginRight = 5;
+
     let downloadButton = $(`
         <div id='downloadButton' class='clickAble qpOption'>
             <i aria-hidden='true' class='fa fa-download qpMenuItem'></i>
         </div>`)
         .css({
-            width: `${BUTTON_WIDTH}px`,
+            width: `${buttonWidth}px`,
             height: '100%',
-            'margin-right': `${BUTTON_MARGIN_RIGHT}px`
+            'margin-right': `${buttonMarginRight}px`
         })
         .click(function () {
             downloadSongsInfo();
@@ -113,7 +98,7 @@ function setupDownloadButton() {
 	    });
 
     let currentWidth = $('#qpOptionContainer').width();
-    let extraWidth = BUTTON_WIDTH + BUTTON_MARGIN_RIGHT;
+    let extraWidth = buttonWidth + buttonMarginRight;
     $('#qpOptionContainer').width(currentWidth + extraWidth);
     $('#qpOptionContainer > div').append(downloadButton);
 }
@@ -170,48 +155,74 @@ function clearSongsInfo() {
 
 
 ////////////////////////////////////////////////////////////////////////////////
-//////////////////////////  CONFIGURATION WINDOW STUFF   ///////////////////////
+//////////////////////////  CONFIGURATION TAB STUFF   //////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-function createConfigWindow() {
-    configWindow = new AMQWindow({
-        title: 'Song Info Downloader Configuration',
-        position: { x: 0, y: 34 },
-        width: 400,
-        height: 300,
-        zIndex: 1010,
-        resizable: false,
-        draggable: true
-    });
+function addDownloaderSettingsTab() {
+    // Create the "Downloader" tab in settings
+    $('#settingModal .tabContainer')
+        .append($('<div></div>')
+            .addClass('tab songInfoDownloader clickAble')
+            .attr('onClick', "options.selectTab('settingsDownloaderContainer', this)")
+            .append($('<h5></h5>')
+                .text('Downloader')
+            )
+        );
 
-    configWindow.addPanel({
-        id: 'configWindowPanel',
-        width: 1.0,
-        height: 'calc(100%)',
-        scrollable: { x: false, y: false }
-    });
+    // Create the body base for "Downloader" tab
+    let downloaderTabContent = $('<div></div>')
+        .attr('id', 'settingsDownloaderContainer')
+        .addClass('settingContentContainer hide');
+    $('#settingModal .modal-body').append(downloaderTabContent);
 
+
+    // Create the "Change Prefered Host" select box for "Downloader" tab
     addSelectBox('Change prefered host', Object.keys(DOMAINS), (value) => {
         selectedDomain = value;
         saveUserConfig();
-    }, selectedDomain);
+    }, selectedDomain, 'settingsDownloaderContainer');
 
+    // Create the "Autodownload on Quiz End" checkbox for "Downloader" tab
     addCheckBox('Autodownload on quiz end', (checked) => {
         autoDownloadOnQuizOver = checked;
         saveUserConfig();
         updateAutoDownloadOnQuizOverListener();
-    }, autoDownloadOnQuizOver);
+    }, autoDownloadOnQuizOver, 'settingsDownloaderContainer');
 
+    // Create the "Reset Songlist on Quiz Start" checkbox for "Downloader" tab
     addCheckBox('Reset songlist on quiz start', (checked) => {
         clearSongsInfoOnNewQuiz = checked;
         saveUserConfig();
         updateClearSongsInfoOnNewQuizListener();
-    }, clearSongsInfoOnNewQuiz);
+    }, clearSongsInfoOnNewQuiz, 'settingsDownloaderContainer');
 
-    setupConfigWindowButton();
+
+    // Bind a click event listener to resize the settings modal width.
+    // We can't change its width directly as we want it to dynamically
+    // adjust to the modal-tab width, and we can't get it while the modal is hidden
+    $('#settingModal').on('shown.bs.modal', function () {
+        adjustModalWidth();
+    });
+
+    // Bind a click event listener to show the content of the "Downloader" tab when clicked
+    $('#settingModal .tabContainer').on('click', '.songInfoDownloader', function () {
+        downloaderTabContent.removeClass('hide');
+    });
+
+    // Bind a click event listener to hide the downloader tab when another tab is clicked
+    $('#settingModal .tabContainer').on('click', '.tab:not(.songInfoDownloader)', function () {
+        if (!downloaderTabContent.hasClass('hide')) {
+            downloaderTabContent.addClass('hide');
+
+            // Manually unselect the "Downloader" tab and select the one that was clicked (doesn't work well by default)
+            $('#settingModal .tabContainer .tab').removeClass('selected');
+            $(this).addClass('selected');
+        }
+    });
 }
 
-function addSelectBox(label, options, onChangeCallback, defaultValue) {
+
+function addSelectBox(label, options, onChangeCallback, defaultValue, containerId) {
     let id = label.replace(/\s/g, '');
 
     let selectContainer = $('<div>')
@@ -255,10 +266,10 @@ function addSelectBox(label, options, onChangeCallback, defaultValue) {
         });
 
     selectContainer.append(selectLabel, select);
-    configWindow.panels[0].panel.append(selectContainer);
+    $('#' + containerId).append(selectContainer);
 }
 
-function addCheckBox(label, onChangeCallback, defaultValue) {
+function addCheckBox(label, onChangeCallback, defaultValue, containerId) {
     let id = label.replace(/\s/g, '');
 
     let checkboxContainer = $('<div>')
@@ -287,31 +298,16 @@ function addCheckBox(label, onChangeCallback, defaultValue) {
         });
 
     checkboxContainer.append(checkbox, checkboxLabel);
-    configWindow.panels[0].panel.append(checkboxContainer);
+    $('#' + containerId).append(checkboxContainer);
 }
 
 
-function setupConfigWindowButton() {
-    configWindowButton = $(`
-        <div id='configWindowButton' class='clickAble qpOption'>
-            <i aria-hidden='true' class='fa fa-cogs qpMenuItem'></i>
-        </div>`)
-        .css({
-            width: `${BUTTON_WIDTH}px`,
-            height: '100%',
-            'margin-right': `${BUTTON_MARGIN_RIGHT}px`
-        })
-        .click(() => configWindow.isVisible() ? configWindow.close() : configWindow.open())
-        .popover({
-			placement: 'bottom',
-			content: 'Song Info Configuration',
-			trigger: 'hover'
-	    });
-
-    let currentWidth = $('#qpOptionContainer').width();
-    let extraWidth = BUTTON_WIDTH + BUTTON_MARGIN_RIGHT;
-    $('#qpOptionContainer').width(currentWidth + extraWidth);
-    $('#qpOptionContainer > div').append(configWindowButton);
+function adjustModalWidth() {
+    // Modify the overall settings modal's width dimension so that the added tab doesn't exceed it
+    let modalContent = $('#settingModal .modal-dialog');
+    let modalTab = $('#settingModal .tabContainer');
+    let desiredWidth = `${modalTab.width()}px`;
+    modalContent.css('width', desiredWidth);
 }
 
 
@@ -325,8 +321,10 @@ function getCookie(name) {
     let ca = document.cookie.split(';');
     for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
-        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        while (c.charAt(0) === ' ')
+            c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0)
+            return c.substring(nameEQ.length, c.length);
     }
     return null;
 }
