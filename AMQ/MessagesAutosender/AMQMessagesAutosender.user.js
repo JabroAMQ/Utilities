@@ -20,9 +20,9 @@ AMQ_addScriptData({
     description: `
         <p>Allow the player to save custom messages and, once they are clicked, autosend them to game chat</p>
         <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/MessagesAutosender/images/ExampleGIF.gif' alt='ExampleGIF'>
-        You can open the window from an in-game button:
+        <p>You can open the window from an in-game button:</p>
         <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/MessagesAutosender/images/OpenButton.png' alt='OpenButton'>
-        Or from the options container:
+        <p>Or from the options container:</p>
         <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/MessagesAutosender/images/OptionsContainer.png' alt='OptionsContainer'>
     `
 });
@@ -41,25 +41,23 @@ TODO list:
 ////////////////////////  INITIALIZATION   ////////////////////////
 ///////////////////////////////////////////////////////////////////
 
-const CHECK_INTERVAL = 500;
 const MAX_MESSAGE_LENGTH = 150;
-const BUTTON_WIDTH = 30;
-const BUTTON_MARGIN_RIGHT = 5;
-
 let savedMessagesWindow;
-let savedMessagesWindowButton;
 let savedMessages = [];
 
 
-// Load the script once the game has started
+// Do not load the script in the login page
+if (document.getElementById('loginPage'))
+    return;
+
+// Wait until the LOADING... screen is hidden and load script
 let loadInterval = setInterval(() => {
-    let loadingScreen = document.getElementById('loadingScreen');
-    if (loadingScreen && loadingScreen.classList.contains('hidden')) {
+    if ($('#loadingScreen').hasClass('hidden')) {
+        clearInterval(loadInterval);
         loadSavedMessages();
         createSavedMessagesWindow();
-        clearInterval(loadInterval);
     }
-}, CHECK_INTERVAL);
+}, 500);
 
 
 ///////////////////////////////////////////////////////////////////
@@ -208,14 +206,17 @@ function addSavedMessagesWindowToOptions() {
 
 
 function setupSavedMessagesWindowButton() {
-    savedMessagesWindowButton = $(`
+    const buttonWidth = 30;
+    const buttonMarginRight = 5;
+
+    let savedMessagesWindowButton = $(`
         <div id='savedMessagesWindowButton' class='clickAble qpOption'>
             <i aria-hidden='true' class='fa fa-comments qpMenuItem'></i>
         </div>`)
         .css({
-            width: `${BUTTON_WIDTH}px`,
+            width: `${buttonWidth}px`,
             height: '100%',
-            'margin-right': `${BUTTON_MARGIN_RIGHT}px`
+            'margin-right': `${buttonMarginRight}px`
         })
         .click(openSavedMessagesWindow)
         .popover({
@@ -225,7 +226,7 @@ function setupSavedMessagesWindowButton() {
 	    });
 
     let currentWidth = $('#qpOptionContainer').width();
-    let extraWidth = BUTTON_WIDTH + BUTTON_MARGIN_RIGHT;
+    let extraWidth = buttonWidth + buttonMarginRight;
     $('#qpOptionContainer').width(currentWidth + extraWidth);
     $('#qpOptionContainer > div').append(savedMessagesWindowButton);
 }
