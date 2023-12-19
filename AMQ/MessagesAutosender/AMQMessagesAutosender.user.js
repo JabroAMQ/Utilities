@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Messages Autosender
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.3.1
+// @version      0.3.2
 // @description  Allow the user to store some messages and autosend them when clicked
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
@@ -30,11 +30,8 @@ AMQ_addScriptData({
 /*
 
 TODO list:
-
 - Prettify the window stuff
-
 - Fix the issue where very long saved messages surpass the button's limit dimensions
-
 */
 
 ///////////////////////////////////////////////////////////////////
@@ -87,7 +84,7 @@ function addNewMessagePanel() {
         id: 'addNewMessagePanel',
         width: 1,
         height: 0.2,
-        scrollable: { x: false, y: false }
+        scrollable: { x: true, y: false }
     });
 
     savedMessagesWindow.panels[0].panel.append(createSeparatorLine());
@@ -132,7 +129,7 @@ function addSavedMessagesPanel() {
         id: 'savedMessagesPanel',
         width: 1,
         height: 0.8,
-        scrollable: { x: false, y: true },
+        scrollable: { x: true, y: true },
         position: { x: 0, y: 0.2 }
     });
 
