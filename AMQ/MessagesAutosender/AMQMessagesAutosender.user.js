@@ -7,8 +7,8 @@
 // @match        https://animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
 // @grant        none
-// @require      https://raw.githubusercontent.com/TheJoseph98/AMQ-Scripts/master/common/amqScriptInfo.js
-// @require      https://raw.githubusercontent.com/TheJoseph98/AMQ-Scripts/master/common/amqWindows.js
+// @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
+// @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqWindows.js
 // @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/MessagesAutosender/AMQMessagesAutosender.user.js
 // @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/MessagesAutosender/AMQMessagesAutosender.user.js
 // ==/UserScript==
