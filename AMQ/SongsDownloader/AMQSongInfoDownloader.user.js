@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Song Info Downloader
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.4.1
+// @version      0.4.2
 // @description  Download some info from the songs that played while playing AMQ
 // @author       Jabro, Spitzell
 // @match        https://animemusicquiz.com/*
@@ -58,6 +58,7 @@ if (document.getElementById('loginPage'))
 let loadInterval = setInterval(() => {
     if ($('#loadingScreen').hasClass('hidden')) {
         clearInterval(loadInterval);
+        loadUserConfig();
         setup();
     }
 }, 500);
