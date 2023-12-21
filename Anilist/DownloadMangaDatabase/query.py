@@ -1,6 +1,17 @@
 from typing import Final, LiteralString
 
+# The URL where the request is going to be send (do not modify)
 URL : Final[str] = 'https://graphql.anilist.co'
+
+# Whether you want to flatten dicts or not (modify it if you wish): Example at the end of this file
+FLATTEN_DICT : bool = True
+
+# Whether you want to flatten lists or not (modify it if you wish): Example at the end of this file
+# NOTE FLATTEN_DICT must be True in order for FLATTEN_LIST to be applied
+FLATTEN_LIST : bool = True
+
+# The data you want to retrieve from anilist (modify it if you wish)
+# NOTE Flattening connections i.e. CharacterConnection not yet supported
 QUERY : Final[LiteralString] = '''
 query ($page: Int) {
   Page(page: $page) {
@@ -11,12 +22,61 @@ query ($page: Int) {
       id
       title {
         romaji
+        english
       }
       status
       format
       chapters
       volumes
+      tags {
+        id
+        name
+      }
     }
   }
 }
 '''
+
+
+# Examples for understanding what flattening dicts/lists do:
+"""
+Flatten the dicts so:
+
+    title {
+      romaji
+      english
+    }
+
+is stored as two headers, "title_romaji" and "title_english":
+
+    "title_romaji": "Shin Seiki Evangelion"
+    "title_english": "Neon Genesis Evangelion"
+
+rather than one header "title" containing:
+
+    "title": {"romaji": "Shin Seiki Evangelion", "english": "Neon Genesis Evangelion"}
+
+----------------------------------------------------------------------------------------
+
+Flatten the lists so:
+
+    "tags": [
+      {
+        "id": 63,
+        "name": "Space"
+      },
+      {
+        "id": 648,
+        "name": "Crime"
+      },
+    ]
+
+is stored as two headers "tags_id" and "tags_name":
+
+    "tags_id": [63, 648]
+    "tags_name": ["Space", "Crime"]
+
+rather than one header "tags" containing:
+
+    "tags" = [{"id": 63, "name": "Space"}, {"id": 648, "name": "Crime"}]
+"""

@@ -3,17 +3,20 @@ import sys
 import time
 from csv import DictWriter
 from datetime import datetime
-from typing import Final, Any
+from typing import Any
 
 import requests
 from requests.exceptions import RequestException
 
-from query import URL, QUERY
+from query import URL, QUERY, FLATTEN_DICT, FLATTEN_LIST
 
 
-# Modify constants if needed
-DEFAULT_TIMEOUT : Final[int] = 5
-OUTPUT_DIRECTORY : Final[str] = os.path.join(os.getcwd(), 'output')
+# Modify if needed
+DEFAULT_TIMEOUT : int = 5
+OUTPUT_DIRECTORY : str = os.path.join(os.getcwd(), 'output')
+
+# Do not modify
+fieldnames : list[str] = []
 
 
 def get_all_mangas(output_file_path : str, start_page : int = 1) -> None:
@@ -33,8 +36,7 @@ def get_all_mangas(output_file_path : str, start_page : int = 1) -> None:
             response = session.post(URL, json={'query': QUERY, 'variables': variables})
             response.raise_for_status()
 
-            # Write the data into the csv
-            # NOTE We do it page by page rather than all at the same time to avoid memory problems (there are too many mangas)
+            # Write the data into the csv page by page rather than all at the same time to avoid memory problems (there are too many mangas)
             data = response.json()['data']['Page']
             write_mangas_page(data['media'], output_file_path, current_page==start_page)
 
@@ -42,7 +44,6 @@ def get_all_mangas(output_file_path : str, start_page : int = 1) -> None:
             current_page += 1
 
         except RequestException as e:
-            
             # https://anilist.gitbook.io/anilist-apiv2-docs/overview/rate-limiting
             # Check if we got a HTTP 429 Too Many Request error
             if response is not None and response.status_code == 429:
@@ -68,32 +69,47 @@ def write_mangas_page(mangas : list[dict[str, Any]], file_path : str, write_head
     Append the mangas included in the requests's response to the CSV file.\n
     Mangas will contain the data asked on the `QUERY` specified in `query.py`.
     """
-    # Flatten the dicts so that instead of storing one header "title" containing values like:
-    # {'romaji': 'Shin Seiki Evangelion'}
-    #
-    # we store each of the nested dict keys as a header:
-    # "title_romaji" as header, containing as value 'Shin Seiki Evangelion'
-    flattened_mangas = [flatten_dict(manga) for manga in mangas]
+    global fieldnames
+    # Flatten the dicts if user configured as so
+    flattened_mangas = [flatten_dict(manga) if FLATTEN_DICT else manga for manga in mangas]
     
     if write_header:
-        # We clear the CSV content ('w' mode), write the headers and the page of mangas
+        # We clear the CSV content ('w' mode), and write the headers
         with open(file_path, 'w', encoding='utf-8', newline='') as f:
+            # Update global fieldnames value
             fieldnames = list(flattened_mangas[0].keys())
             writer = DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
+    
+    # Write the mangas one by one to handle errors granularly 
+    with open(file_path, 'a', encoding='utf-8', newline='') as f:
+        writer = DictWriter(f, fieldnames=fieldnames)
+        for manga in flattened_mangas:
+            already_added = False
+            while not already_added:
+                try:
+                    writer.writerow(manga)
+                    already_added = True
 
-            writer.writerows(flattened_mangas)
+                except ValueError as e:
+                    # ValueError: dict contains fields not in fieldnames: 'tags'
+                    # If we are asking for `tags { id name }` and `FLATTEN_LIST = True`, the expected keys are "tags_id" and "tags_name".
+                    # But if tags info is missing (`tags = []`), we don't get to replace "tags" by "tags_id" and "tags_name" in `flatten_list()`
+                    # We do that here, adding an empty list as "tags_id" and "tags_name" values (or whatever fieldnames we are missing)
 
-    else:
-        # We just append the page of mangas at the end of the content of the CSV file
-        with open(file_path, 'a', encoding='utf-8', newline='') as f:
-            fieldnames = list(flattened_mangas[0].keys())
-            writer = DictWriter(f, fieldnames=fieldnames)
-            writer.writerows(flattened_mangas)
+                    # Get the dict key producing the error
+                    tag_producing_error = str(e).split("'")[1]
+                    # Get all the CSV fieldnames that starts with the key and set their value as an empty list
+                    fieldnames_missing = [fieldname for fieldname in fieldnames if fieldname.startswith(f'{tag_producing_error}_')]
+                    for fieldname in fieldnames_missing:
+                        manga[fieldname] = []
+                    # Delete the wrong key
+                    del manga[tag_producing_error]
 
 
-def flatten_dict(my_dict: dict[str, Any], parent_key: str = '') -> dict[str, Any]:
+def flatten_dict(my_dict : dict[str, Any], parent_key : str = '') -> dict[str, Any]:
     """Recursively flattens a nested dictionary."""
+    # TODO Add support for flattening connections (CharacterConnection)
     items = []
 
     for key, value in my_dict.items():
@@ -101,10 +117,35 @@ def flatten_dict(my_dict: dict[str, Any], parent_key: str = '') -> dict[str, Any
     
         if isinstance(value, dict):
             items.extend(flatten_dict(value, new_key).items())
+        elif FLATTEN_LIST and isinstance(value, list) and value and isinstance(value[0], dict):
+            sublists = flatten_list(value, key)
+            [items.append(sublist) for sublist in sublists]
         else:
             items.append((new_key, value))
     
     return dict(items)
+
+
+def flatten_list(my_list : list[dict[str, Any]], my_list_name : str) -> list[tuple[str, list[Any]]]:
+    """
+    Given a list of dicts, where each of the dicts have the same keys, flatten the lists producing one list per dict key.\n
+    Returns:
+    -----------
+    A list of tuples, each one containing:
+    - The name of each list ("my_list_name"_"dict_key")
+    - The list content
+    """
+    result = []
+    if not my_list:
+        return result
+    
+    keys = my_list[0].keys()
+    for key in keys:
+        sublist_name = f'{my_list_name}_{key}'
+        sublist_content = [item[key] for item in my_list]
+        result += [(sublist_name, sublist_content)]
+    
+    return result
 
 
 if __name__ == '__main__':
