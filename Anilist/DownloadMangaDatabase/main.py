@@ -52,7 +52,7 @@ def get_all_mangas(output_file_path : str, start_page : int = 1) -> None:
                 print(f'Timeout: Sleeping {retry_after} seconds...', file=sys.stdout)
                 time.sleep(retry_after)
             
-            # In case not, print error and wait for the default timeout before tring again...
+            # In case not, print error and wait for the default timeout before trying again...
             else:
                 print(f'Error: {e}\nWaiting for {DEFAULT_TIMEOUT} seconds (default)...', file=sys.stderr)
                 time.sleep(DEFAULT_TIMEOUT)
@@ -98,13 +98,13 @@ def write_mangas_page(mangas : list[dict[str, Any]], file_path : str, write_head
                     # We do that here, adding an empty list as "tags_id" and "tags_name" values (or whatever fieldnames we are missing)
 
                     # Get the dict key producing the error
-                    tag_producing_error = str(e).split("'")[1]
+                    field_producing_error = str(e).split("'")[1]
                     # Get all the CSV fieldnames that starts with the key and set their value as an empty list
-                    fieldnames_missing = [fieldname for fieldname in fieldnames if fieldname.startswith(f'{tag_producing_error}_')]
+                    fieldnames_missing = [fieldname for fieldname in fieldnames if fieldname.startswith(f'{field_producing_error}_')]
                     for fieldname in fieldnames_missing:
                         manga[fieldname] = []
                     # Delete the wrong key
-                    del manga[tag_producing_error]
+                    del manga[field_producing_error]
 
 
 def flatten_dict(my_dict : dict[str, Any], parent_key : str = '') -> dict[str, Any]:
