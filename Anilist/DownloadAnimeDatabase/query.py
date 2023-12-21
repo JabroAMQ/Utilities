@@ -11,6 +11,8 @@ FLATTEN_DICT : bool = True
 FLATTEN_LIST : bool = True
 
 # The data you want to retrieve from anilist (modify it if you wish)
+# NOTE You can request Mangas rather than Animes but changing the media type:
+# media(type: MANGA) {
 QUERY : LiteralString = '''
 query ($page: Int) {
   Page(page: $page) {

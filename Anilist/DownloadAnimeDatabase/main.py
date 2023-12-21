@@ -15,13 +15,15 @@ from query import URL, QUERY, FLATTEN_DICT, FLATTEN_LIST
 DEFAULT_TIMEOUT : int = 5
 OUTPUT_DIRECTORY : str = os.path.join(os.getcwd(), 'output')
 
+# Do not modify
+fieldnames : list[str] = []
 
-def get_all_animes(start_page : int = 1) -> list[dict[str, Any]]:
+
+def download_all_animes(output_file_path : str, start_page : int = 1) -> None:
     """
-    Return all the animes from Anilist as a list.\n
-    Each Anime will be represented as a dict that may contain different keys depending on the `QUERY` specified in `query.py`. 
+    Get all the animes from Anilist and store them into a CSV file.\n
+    Each Anime will be represented as a dict that may contain different data depending on the `QUERY` specified in `query.py`. 
     """
-    all_animes : list[dict[str, Any]] = []
     current_page = start_page
     session = requests.Session()
 
@@ -34,9 +36,9 @@ def get_all_animes(start_page : int = 1) -> list[dict[str, Any]]:
             response = session.post(URL, json={'query': QUERY, 'variables': variables})
             response.raise_for_status()
 
-            # Add the result to the output list
+            # Write the data into the csv page by page rather than all at the same time to avoid memory problems
             data = response.json()['data']['Page']
-            all_animes += data['media']
+            write_animes_page(data['media'], output_file_path, current_page==start_page)
 
             # Advance to the next page of animes
             current_page += 1
@@ -60,31 +62,30 @@ def get_all_animes(start_page : int = 1) -> list[dict[str, Any]]:
         # Stop once all animes have been added to the list
         if not data['pageInfo']['hasNextPage']:
              break
-     
-    return all_animes
 
 
-def write_all_animes(animes : list[dict[str, Any]]) -> None:
+def write_animes_page(animes : list[dict[str, Any]], file_path : str, write_header : bool) -> None:
     """
-    Write all the animes into a CSV file.\n
-    Each row will contain different keys depending on the `QUERY` specified in `query.py`.
+    Append the animes included in the requests's response to the CSV file.\n
+    Animes will contain the data asked on the `QUERY` specified in `query.py`.
     """
-    # Create the specified directory if it doesn't exist yet
-    os.makedirs(OUTPUT_DIRECTORY, exist_ok=True)
-    output_file_path = os.path.join(OUTPUT_DIRECTORY, 'database.csv')
-
-    with open(output_file_path, 'w', encoding='utf-8', newline='') as f:
-        # Flatten the dicts if user configured as so
-        flattened_animes = [flatten_dict(anime) if FLATTEN_DICT else anime for anime in animes]
-
-        # Write the headers
-        # NOTE Asuming first anime (cowboy bebop) has info stored for all list[dict] fields 
-        # (could not be the case for some obscure fields asked in the query requested and FLATTEN_LIST = True)
-        fieldnames = list(flattened_animes[0].keys())
+    global fieldnames
+    # Flatten the dicts if user configured as so
+    flattened_animes = [flatten_dict(anime) if FLATTEN_DICT else anime for anime in animes]
+    
+    if write_header:
+        # We clear the CSV content ('w' mode), and write the headers
+        with open(file_path, 'w', encoding='utf-8', newline='') as f:
+            # Update global fieldnames value
+            # NOTE Asuming first anime (cowboy bebop) has info stored for all list[dict] fields 
+            # (could not be the case for some obscure fields asked in the query requested and FLATTEN_LIST = True)
+            fieldnames = list(flattened_animes[0].keys())
+            writer = DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+    
+    # Write the animes one by one to handle errors granularly 
+    with open(file_path, 'a', encoding='utf-8', newline='') as f:
         writer = DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-
-        # Write the animes one by one to handle errors granularly
         for anime in flattened_animes:
             already_added = False
             while not already_added:
@@ -93,11 +94,12 @@ def write_all_animes(animes : list[dict[str, Any]]) -> None:
                     already_added = True
 
                 except ValueError as e:
-                    # ValueError: dict contains fields not in fieldnames: 'tags'
-                    # If we are asking for `tags { id name }` and `FLATTEN_LIST = True`, the expected keys are "tags_id" and "tags_name".
-                    # But if tags info is missing (`tags = []`), we don't get to replace "tags" by "tags_id" and "tags_name" in `flatten_list()`
-                    # We do that here, adding an empty list as "tags_id" and "tags_name" values (or whatever fieldnames we are missing)
-
+                    """
+                    ValueError: dict contains fields not in fieldnames: 'tags'
+                    If we are asking for `tags { id name }` and `FLATTEN_LIST = True`, the expected keys are "tags_id" and "tags_name".
+                    But if tags info is missing (`tags = []`), we don't get to replace "tags" by "tags_id" and "tags_name" in `flatten_list()`
+                    We do that here, adding an empty list as "tags_id" and "tags_name" values (or whatever fieldnames we are missing)
+                    """
                     # Get the dict key producing the error
                     field_producing_error = str(e).split("'")[1]
                     # Get all the CSV fieldnames that starts with the key and set their value as an empty list
@@ -142,11 +144,11 @@ def flatten_list(my_list : list[dict[str, Any]]) -> dict[str, list[Any]]:
 
 
 if __name__ == '__main__':
-    start_time = datetime.now()
-    animes = get_all_animes()
-    api_time = datetime.now()
-    write_all_animes(animes)
+    
+    # Create the specified directory if it doesn't exist yet
+    os.makedirs(OUTPUT_DIRECTORY, exist_ok=True)
+    output_file_path = os.path.join(OUTPUT_DIRECTORY, 'database.csv')
 
-    print(f'API Time: {api_time - start_time}')
-    print(f'CSV Time: {datetime.now() - api_time}')
-    print(f'Total: {datetime.now() - start_time}')
+    start = datetime.now()
+    download_all_animes(output_file_path)
+    print(f'Finish reading! It took: {str(datetime.now() - start)}')
