@@ -11,8 +11,7 @@ FLATTEN_DICT : bool = True
 FLATTEN_LIST : bool = True
 
 # The data you want to retrieve from anilist (modify it if you wish)
-# NOTE Flattening connections i.e. CharacterConnection not yet supported
-QUERY : Final[LiteralString] = '''
+QUERY : LiteralString = '''
 query ($page: Int) {
   Page(page: $page) {
     pageInfo {
@@ -31,6 +30,15 @@ query ($page: Int) {
       tags {
         id
         name
+      }
+      characters {
+        nodes {
+          name {
+            first
+            last
+          }
+          gender
+        }
       }
     }
   }

@@ -109,7 +109,6 @@ def write_mangas_page(mangas : list[dict[str, Any]], file_path : str, write_head
 
 def flatten_dict(my_dict : dict[str, Any], parent_key : str = '') -> dict[str, Any]:
     """Recursively flattens a nested dictionary."""
-    # TODO Add support for flattening connections (CharacterConnection)
     items = []
 
     for key, value in my_dict.items():
@@ -118,32 +117,25 @@ def flatten_dict(my_dict : dict[str, Any], parent_key : str = '') -> dict[str, A
         if isinstance(value, dict):
             items.extend(flatten_dict(value, new_key).items())
         elif FLATTEN_LIST and isinstance(value, list) and value and isinstance(value[0], dict):
-            sublists = flatten_list(value, key)
-            [items.append(sublist) for sublist in sublists]
+            subdict = flatten_list(value)
+            items.extend(flatten_dict(subdict, new_key).items())
         else:
             items.append((new_key, value))
     
     return dict(items)
 
 
-def flatten_list(my_list : list[dict[str, Any]], my_list_name : str) -> list[tuple[str, list[Any]]]:
-    """
-    Given a list of dicts, where each of the dicts have the same keys, flatten the lists producing one list per dict key.\n
-    Returns:
-    -----------
-    A list of tuples, each one containing:
-    - The name of each list ("my_list_name"_"dict_key")
-    - The list content
-    """
-    result = []
+def flatten_list(my_list : list[dict[str, Any]]) -> dict[str, list[Any]]:
+    """Given a list of dicts, where each of the dicts have the same keys, flatten the lists producing one list per dict key."""
+    result = {}
+    
     if not my_list:
         return result
     
     keys = my_list[0].keys()
     for key in keys:
-        sublist_name = f'{my_list_name}_{key}'
-        sublist_content = [item[key] for item in my_list]
-        result += [(sublist_name, sublist_content)]
+        new_sublist = [item[key] for item in my_list]
+        result[key] = new_sublist
     
     return result
 
