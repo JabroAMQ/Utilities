@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Messages Autosender
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.3.2
+// @version      0.4
 // @description  Allow the user to store some messages and autosend them when clicked
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
@@ -28,10 +28,9 @@ AMQ_addScriptData({
 });
 
 /*
-
 TODO list:
+
 - Prettify the window stuff
-- Fix the issue where very long saved messages surpass the button's limit dimensions
 */
 
 ///////////////////////////////////////////////////////////////////
@@ -154,24 +153,33 @@ function addMessageContainerToPanel(textFieldValue) {
     container.style.width = '100%';
     container.style.height = '10%';
 
-    // Add a button to display the saved message. Click on it to send it to the gamechat
-    const savedMessageButton = document.createElement('button');
-    savedMessageButton.innerHTML = textFieldValue;
-    savedMessageButton.onclick = function() { sendMessageToGameChat(textFieldValue); };
-    savedMessageButton.style.color = 'black';
-    savedMessageButton.style.width = '75%';
-    savedMessageButton.style.marginLeft = '5%';
-    savedMessageButton.style.marginRight = '5%';
-    container.appendChild(savedMessageButton);
+    // Add a div to display the saved message text
+    const savedMessageDiv = document.createElement('div');
+    savedMessageDiv.innerHTML = textFieldValue;
+    savedMessageDiv.title = textFieldValue;
+    savedMessageDiv.style.color = 'black';
+    savedMessageDiv.style.width = '75%';
+    savedMessageDiv.style.marginLeft = '5%';
+    savedMessageDiv.style.marginRight = '5%';
+    savedMessageDiv.style.overflow = 'hidden';
+    savedMessageDiv.style.textOverflow = 'ellipsis';
+    savedMessageDiv.style.backgroundColor = 'white';
+    container.appendChild(savedMessageDiv);
 
     // Add a delete button to remove the saved message
     const deleteButton = document.createElement('button');
     deleteButton.innerHTML = 'Delete';
-    deleteButton.onclick = function () { deleteMessage(container, textFieldValue) };
+    deleteButton.onclick = function (event) {
+        event.stopPropagation();
+        deleteMessage(container, textFieldValue);
+    };
     deleteButton.style.color = 'black';
     deleteButton.style.width = '15%';
     deleteButton.style.marginRight = '5%';
     container.appendChild(deleteButton);
+
+    // Send the message from the container to game chat when clicked
+    container.onclick = function() { sendMessageToGameChat(textFieldValue); };
 
     // Append the container to the 'savedMessagesPanel' panel
     savedMessagesWindow.panels[1].panel.append(container);
