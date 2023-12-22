@@ -10,7 +10,7 @@ FLATTEN_DICT : bool = True
 # NOTE FLATTEN_DICT must be True in order for FLATTEN_LIST to be applied
 FLATTEN_LIST : bool = True
 
-# The data you want to retrieve from anilist (modify it if you wish)
+# The data you want to retrieve from AniList (modify it if you wish)
 # NOTE You can request Mangas rather than Animes but changing the media type:
 # media(type: MANGA) {
 QUERY : LiteralString = '''

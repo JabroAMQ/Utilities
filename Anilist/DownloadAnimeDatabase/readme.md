@@ -1,11 +1,11 @@
 # Script description
 
-Retrieve some (custom) info from all of Anilist's animes (or mangas) using their API and save them into a CSV file, which will be stored in the [output](output) subdirectory (created in the directory where the script is being executed from).
+Retrieve some (custom) info from all of AniList's animes (or mangas) using their API and save them into a CSV file, which will be stored in the [output](output) subdirectory (created in the directory where the script is being executed from).
 
 > [!NOTE]
 > This repository has already a [database](output/database.csv) in the output subdirectory which contains 50 animes as output example.
 >
-> By executing the script yourself you are requesting the entire database, not only 50 animes, which takes several minutes due to anilist's rate limit:
+> By executing the script yourself you are requesting the entire database, not only 50 animes, which takes several minutes due to AniList's rate limit:
 > - **Expected download time for entire anime database:** 5 to 10 minutes.
 > - **Expected download time for entire manga database:** 30 to 60 minutes.
 

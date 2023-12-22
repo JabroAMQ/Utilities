@@ -13,12 +13,12 @@ Contains:
 - A python script that takes as input the downloaded TXT file, downloading all the songs from the file in MP3 format while tagging them with song name and artist info.
 
 
-# Anilist
+# AniList
 
 ## [Clean Anime Data](Anilist/CleanAnimeData/)
 
-Given a JSON with the data from an anime list obtained as a result of exporting an Anilist's anime list using automail, cleans some media fields so that the anime list can be reimported or imported to another anilist account without the cleaned data.
+Given a JSON with the data from an anime list obtained as a result of exporting an AniList's anime list using automail, cleans some media fields so that the anime list can be reimported or imported to another AniList account without the cleaned data.
 
 ## [Download Anime Database](Anilist/DownloadAnimeDatabase/)
 
-Retrieve some (custom) info from all of Anilist's animes (or mangas) using their API and save them into a CSV file.
+Retrieve some (custom) info from all of AniList's animes (or mangas) using their API and save them into a CSV file.

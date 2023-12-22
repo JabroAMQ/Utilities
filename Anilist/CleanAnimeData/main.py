@@ -29,8 +29,8 @@ def get_json_file(directory : str) -> dict | None:
 def clean_user_data(json_data : dict) -> dict:
     """
     Given a JSON file (loaded into memory as a dict) with the data from an ANIME LIST (not manga) obtained as a result of
-    exporting an Anilist's anime list using automail, clean some media fields so that the anime list can be reimported or
-    imported to another anilist account removing things like user's custom lists or the animes's progress, score, notes or dates.\n
+    exporting an AniList's anime list using automail, clean some media fields so that the anime list can be reimported or
+    imported to another AniList account removing things like user's custom lists or the animes's progress, score, notes or dates.\n
     Return the cleaned dict.
     """
     list_sections : list[dict[str, dict[str, Any]]] = json_data['MediaListCollection']['lists']

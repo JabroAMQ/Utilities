@@ -21,7 +21,7 @@ fieldnames : list[str] = []
 
 def download_all_animes(output_file_path : str, start_page : int = 1) -> None:
     """
-    Get all the animes from Anilist and store them into a CSV file.\n
+    Get all the animes from AniList and store them into a CSV file.\n
     Each Anime will be represented as a dict that may contain different data depending on the `QUERY` specified in `query.py`. 
     """
     current_page = start_page
