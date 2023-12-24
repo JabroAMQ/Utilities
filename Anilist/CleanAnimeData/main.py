@@ -3,12 +3,12 @@ import sys
 import json
 from typing import Any, Final
 
-# Modify constants if needed
-INPUT_DIRECTORY : Final[str] = os.getcwd()
-OUTPUT_DIRECTORY : Final[str] = os.path.join(INPUT_DIRECTORY, 'Output')
+# Modify if needed
+INPUT_DIRECTORY: Final[str] = os.getcwd()
+OUTPUT_DIRECTORY: Final[str] = os.path.join(INPUT_DIRECTORY, 'Output')
 
 
-def get_json_file(directory : str) -> dict | None:
+def get_json_file(directory: str) -> dict | None:
     """
     Find an load into memory the content of the JSON file found in `directory` directory (if any).\n
     Return a dict with the content of the found JSON, or `None` if no JSON was found in the specified directory.
@@ -26,14 +26,14 @@ def get_json_file(directory : str) -> dict | None:
         return data
 
 
-def clean_user_data(json_data : dict) -> dict:
+def clean_user_data(json_data: dict) -> dict:
     """
     Given a JSON file (loaded into memory as a dict) with the data from an ANIME LIST (not manga) obtained as a result of
     exporting an AniList's anime list using automail, clean some media fields so that the anime list can be reimported or
     imported to another AniList account removing things like user's custom lists or the animes's progress, score, notes or dates.\n
     Return the cleaned dict.
     """
-    list_sections : list[dict[str, dict[str, Any]]] = json_data['MediaListCollection']['lists']
+    list_sections: list[dict[str, dict[str, Any]]] = json_data['MediaListCollection']['lists']
     # Removing custom lists sections (completed, hold and dropped are placed at the beginning, and watching at the end)
     list_sections = list_sections[:3] + list_sections[-1:]
 
@@ -58,7 +58,7 @@ def clean_user_data(json_data : dict) -> dict:
     return json_data
 
 
-def save_modified_json(json_data : dict, directory : str) -> None:
+def save_modified_json(json_data: dict, directory: str) -> None:
     """Save the cleaned `json_data` dict into a JSON file in the `directory` directory."""
     # Create the specified directory if it doesn't exist yet
     os.makedirs(directory, exist_ok=True)

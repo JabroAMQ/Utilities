@@ -1,19 +1,19 @@
 from typing import Final, LiteralString
 
 # The URL where the request is going to be send (do not modify)
-URL : Final[str] = 'https://graphql.anilist.co'
+URL: Final[str] = 'https://graphql.anilist.co'
 
 # Whether you want to flatten dicts or not (modify it if you wish): Example at the end of this file
-FLATTEN_DICT : bool = True
+FLATTEN_DICT: bool = True
 
 # Whether you want to flatten lists or not (modify it if you wish): Example at the end of this file
 # NOTE FLATTEN_DICT must be True in order for FLATTEN_LIST to be applied
-FLATTEN_LIST : bool = True
+FLATTEN_LIST: bool = True
 
 # The data you want to retrieve from AniList (modify it if you wish)
 # NOTE You can request Mangas rather than Animes but changing the media type:
 # media(type: MANGA) {
-QUERY : LiteralString = '''
+QUERY: LiteralString = '''
 query ($page: Int) {
   Page(page: $page) {
     pageInfo {

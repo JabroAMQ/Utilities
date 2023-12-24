@@ -8,22 +8,22 @@ import requests
 import eyed3
 
 
-# Modify constants if needed
-INPUT_FILE_PATH : Final[str] = os.path.join(os.getcwd(), 'songsInfo.txt')
-OUTPUT_DIRECTORY_PATH : Final[str] = os.path.join(os.getcwd(), 'output')
+# Modify if needed
+INPUT_FILE_PATH: Final[str] = os.path.join(os.getcwd(), 'songsInfo.txt')
+OUTPUT_DIRECTORY_PATH: Final[str] = os.path.join(os.getcwd(), 'output')
 
 
 class Song(NamedTuple):
     """Class to represent a song."""
-    anime_name : str
-    song_url : str
-    song_name : str
-    song_artist : str
+    anime_name: str
+    song_url: str
+    song_name: str
+    song_artist: str
 
 
 def process_file_content() -> list[Song]:
     """Process the content of the plain text file and return a list of Song objects."""
-    songs : list[Song] = []
+    songs: list[Song] = []
 
     with open(INPUT_FILE_PATH, 'r', encoding='utf-8') as fd:
         file_lines = fd.readlines()
@@ -50,15 +50,15 @@ def process_file_content() -> list[Song]:
 def process_anime_name(anime_name: str, song_type: str) -> str:
     """Process the anime name by removing forbidden characters, replacing certain characters, and adding song type."""
     # Handle forbidden characters for file names (in the way asked by an user)
-    # We remove [], "", <>
+    # Remove [], "", <>
     anime_name = re.sub(r'["<>|]+', '', anime_name)
 
-    # We replace ?, /, *
+    # Replace ?, /, *
     replacements = {'?': '¿', '/': ';', '*': '^'}
     for a, b in replacements.items():
         anime_name = anime_name.replace(a, b)
 
-    # We replace ":" by a "-" and add an additional "-" at the end of the name
+    # Replace ":" by a "-" and add an additional "-" at the end of the name
     # Gintama: THE FINAL --> Gintama -THE FINAL- 
     if ': ' in anime_name:
         anime_name = anime_name.replace(': ', ' -') + '-'
@@ -70,7 +70,7 @@ def process_anime_name(anime_name: str, song_type: str) -> str:
     return anime_name
 
 
-def save_as_mp3(anime_name : str, song_url : str, song_name : str, song_artist : str) -> None:
+def save_as_mp3(anime_name: str, song_url: str, song_name: str, song_artist: str) -> None:
     """Download the MP3 file from the given URL and save it with the provided song info."""
     counter = 1
     output_file_path = os.path.join(OUTPUT_DIRECTORY_PATH, f'{anime_name}.mp3')

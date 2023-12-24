@@ -12,14 +12,14 @@ from query import URL, QUERY, FLATTEN_DICT, FLATTEN_LIST
 
 
 # Modify if needed
-DEFAULT_TIMEOUT : int = 5
-OUTPUT_DIRECTORY : str = os.path.join(os.getcwd(), 'output')
+DEFAULT_TIMEOUT: int = 5
+OUTPUT_DIRECTORY: str = os.path.join(os.getcwd(), 'output')
 
 # Do not modify
-fieldnames : list[str] = []
+fieldnames: list[str] = []
 
 
-def download_all_animes(output_file_path : str, start_page : int = 1) -> None:
+def download_all_animes(output_file_path: str, start_page: int = 1) -> None:
     """
     Get all the animes from AniList and store them into a CSV file.\n
     Each Anime will be represented as a dict that may contain different data depending on the `QUERY` specified in `query.py`. 
@@ -64,7 +64,7 @@ def download_all_animes(output_file_path : str, start_page : int = 1) -> None:
              break
 
 
-def write_animes_page(animes : list[dict[str, Any]], file_path : str, write_header : bool) -> None:
+def write_animes_page(animes: list[dict[str, Any]], file_path: str, write_header: bool) -> None:
     """
     Append the animes included in the requests's response to the CSV file.\n
     Animes will contain the data asked on the `QUERY` specified in `query.py`.
@@ -110,7 +110,7 @@ def write_animes_page(animes : list[dict[str, Any]], file_path : str, write_head
                     del anime[field_producing_error]
 
 
-def flatten_dict(my_dict : dict[str, Any], parent_key : str = '') -> dict[str, Any]:
+def flatten_dict(my_dict: dict[str, Any], parent_key: str = '') -> dict[str, Any]:
     """Recursively flattens a nested dictionary."""
     items = []
 
@@ -128,7 +128,7 @@ def flatten_dict(my_dict : dict[str, Any], parent_key : str = '') -> dict[str, A
     return dict(items)
 
 
-def flatten_list(my_list : list[dict[str, Any]]) -> dict[str, list[Any]]:
+def flatten_list(my_list: list[dict[str, Any]]) -> dict[str, list[Any]]:
     """Given a list of dicts, where each of the dicts have the same keys, flatten the lists producing one list per dict key."""
     result = {}
     
