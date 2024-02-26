@@ -8,6 +8,8 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
 // @grant        none
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
+// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/CancerRemoval/AMQCancerRemoval.user.js
+// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/CancerRemoval/AMQCancerRemoval.user.js
 // ==/UserScript==
 
 let ignoreScript = false;   // modified in-game through an in-game button located in the footer of the settings container
@@ -17,7 +19,7 @@ const DELAY = 500;          // manual delay among functions (milliseconds) to en
 AMQ_addScriptData({
     name: 'AMQ Cancer Removal',
     author: 'Jabro',
-    link: 'TODO',
+    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/CancerRemoval/AMQCancerRemoval.user.js',
     description: `
         <p>TODO</p>
     `
