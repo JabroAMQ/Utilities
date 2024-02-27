@@ -133,14 +133,12 @@ $('#mhChangeButton').click(() => {
 //////////////////////////////////////////////////////////
 new Listener('Host Promotion', (payload) => {
 	var newHost = payload.newHost;
+    
     // If we have just been promoted to host while in lobby
     if (newHost === selfName && lobby.inLobby) {
-
         // Check for cancer settings and modify them if so...
-        setTimeout(() => {
-            if (cancerFound())
-                changeSettings();
-        }, DELAY);
+        if (cancerFound())
+            changeSettings();
     }
 }).bindListener();
 
