@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Cancer Removal
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.2
+// @version      0.3
 // @description  Automatically turns off dubs and rebroadcasts from lobby settings
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
@@ -18,7 +18,7 @@ if (document.getElementById('loginPage'))
     return;
 
 
-const VERSION = '0.2';      // Documentation purposes only. Make sure this value matches with the @version one from the userscript header
+const VERSION = '0.3';      // Documentation purposes only. Make sure this value matches with the @version one from the userscript header
 const DELAY = 500;          // Manual delay among functions (milliseconds) to ensure instructions are executed in a fashion order
 
 let ignoreScript;           // Modified in-game through an in-game button located in the footer of the settings container
@@ -44,7 +44,7 @@ AMQ_addScriptData({
             <ul>
                 <li>- The lobby is created.</li>
                 <li>- The host (using this script) modifies the lobby settings.</li>
-                <li>- [TODO] The player (using this script) is promoted to host while in the lobby.</li>
+                <li>- The player (using this script) is promoted to host while in the lobby.</li>
             </ul>
         </div>
 
@@ -97,6 +97,7 @@ modalFooter.insertBefore(ignoreButton, mainButton);
 ///////////////////////////////////////////////////
 // MODIFIED BEHAVIOUR OF THE "HOST LOBBY" BUTTON //
 ///////////////////////////////////////////////////
+// Ideally rather than modifying the onclick behaviour, we should add an event listener to perform the additional behaviour
 $('#mhHostButton').removeAttr('onclick');
 $('#mhHostButton').click(() => {
     // Host a lobby with the settings stablished by the host
@@ -113,6 +114,7 @@ $('#mhHostButton').click(() => {
 //////////////////////////////////////////////////////////////
 // MODIFIED BEHAVIOUR OF THE "CHANGE LOBBY SETTINGS" BUTTON //
 //////////////////////////////////////////////////////////////
+// Ideally rather than modifying the onclick behaviour, we should add an event listener to perform the additional behaviour
 $('#mhChangeButton').removeAttr('onclick');
 $('#mhChangeButton').click(() => {
     // Change the lobby with the settings established by the host
@@ -129,7 +131,18 @@ $('#mhChangeButton').click(() => {
 //////////////////////////////////////////////////////////
 // MODIFIED BEHAVIOUR WHEN BEING PROMOTED TO LOBBY HOST //
 //////////////////////////////////////////////////////////
-// TODO
+new Listener('Host Promotion', (payload) => {
+	var newHost = payload.newHost;
+    // If we have just been promoted to host while in lobby
+    if (newHost === selfName && lobby.inLobby) {
+
+        // Check for cancer settings and modify them if so...
+        setTimeout(() => {
+            if (cancerFound())
+                changeSettings();
+        }, DELAY);
+    }
+}).bindListener();
 
 
 /////////////////////////////////

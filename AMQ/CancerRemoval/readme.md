@@ -33,4 +33,4 @@ The script checks the settings (and modifies them if procceed) when:
 
 - The lobby is created.
 - The settings are modified by the host (if they are using this script).
-- [Not Yet Done] The player using this script is promoted to host while in lobby (not during game).
+- The player using this script is promoted to host while in lobby (not during game).
