@@ -23,7 +23,7 @@ Unpleasant modifiers:
 
 The script automatically modify the lobby settings, so the player doesn't need to do anything in order to make this work.
 
-However, the player is free to turn off the script from in-game by clicking on the "Cancer" button that can be found in the footer of the lobby settings modal:
+However, the player is free to turn off the script from in-game so the settings are not modified anymore by clicking on the "Cancer" button that can be found in the footer of the lobby settings modal:
 
 <div>
     <img src='images/cancer_button.png' width='500' height='500'/>

@@ -4,6 +4,10 @@
 
 A javascript userscript for AMQ that allow the player to save custom messages and, once they are clicked, autosend them to game chat.
 
+## [Cancer Removal](AMQ/CancerRemoval/)
+
+A javascript userscript for AMQ that automatically look for unpleasant lobby settings and modify them if needed.
+
 ## [Songs Downloader](AMQ/SongsDownloader/)
 
 Contains:
