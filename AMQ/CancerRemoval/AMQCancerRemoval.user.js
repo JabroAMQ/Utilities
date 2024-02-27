@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Cancer Removal
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.1
+// @version      0.2
 // @description  Automatically turns off dubs and rebroadcasts from lobby settings
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
@@ -18,9 +18,11 @@ if (document.getElementById('loginPage'))
     return;
 
 
-const VERSION = '0.1';      // Documentation purposes only. Make sure this value matches with the @version one from the userscript header
-let ignoreScript = false;   // Modified in-game through an in-game button located in the footer of the settings container
+const VERSION = '0.2';      // Documentation purposes only. Make sure this value matches with the @version one from the userscript header
 const DELAY = 500;          // Manual delay among functions (milliseconds) to ensure instructions are executed in a fashion order
+
+let ignoreScript;           // Modified in-game through an in-game button located in the footer of the settings container
+loadConfig();               // Set a value for the configuration variables (ignoreScript only in this case) retrieved through cookies
 
 
 AMQ_addScriptData({
@@ -60,19 +62,23 @@ AMQ_addScriptData({
 // Create a button to allow the user to ignore this script when clicked
 var ignoreButton = document.createElement('button');
 ignoreButton.type = 'button';
-ignoreButton.className = 'btn btn-primary';
+ignoreButton.className = ignoreScript ? 'btn btn-default' : 'btn btn-primary';
 ignoreButton.id = 'mhCancerButton'
-ignoreButton.textContent = 'Cancer';    // No space for a more descriptive button name :(
+ignoreButton.innerHTML = '♋';
 
 // Add the desired functionallity to the button
 ignoreButton.addEventListener('click', function() {
+    // Modify the value of ignoreScript and save it as cookie to remember it in future sessions
     ignoreScript = !ignoreScript;
+    saveConfig();
 
-    // Modify the modal text based on the value of ignoreScript var
+    // Modify the cancer button class and the text of the modal based on the value of ignoreScript var
+    ignoreButton.className = ignoreScript ? 'btn btn-default' : 'btn btn-primary';
     var modalText = ignoreScript
         ? 'The script has now been disabled. The settings won\'t be changed by the script anymore.'
         : 'The script has now been enabled. The settings can now be modified by the script to prevent unpleasant game modifiers.';
 
+    // Send a "debug" modal to inform the user that the change was applied
     Swal.fire({
         title: 'AMQ Cancer Removal Script',
         text: modalText,
@@ -185,4 +191,42 @@ function sendChatMessage(content) {
 
     var enterEvent = new KeyboardEvent('keypress', { key: 'Enter', keyCode: 13 });
     chatInput.dispatchEvent(enterEvent);
+}
+
+
+//////////////////////
+//  COOKIES STUFF   //
+//////////////////////
+// https://stackoverflow.com/a/24103596/20214407
+function getCookie(name) {
+    let nameEQ = name + '=';
+    let ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ')
+            c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0)
+            return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
+function setCookie(name, value, days) {
+    let expires = '';
+    if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = '; expires=' + date.toUTCString();
+    }
+    document.cookie = name + '=' + value + expires + '; path=/';
+}
+
+function loadConfig() {
+    let ignoreScriptString = getCookie('ignoreScript');
+    ignoreScript = ignoreScriptString === 'true';
+}
+
+function saveConfig() {
+    let ignoreScriptString = ignoreScript.toString();
+    setCookie('ignoreScript', ignoreScriptString, 9999);
 }
