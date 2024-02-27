@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         AMQ Cancer Removal
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.0
-// @description  TODO
+// @version      0.1
+// @description  Automatically turns off dubs and rebroadcasts from lobby settings
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
@@ -21,7 +21,27 @@ AMQ_addScriptData({
     author: 'Jabro',
     link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/CancerRemoval/AMQCancerRemoval.user.js',
     description: `
-        <p>TODO</p>
+        <div>
+            <p>Automatically change some settings modifiers from the lobby:</p>
+            <ul>
+                <li>- Turns off rebroadcast and dubs songs.</li>
+                <li>- Turns on skip guessing and skip replay options.</li>
+            </ul>
+        </div>
+
+        <div>
+            <p>The changes are applied when:</p>
+            <ul>
+                <li>- The lobby is created.</li>
+                <li>- The host (using this script) modifies the lobby settings.</li>
+                <li>- [TODO] The player (using this script) is promoted to host while in the lobby.</li>
+            </ul>
+        </div>
+
+        <div>
+            <p>You can turn off this behavior from the own game by clicking on the "Cancer" button found in the footer of the settings modal:</p>
+            <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/CancerRemoval/images/cancer_button.png' alt='Cancer Button'>
+        </div>
     `
 });
 
