@@ -13,10 +13,13 @@
 // @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/MessagesAutosender/AMQMessagesAutosender.user.js
 // ==/UserScript==
 
+const VERSION = '0.4';    // Documentation purposes only. Make sure this value matches with the @version one from the userscript header
+
 AMQ_addScriptData({
     name: 'AMQ Messages Autosender',
     author: 'Jabro',
     link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/MessagesAutosender/AMQMessagesAutosender.user.js',
+    version: VERSION,
     description: `
         <p>Allow the player to save custom messages and, once they are clicked, autosend them to game chat</p>
         <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/MessagesAutosender/images/ExampleGIF.gif' alt='ExampleGIF'>

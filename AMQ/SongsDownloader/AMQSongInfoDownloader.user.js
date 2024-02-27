@@ -12,10 +12,13 @@
 // @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/AMQSongInfoDownloader.user.js
 // ==/UserScript==
 
+const VERSION = '0.4.2';    // Documentation purposes only. Make sure this value matches with the @version one from the userscript header
+
 AMQ_addScriptData({
     name: 'AMQ Song Info Downloader',
     author: 'Jabro & Spitzell',
     link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/AMQSongInfoDownloader.user.js',
+    version: VERSION,
     description: `
         <p>Allow the player to download a TXT file with some info about the songs that played.</p>
         <p>You can download the TXT file at any point during the game:</p>
