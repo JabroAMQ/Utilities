@@ -12,14 +12,16 @@
 // @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/CancerRemoval/AMQCancerRemoval.user.js
 // ==/UserScript==
 
-let ignoreScript = false;   // modified in-game through an in-game button located in the footer of the settings container
-const DELAY = 500;          // manual delay among functions (milliseconds) to ensure instructions are executed in a fashion order
+const VERSION = 0.1;        // Documentation purposes only. Make sure this value matches with the @version one from the userscript header
+let ignoreScript = false;   // Modified in-game through an in-game button located in the footer of the settings container
+const DELAY = 500;          // Manual delay among functions (milliseconds) to ensure instructions are executed in a fashion order
 
 
 AMQ_addScriptData({
     name: 'AMQ Cancer Removal',
     author: 'Jabro',
     link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/CancerRemoval/AMQCancerRemoval.user.js',
+    version: VERSION,
     description: `
         <div>
             <p>Automatically change some settings modifiers from the lobby:</p>
