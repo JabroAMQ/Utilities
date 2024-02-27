@@ -12,6 +12,12 @@
 // @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/CancerRemoval/AMQCancerRemoval.user.js
 // ==/UserScript==
 
+
+// Do not load the script in the login page
+if (document.getElementById('loginPage'))
+    return;
+
+
 const VERSION = 0.1;        // Documentation purposes only. Make sure this value matches with the @version one from the userscript header
 let ignoreScript = false;   // Modified in-game through an in-game button located in the footer of the settings container
 const DELAY = 500;          // Manual delay among functions (milliseconds) to ensure instructions are executed in a fashion order
@@ -114,9 +120,9 @@ $('#mhChangeButton').click(() => {
 });
 
 
-/////////////////////////////////////////////////////////
-// ADD NEW BEHAVIOUR WHEN BEING PROMOTED TO LOBBY HOST //
-/////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+// MODIFIED BEHAVIOUR WHEN BEING PROMOTED TO LOBBY HOST //
+//////////////////////////////////////////////////////////
 // TODO
 
 
