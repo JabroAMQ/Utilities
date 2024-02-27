@@ -133,7 +133,7 @@ $('#mhChangeButton').click(() => {
 //////////////////////////////////////////////////////////
 new Listener('Host Promotion', (payload) => {
 	var newHost = payload.newHost;
-    
+
     // If we have just been promoted to host while in lobby
     if (newHost === selfName && lobby.inLobby) {
         // Check for cancer settings and modify them if so...
@@ -205,9 +205,9 @@ function sendChatMessage(content) {
 }
 
 
-//////////////////////
-//  COOKIES STUFF   //
-//////////////////////
+///////////////////
+// COOKIES STUFF //
+///////////////////
 // https://stackoverflow.com/a/24103596/20214407
 function getCookie(name) {
     let nameEQ = name + '=';
