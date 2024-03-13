@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Song Info Downloader
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.4.2
+// @version      0.5
 // @description  Download some info from the songs that played while playing AMQ
 // @author       Jabro, Spitzell
 // @match        https://animemusicquiz.com/*
@@ -12,7 +12,7 @@
 // @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/AMQSongInfoDownloader.user.js
 // ==/UserScript==
 
-const VERSION = '0.4.2';    // Documentation purposes only. Make sure this value matches with the @version one from the userscript header
+const VERSION = '0.5';    // Documentation purposes only. Make sure this value matches with the @version one from the userscript header
 
 AMQ_addScriptData({
     name: 'AMQ Song Info Downloader',
@@ -41,8 +41,8 @@ TODO LIST:
 
 const DOMAINS = {
     'EU': 'https://nl.catbox.video/',
-    'NA1': 'https://ladst1.catbox.video/',
-    'NA2': 'https://abdist1.catbox.video/'
+    'NA1': 'https://ladist1.catbox.video/',
+    'NA2': 'https://vhdist1.catbox.video/'
 };
 
 let quizReadyListener;
