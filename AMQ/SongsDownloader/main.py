@@ -60,10 +60,10 @@ def process_anime_name(anime_name: str, song_type: str) -> str:
 
     # Replace ":" by a "-" and add an additional "-" at the end of the name
     # Gintama: THE FINAL --> Gintama -THE FINAL- 
-    if ': ' in anime_name:
-        anime_name = anime_name.replace(': ', ' -') + '-'
-    elif ':' in anime_name:
-        anime_name = anime_name.replace(':', ' -') + '-'
+    if ':' in anime_name:
+        anime_name_parts = anime_name.split(':')
+        anime_name_parts = [part.strip() for part in anime_name_parts]
+        anime_name = ' -'.join(anime_name_parts) + '-'
 
     # We add song type to anime name
     anime_name = f'{anime_name.strip()} {song_type}'
