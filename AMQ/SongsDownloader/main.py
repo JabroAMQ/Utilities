@@ -50,8 +50,8 @@ def process_file_content() -> list[Song]:
 def process_anime_name(anime_name: str, song_type: str) -> str:
     """Process the anime name by removing forbidden characters, replacing certain characters, and adding song type."""
     # Handle forbidden characters for file names (in the way asked by an user)
-    # Remove [], "", <>
-    anime_name = re.sub(r'["<>|]+', '', anime_name)
+    # Remove ", <>, |, \
+    anime_name = re.sub(r'["<>|\\]+', '', anime_name)
 
     # Replace ?, /, *
     replacements = {'?': '¿', '/': ';', '*': '^'}
