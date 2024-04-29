@@ -8,8 +8,8 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
 // @grant        none
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
-// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/RoomNameAutosetters/AMQRoomNameFromSavesSettings.user.js
-// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/RoomNameAutosetters/AMQRoomNameFromSavesSettings.user.js
+// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/RoomNameAutosetters/AMQRoomNameFromSavedSettings.user.js
+// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/RoomNameAutosetters/AMQRoomNameFromSavedSettings.user.js
 // ==/UserScript==
 
 // Do not load the script in the login page
@@ -39,7 +39,7 @@ function roomNameFromSavedSettings() {
 AMQ_addScriptData({
     name: 'AMQ Room Name from Saved Settings',
     author: 'Jabro',
-    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/RoomNameAutosetters/AMQRoomNameFromSavesSettings.user.js',
+    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/RoomNameAutosetters/AMQRoomNameFromSavedSettings.user.js',
     version: 0.1,
     description: `
         <div>
