@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Room Name from Saved Settings
 // @namespace    http://tampermonkey.net/
-// @version      0.0
+// @version      0.1
 // @description  Automatically set the room name to the one stored when loading settings from saved settings
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
@@ -40,7 +40,7 @@ AMQ_addScriptData({
     name: 'AMQ Room Name from Saved Settings',
     author: 'Jabro',
     link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/RoomNameAutosetters/AMQRoomNameFromSavesSettings.user.js',
-    version: 0.0,
+    version: 0.1,
     description: `
         <div>
             <p>Automatically set the room name to the one stored when loading settings from saved settings:</p>
