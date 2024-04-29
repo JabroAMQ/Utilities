@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Room Name and Password Autosetters
 // @namespace    http://tampermonkey.net/
-// @version      0.0
+// @version      0.1
 // @description  Automatically set the room's name and password (if any) to the last ones you used so that you don't have to write them again each time you host a lobby
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
@@ -9,6 +9,8 @@
 // @grant        none
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqWindows.js
+// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQRoomNameAndPasswordAutosetters.user.js
+// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQRoomNameAndPasswordAutosetters.user.js
 // ==/UserScript==
 
 // Do not load the script in the login page
@@ -19,8 +21,8 @@ if (document.getElementById('loginPage'))
 AMQ_addScriptData({
     name: 'AMQ Last Room Name and Password Autosetter',
     author: 'Jabro',
-    link: 'placeholder',
-    version: 0.0,
+    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQRoomNameAndPasswordAutosetters.user.js',
+    version: 0.1,
     description: `
         <p>Automatically set the room's name and password (if any) to the last ones you used so that you don't have to write them again each time you host a lobby.</p>
         <p>The room's name and password stored values are updated once you host a lobby, or when you change the lobby settings.</p>
