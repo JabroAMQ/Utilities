@@ -10,8 +10,37 @@ Automatically set the room's name and password (if any) to the last ones you use
 
 When loading the lobby's settings from the saved settings panel (not from code), automatically updates the room's name with the one used for storing the selected settings.
 
-<div style="text-align: center;">
-    <img src='images/roomNameFromSavedSettings.png' width='600' height='120'/>
+<div>
+    <img src='images/RoomNameFromSavedSettings/example.png' width='600' height='120'/>
+</div>
+
+## AMQ Cancer Removal
+
+Automatically look for unpleasant lobby settings and modify them if needed.
+
+<div>
+    <img src='images/CancerRemoval/example.png' width='500' height='300'/>
+</div>
+
+Unpleasant modifiers:
+
+- Rebroadcast songs if ON.
+- Dubs songs if ON.
+- Skip guessing if OFF.
+- Skip replay if OFF.
+
+The script checks the settings (and modifies them if procceed) when:
+
+- The lobby is created.
+- The settings are modified by the host (if they are using this script).
+- The player using this script is promoted to host while in lobby (not during game).
+
+### Turning off the script from in game
+
+The player is free to turn off the script from in-game so the settings are not modified by the script anymore by clicking on the "Cancer" button that can be found in the footer of the lobby settings modal:
+
+<div>
+    <img src='images/CancerRemoval/cancer_button.png' width='500' height='500'/>
 </div>
 
 # Requirements

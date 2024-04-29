@@ -8,8 +8,8 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
 // @grant        none
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
-// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/CancerRemoval/AMQCancerRemoval.user.js
-// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/CancerRemoval/AMQCancerRemoval.user.js
+// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQCancerRemoval.user.js
+// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQCancerRemoval.user.js
 // ==/UserScript==
 
 
@@ -28,7 +28,7 @@ loadConfig();               // Set a value for the configuration variables (igno
 AMQ_addScriptData({
     name: 'AMQ Cancer Removal',
     author: 'Jabro',
-    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/CancerRemoval/AMQCancerRemoval.user.js',
+    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQCancerRemoval.user.js',
     version: VERSION,
     description: `
         <div>
@@ -50,7 +50,7 @@ AMQ_addScriptData({
 
         <div>
             <p>You can turn off this behavior from the own game by clicking on the "Cancer" button found in the footer of the settings modal:</p>
-            <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/CancerRemoval/images/cancer_button.png' alt='Cancer Button'>
+            <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/FasterLobbyCreation/images/CancerRemoval/cancer_button.png' alt='Cancer Button'>
         </div>
     `
 });

@@ -44,7 +44,7 @@ AMQ_addScriptData({
     description: `
         <div>
             <p>Automatically set the room name to the one stored when loading settings from saved settings:</p>
-            <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/FasterLobbyCreation/images/roomNameFromSavedSettings.png' alt='roomNameDromSavedSettingsPNG'>
+            <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/FasterLobbyCreation/images/RoomNameFromSavedSettings/roomNameFromSavedSettings.png' alt='example'>
         </div>
     `
 });
