@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Cancer Removal
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.3
+// @version      0.3.1
 // @description  Automatically turns off dubs and rebroadcasts from lobby settings
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
@@ -18,7 +18,7 @@ if (document.getElementById('loginPage'))
     return;
 
 
-const VERSION = '0.3';      // Documentation purposes only. Make sure this value matches with the @version one from the userscript header
+const VERSION = '0.3.1';    // Documentation purposes only. Make sure this value matches with the @version one from the userscript header
 const DELAY = 500;          // Manual delay among functions (milliseconds) to ensure instructions are executed in a fashion order
 
 let ignoreScript;           // Modified in-game through an in-game button located in the footer of the settings container
