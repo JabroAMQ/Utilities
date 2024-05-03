@@ -95,48 +95,37 @@ modalFooter.insertBefore(ignoreButton, mainButton);
 
 
 ///////////////////////////////////////////////////
-// MODIFIED BEHAVIOUR OF THE "HOST LOBBY" BUTTON //
+// MODIFIED BEHAVOUR OF THE "HOST LOBBY" BUTTON //
 ///////////////////////////////////////////////////
-// Ideally rather than modifying the onclick behaviour, we should add an event listener to perform the additional behaviour
+// NOTE: ideally rather than modifying the onclick behavour, we should add an event listener to add the additional behavour
 $('#mhHostButton').removeAttr('onclick');
 $('#mhHostButton').click(() => {
-    // Host a lobby with the settings stablished by the host
-    roomBrowser.host();
-
-    // Check for cancer settings and modify them if so...
-    setTimeout(() => {
+    roomBrowser.host();             // Original "onclick" behavour
+    setTimeout(() => {              // Added behavour
         if (cancerFound())
             changeSettings();
     }, DELAY);
 });
 
-
 //////////////////////////////////////////////////////////////
-// MODIFIED BEHAVIOUR OF THE "CHANGE LOBBY SETTINGS" BUTTON //
+// MODIFIED BEHAVOUR OF THE "CHANGE LOBBY SETTINGS" BUTTON //
 //////////////////////////////////////////////////////////////
-// Ideally rather than modifying the onclick behaviour, we should add an event listener to perform the additional behaviour
+// NOTE: ideally rather than modifying the onclick behavour, we should add an event listener to add the additional behavour
 $('#mhChangeButton').removeAttr('onclick');
 $('#mhChangeButton').click(() => {
-    // Change the lobby with the settings established by the host
-    lobby.changeGameSettings();
-
-    // Check for cancer settings and modify them if so...
-    setTimeout(() => {
+    lobby.changeGameSettings();     // Original "onclick" behavour
+    setTimeout(() => {              // Added behavour
         if (cancerFound())
             changeSettings();
     }, DELAY);
 });
 
-
 //////////////////////////////////////////////////////////
-// MODIFIED BEHAVIOUR WHEN BEING PROMOTED TO LOBBY HOST //
+// MODIFIED BEHAVOUR WHEN BEING PROMOTED TO LOBBY HOST //
 //////////////////////////////////////////////////////////
 new Listener('Host Promotion', (payload) => {
 	var newHost = payload.newHost;
-
-    // If we have just been promoted to host while in lobby
     if (newHost === selfName && lobby.inLobby) {
-        // Check for cancer settings and modify them if so...
         if (cancerFound())
             changeSettings();
     }
@@ -162,18 +151,12 @@ function cancerFound() {
 }
 
 function changeSettings() {
-    // Notify the players that cancer settings were found
     setTimeout(() => {
         sendChatMessage('**Script:** Unpleasant settings detected...');
-
-        // Modify the lobby settings accordingly
         setTimeout(() => {
             removeCancer();
-
-            // Confirm changes applied
             setTimeout(() => {
                 sendChatMessage('**Script:** :sweat_smile:');
-
             }, DELAY);
         }, DELAY);
     }, DELAY);
@@ -193,13 +176,8 @@ function removeCancer() {
 }
 
 function sendChatMessage(content) {
-    // NOTE: ideally we want to send a system message rather than a player message like in the line below.
-    // NOTE: line below not ideal since it makes the message only visible to the player running this script, not everyone in the lobby
-    //gameChat.systemMessage(content);
-
     var chatInput = document.getElementById('gcInput');
     chatInput.value = content;
-
     var enterEvent = new KeyboardEvent('keypress', { key: 'Enter', keyCode: 13 });
     chatInput.dispatchEvent(enterEvent);
 }
