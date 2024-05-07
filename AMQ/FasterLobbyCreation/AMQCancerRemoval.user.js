@@ -2,7 +2,7 @@
 // @name         AMQ Cancer Removal
 // @namespace    https://github.com/JabroAMQ/
 // @version      0.4
-// @description  Automatically turns off dubs and rebroadcasts from lobby settings
+// @description  Check for unpleasant lobby's modifiers values and change them if proceeds
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
