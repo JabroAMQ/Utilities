@@ -16,16 +16,17 @@ When loading the lobby's settings from the saved settings panel (not from code),
 
 ## AMQ Cancer Removal
 
-Automatically look for unpleasant lobby settings and modify them if needed.
+Automatically look for unpleasant lobby modifiers and modify them if needed.
 
 <div>
-    <img src='images/CancerRemoval/example.png' width='500' height='300'/>
+    <img src='images/CancerRemoval/example.png' width='500' height='180'/>
 </div>
 
-Unpleasant modifiers:
+Unpleasant modifiers (default):
 
 - Rebroadcast songs if ON.
 - Dubs songs if ON.
+- Full song range if ON.
 - Skip guessing if OFF.
 - Skip replay if OFF.
 
@@ -42,6 +43,10 @@ The player is free to turn off the script from in-game so the settings are not m
 <div>
     <img src='images/CancerRemoval/cancer_button.png' width='500' height='500'/>
 </div>
+
+### Modifying script behavour
+
+The user can change which are the "unpleasant" modifiers from the script code. Look for `const modifiers` inside the script.
 
 # Requirements
 
