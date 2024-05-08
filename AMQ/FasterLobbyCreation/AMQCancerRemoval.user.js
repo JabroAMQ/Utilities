@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Cancer Removal
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.4
+// @version      0.4.1
 // @description  Check for unpleasant lobby's modifiers values and change them if proceeds
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
@@ -13,16 +13,42 @@
 // ==/UserScript==
 
 
-// Do not load the script in the login page
-if (document.getElementById('loginPage'))
-    return;
-
-
-const VERSION = '0.4';          // Documentation purposes only. Its value should match with the @version one from the userscript header
+const VERSION = '0.4.1';        // Documentation purposes only. Its value should match with the @version one from the userscript header
 const DELAY = 500;              // Manual delay among functions (in milliseconds) to ensure instructions are executed in a fashion order
-
 let ignoreScript;               // Whether this script should be ignored when modifying the lobby settings
-loadConfig();                   // Load cookies to retrieve persistent variable values
+let modifiers;                  // The values of the modifiers to be checked
+
+AMQ_addScriptData({
+    name: 'AMQ Cancer Removal',
+    author: 'Jabro',
+    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQCancerRemoval.user.js',
+    version: VERSION,
+    description: `
+        <div>
+            <p>Automatically change some settings modifiers from the lobby. By default:</p>
+            <ul>
+                <li>- Turns off rebroadcast and dubs songs as well as full song range.</li>
+                <li>- Turns on skip guessing and skip replay options.</li>
+            </ul>
+        </div>
+
+        <div>
+            <p>The changes are applied when:</p>
+            <ul>
+                <li>- The lobby is created.</li>
+                <li>- The host (using this script) modifies the lobby settings.</li>
+                <li>- The player (using this script) is promoted to host while in the lobby.</li>
+            </ul>
+        </div>
+
+        <div>
+            <p>You can turn off the script from the own game by clicking on the "Cancer" button found in the footer of the settings modal:</p>
+            <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/FasterLobbyCreation/images/CancerRemoval/cancer_button.png' alt='Cancer Button'>
+
+            <p>You can also modify which modifiers should be turned on/off in the code of the script (const modifiers values)</p>
+        </div>
+    `
+});
 
 
 class Modifier {
@@ -77,7 +103,7 @@ class Modifiers {
     }
 }
 
-const modifiers = new Modifiers([
+modifiers = new Modifiers([
     /*
     Possible modifiers values:
     - ON: Ensure the modifier is set to true (and set it to true if not)
@@ -92,6 +118,93 @@ const modifiers = new Modifiers([
     { checkboxSelector: '#mhDubSongs', value: Modifiers.OFF },              // Dub Songs
     { checkboxSelector: '#mhFullSongRange', value: Modifiers.OFF }          // Full Song Range
 ]);
+
+
+// Do not load the script in the login page
+if (document.getElementById('loginPage'))
+    return;
+
+// Wait until the LOADING... screen is hidden and load script
+let loadInterval = setInterval(() => {
+    if ($('#loadingScreen').hasClass('hidden')) {
+        clearInterval(loadInterval);
+        loadConfig();
+        addCancerListeners();
+        addCancerButton();
+        addCancerSettingsTab();
+    }
+}, DELAY);
+
+
+function addCancerListeners() {
+    addHostLobbyListener();         // TODO: create a proper event listener (which is the event name we have to listen to??)
+    addChangeSettingsListener();    // TODO: create a proper event listener (which is the event name we have to listen to??)
+    addHostPromotionListener();
+}
+
+function addHostLobbyListener() {
+    // Modified behavour of the "Host Lobby" button
+    // NOTE: ideally rather than modifying the onclick behavour, we should add an event listener to add the additional behavour
+    $('#mhHostButton').removeAttr('onclick');
+    $('#mhHostButton').click(() => {
+        roomBrowser.host();             // Original "onclick" behavour
+        checkSettings();                // Added behavour
+    });
+}
+
+function addChangeSettingsListener() {
+    // Modified behavour of the "Change Lobby Settings" button
+    // NOTE: ideally rather than modifying the onclick behavour, we should add an event listener to add the additional behavour
+    $('#mhChangeButton').removeAttr('onclick');
+    $('#mhChangeButton').click(() => {
+        lobby.changeGameSettings();     // Original "onclick" behavour
+        checkSettings();                // Added behavour
+    });
+}
+
+function addHostPromotionListener() {
+    // Added behavour when being promoted to host while in lobby
+    new Listener('Host Promotion', (payload) => {
+        var newHost = payload.newHost;
+        if (newHost === selfName && lobby.inLobby)
+            checkSettings();
+    }).bindListener();
+}
+
+function addCancerButton() {
+    // Create a button to allow the user to ignore this script when clicked
+    var ignoreButton = document.createElement('button');
+    ignoreButton.type = 'button';
+    ignoreButton.className = ignoreScript ? 'btn btn-default' : 'btn btn-primary';
+    ignoreButton.id = 'mhCancerButton'
+    ignoreButton.innerHTML = '♋';
+
+    // Add the desired functionallity to the button
+    ignoreButton.addEventListener('click', function() {
+        // Modify the value of ignoreScript and save it as cookie to remember it in future sessions
+        ignoreScript = !ignoreScript;
+        saveConfig();
+
+        // Modify the cancer button class and the text of the modal based on the value of ignoreScript var
+        ignoreButton.className = ignoreScript ? 'btn btn-default' : 'btn btn-primary';
+        var modalText = ignoreScript
+            ? 'The script has now been disabled. The lobby\'s modifiers won\'t be checked by the script anymore.'
+            : 'The script has now been enabled. The lobby\'s modifiers will now be modified by the script if proceeds.';
+
+        // Send a "debug" modal to inform the user that the change was applied
+        Swal.fire({
+            title: 'AMQ Cancer Removal Script',
+            text: modalText,
+            showConfirmButton: true,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+        });
+    });
+}
+
+function addCancerSettingsTab() {
+    // TODO
+}
 
 
 function getLobbyModifiersValues() {
@@ -138,66 +251,6 @@ function checkSettings() {
 }
 
 
-// Modified behavour of the "Host Lobby" button
-// NOTE: ideally rather than modifying the onclick behavour, we should add an event listener to add the additional behavour
-$('#mhHostButton').removeAttr('onclick');
-$('#mhHostButton').click(() => {
-    roomBrowser.host();             // Original "onclick" behavour
-    checkSettings();                // Added behavour
-});
-
-// Modified behavour of the "Change Lobby Settings" button
-// NOTE: ideally rather than modifying the onclick behavour, we should add an event listener to add the additional behavour
-$('#mhChangeButton').removeAttr('onclick');
-$('#mhChangeButton').click(() => {
-    lobby.changeGameSettings();     // Original "onclick" behavour
-    checkSettings();                // Added behavour
-});
-
-// Added behavour when being promoted to host while in lobby
-new Listener('Host Promotion', (payload) => {
-	var newHost = payload.newHost;
-    if (newHost === selfName && lobby.inLobby)
-        checkSettings();
-}).bindListener();
-
-
-// UI Stuff:
-// Create a button to allow the user to ignore this script when clicked
-var ignoreButton = document.createElement('button');
-ignoreButton.type = 'button';
-ignoreButton.className = ignoreScript ? 'btn btn-default' : 'btn btn-primary';
-ignoreButton.id = 'mhCancerButton'
-ignoreButton.innerHTML = '♋';
-
-// Add the desired functionallity to the button
-ignoreButton.addEventListener('click', function() {
-    // Modify the value of ignoreScript and save it as cookie to remember it in future sessions
-    ignoreScript = !ignoreScript;
-    saveConfig();
-
-    // Modify the cancer button class and the text of the modal based on the value of ignoreScript var
-    ignoreButton.className = ignoreScript ? 'btn btn-default' : 'btn btn-primary';
-    var modalText = ignoreScript
-        ? 'The script has now been disabled. The lobby\'s modifiers won\'t be checked by the script anymore.'
-        : 'The script has now been enabled. The lobby\'s modifiers will now be modified by the script if proceeds.';
-
-    // Send a "debug" modal to inform the user that the change was applied
-    Swal.fire({
-        title: 'AMQ Cancer Removal Script',
-        text: modalText,
-        showConfirmButton: true,
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'OK'
-      });
-});
-
-// Insert the button in the settings container's footer
-var modalFooter = document.querySelector('#mhHostSettingContainer .modal-footer');
-var mainButton = modalFooter.querySelector('.btn-primary');
-modalFooter.insertBefore(ignoreButton, mainButton);
-
-
 // Cookies stuff: https://stackoverflow.com/a/24103596/20214407
 function getCookie(name) {
     let nameEQ = name + '=';
@@ -231,36 +284,3 @@ function saveConfig() {
     let ignoreScriptString = ignoreScript.toString();
     setCookie('ignoreScript', ignoreScriptString, 9999);
 }
-
-
-AMQ_addScriptData({
-    name: 'AMQ Cancer Removal',
-    author: 'Jabro',
-    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQCancerRemoval.user.js',
-    version: VERSION,
-    description: `
-        <div>
-            <p>Automatically change some settings modifiers from the lobby. By default:</p>
-            <ul>
-                <li>- Turns off rebroadcast and dubs songs as well as full song range.</li>
-                <li>- Turns on skip guessing and skip replay options.</li>
-            </ul>
-        </div>
-
-        <div>
-            <p>The changes are applied when:</p>
-            <ul>
-                <li>- The lobby is created.</li>
-                <li>- The host (using this script) modifies the lobby settings.</li>
-                <li>- The player (using this script) is promoted to host while in the lobby.</li>
-            </ul>
-        </div>
-
-        <div>
-            <p>You can turn off the script from the own game by clicking on the "Cancer" button found in the footer of the settings modal:</p>
-            <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/FasterLobbyCreation/images/CancerRemoval/cancer_button.png' alt='Cancer Button'>
-
-            <p>You can also modify which modifiers should be turned on/off in the code of the script (const modifiers values)</p>
-        </div>
-    `
-});
