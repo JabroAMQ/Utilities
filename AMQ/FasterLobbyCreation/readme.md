@@ -27,7 +27,7 @@ Automatically look for unpleasant modifiers when hosting a lobby and change thei
 You can configure which modifiers are considered unpleasant from the game's main settings modal:
 
 <div>
-    <img src='images/AutoModifiers/settings.png' width='500' height='270'>
+    <img src='images/AutoModifiers/settings.png' width='500' height='240'>
 </div>
 
 The possible values of a modifier are:
