@@ -1,12 +1,12 @@
 # AMQ
 
-## [Messages Autosender](AMQ/MessagesAutosender/)
-
-A javascript userscript for AMQ that allow the player to save custom messages and, once they are clicked, autosend them to game chat.
-
 ## [Faster Lobby Creation](AMQ/FasterLobbyCreation/)
 
 A set of independent userscripts for AMQ that make hosting a lobby a couple of seconds faster.
+
+## [Messages Autosender](AMQ/MessagesAutosender/)
+
+A javascript userscript for AMQ that allow the player to save custom messages and, once they are clicked, autosend them to game chat.
 
 ## [Songs Downloader](AMQ/SongsDownloader/)
 

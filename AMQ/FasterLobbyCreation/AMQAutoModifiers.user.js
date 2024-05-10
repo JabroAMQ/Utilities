@@ -1,19 +1,19 @@
 // ==UserScript==
-// @name         AMQ Cancer Removal
+// @name         AMQ Auto Modifiers
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.5
+// @version      0.6
 // @description  Check for unpleasant lobby's modifiers values and change them if proceeds
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
 // @grant        none
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
-// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQCancerRemoval.user.js
-// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQCancerRemoval.user.js
+// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQAutoModifiers.user.js
+// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQAutoModifiers.user.js
 // ==/UserScript==
 
 
-const VERSION = '0.5';          // Documentation purposes only. Its value should match with the @version one from the userscript header
+const VERSION = '0.6';          // Documentation purposes only. Its value should match with the @version one from the userscript header
 const DELAY = 500;              // Manual delay among functions (in milliseconds) to ensure instructions are executed in a fashion order
 let ignoreScript;               // Whether this script should be ignored when modifying the lobby settings
 let modifiers;                  // The values of the modifiers to be checked
@@ -28,9 +28,8 @@ const loadInterval = setInterval(() => {
     if ($('#loadingScreen').hasClass('hidden')) {
         clearInterval(loadInterval);
         loadConfig();
-        addCancerListeners();
-        addCancerButton();
-        addCancerSettingsTab();
+        addModifiersListeners();
+        addModifiersSettingsTab();
     }
 }, DELAY);
 
@@ -42,7 +41,7 @@ class Modifier {
         this.value = value;
     }
 
-    cancerDetected(currentValue) {
+    isUnpleasant(currentValue) {
         switch (this.value) {
             case Modifiers.ON:
                 return !currentValue;
@@ -53,7 +52,7 @@ class Modifier {
         }
     }
 
-    removeCancer() {
+    changeValue() {
         switch (this.value) {
             case Modifiers.ON:
                 this.checkbox.prop('checked', true);
@@ -76,20 +75,20 @@ class Modifiers {
         this.modifiers = modifiers.map(modifier => new Modifier(modifier.name, modifier.checkboxId, modifier.value));
     }
 
-    ensureNotCancer(currentValues) {
-        let cancerFound = false;
+    ensureNotUnpleasant(currentValues) {
+        let unpleasantModifierFound = false;
         this.modifiers.forEach((modifier, index) => {
-            if (modifier.cancerDetected(currentValues[index])) {
-                modifier.removeCancer();
-                cancerFound = true;
+            if (modifier.isUnpleasant(currentValues[index])) {
+                modifier.changeValue();
+                unpleasantModifierFound = true;
             }
         });
-        return cancerFound;
+        return unpleasantModifierFound;
     }
 }
 
 
-function addCancerListeners() {
+function addModifiersListeners() {
     addHostLobbyListener();         // TODO: create a proper event listener (which is the event name we have to listen to??)
     addChangeSettingsListener();    // TODO: create a proper event listener (which is the event name we have to listen to??)
     addHostPromotionListener();
@@ -124,55 +123,25 @@ function addHostPromotionListener() {
     }).bindListener();
 }
 
-function addCancerButton() {
-    // Create a button to allow the user to ignore this script when clicked
-    const ignoreButton = document.createElement('button');
-    ignoreButton.type = 'button';
-    ignoreButton.className = ignoreScript ? 'btn btn-default' : 'btn btn-primary';
-    ignoreButton.id = 'mhCancerButton'
-    ignoreButton.innerHTML = '♋';
 
-    // Add the desired functionallity to the button
-    ignoreButton.addEventListener('click', function() {
-        // Modify the value of ignoreScript and save it as cookie to remember it in future sessions
-        ignoreScript = !ignoreScript;
-        saveConfig();
-
-        // Modify the cancer button class and the text of the modal based on the value of ignoreScript var
-        ignoreButton.className = ignoreScript ? 'btn btn-default' : 'btn btn-primary';
-        const modalText = ignoreScript
-            ? 'The script has now been disabled. The lobby\'s modifiers won\'t be checked by the script anymore.'
-            : 'The script has now been enabled. The lobby\'s modifiers will now be modified by the script if proceeds.';
-
-        // Send a "debug" modal to inform the user that the change was applied
-        Swal.fire({
-            title: 'AMQ Cancer Removal Script',
-            text: modalText,
-            showConfirmButton: true,
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK'
-        });
-    });
-}
-
-function addCancerSettingsTab() {
-    // Create the "Cancer" tab in settings
+function addModifiersSettingsTab() {
+    // Create the "Modifiers" tab in settings
     $('#settingModal .tabContainer')
         .append($('<div></div>')
-            .addClass('tab cancerModifier clickAble')
-            .attr('onClick', "options.selectTab('cancerContainer', this)")
+            .addClass('tab modifiers clickAble')
+            .attr('onClick', "options.selectTab('modifiersContainer', this)")
             .append($('<h5></h5>')
-                .text('Cancer')
+                .text('Modifiers')
             )
         );
 
-    // Create the body base for "Cancer" tab
-    const cancerTabContent = $('<div></div>')
-        .attr('id', 'cancerModifierContainer')
+    // Create the body base for "Modifiers" tab
+    const modifiersTabContent = $('<div></div>')
+        .attr('id', 'modifiersContainer')
         .addClass('settingContentContainer hide');
-    $('#settingModal .modal-body').append(cancerTabContent);
+    $('#settingModal .modal-body').append(modifiersTabContent);
 
-    addCancerSettingsTabBodyContent();
+    addModifiersSettingsTabBodyContent();
 
     // Bind a click event listener to resize the settings modal width.
     // We can't change its width directly as we want it to dynamically
@@ -184,25 +153,25 @@ function addCancerSettingsTab() {
         modalContent.css('width', desiredWidth);
     });
 
-    // Bind a click event listener to show the content of the "Cancer" tab when clicked
-    $('#settingModal .tabContainer').on('click', '.cancerModifier', function () {
-        cancerTabContent.removeClass('hide');
+    // Bind a click event listener to show the content of the "Modifiers" tab when clicked
+    $('#settingModal .tabContainer').on('click', '.modifiers', function () {
+        modifiersTabContent.removeClass('hide');
     });
 
-    // Bind a click event listener to hide the "Cancer" tab when another tab is clicked
-    $('#settingModal .tabContainer').on('click', '.tab:not(.cancerModifier)', function () {
-        if (!cancerTabContent.hasClass('hide')) {
-            cancerTabContent.addClass('hide');
+    // Bind a click event listener to hide the "Modifiers" tab when another tab is clicked
+    $('#settingModal .tabContainer').on('click', '.tab:not(.modifiers)', function () {
+        if (!modifiersTabContent.hasClass('hide')) {
+            modifiersTabContent.addClass('hide');
 
-            // Manually unselect the "Cancer" tab and select the one that was clicked (doesn't work well by default)
+            // Manually unselect the "Modifiers" tab and select the one that was clicked (doesn't work well by default)
             $('#settingModal .tabContainer .tab').removeClass('selected');
             $(this).addClass('selected');
         }
     });
 }
 
-function addCancerSettingsTabBodyContent() {
-    const cancerTabContent = $('#cancerModifierContainer');
+function addModifiersSettingsTabBodyContent() {
+    const modifiersTabContent = $('#modifiersContainer');
     
     // Place the modifiers in groups of 3
     for (let i = 0; i < modifiers.modifiers.length; i += 3) {
@@ -252,7 +221,7 @@ function addCancerSettingsTabBodyContent() {
             modifierContainer.append(label, selectBox);
             row.append(modifierContainer);
         }
-        cancerTabContent.append(row);
+        modifiersTabContent.append(row);
     }
 }
 
@@ -263,9 +232,9 @@ function checkSettings() {
 
     setTimeout(() => {
         const currentValues = getLobbyModifiersValues();
-        const cancer_detected = modifiers.ensureNotCancer(currentValues);
+        const unpleasantModifiers = modifiers.ensureNotUnpleasant(currentValues);
 
-        if (cancer_detected) {
+        if (unpleasantModifiers) {
             setTimeout(() => {
                 sendChatMessage('**Script:** Unpleasant modifiers detected...');
                 setTimeout(() => {
@@ -389,7 +358,7 @@ function setCookie(name, value, days) {
 
 
 AMQ_addStyle(`
-    .cancerModifierContainer {
+    .modifiersContainer {
         margin-top: 10px;
     }
 
@@ -422,19 +391,19 @@ AMQ_addStyle(`
 `);
 
 AMQ_addScriptData({
-    name: 'AMQ Cancer Removal',
+    name: 'AMQ Auto Modifiers',
     author: 'Jabro',
-    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQCancerRemoval.user.js',
+    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQAutoModifiers.user.js',
     version: VERSION,
     description: `
         <div>
             <p>Automatically look for unpleasant modifiers when hosting a lobby and change their values if needed:</p>
-            <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/FasterLobbyCreation/images/CancerRemoval/example.png' alt='Example'
+            <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/FasterLobbyCreation/images/AutoModifiers/example.png' alt='Example'
         </div>
 
         <div>
             <p>You can configure which modifiers are considered unpleasant from the game's main settings modal:</p>
-            <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/FasterLobbyCreation/images/CancerRemoval/settings.png' alt='Settings'
+            <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/FasterLobbyCreation/images/AutoModifiers/settings.png' alt='Settings'
         </div>
 
         <div>
@@ -444,11 +413,6 @@ AMQ_addScriptData({
                 <li>- The host (using this script) modifies the lobby settings.</li>
                 <li>- The player (using this script) is promoted to host while in the lobby.</li>
             </ul>
-        </div>
-
-        <div>
-            <p>You can turn off the script from the own game by clicking on the "Cancer" button found in the footer of the settings modal:</p>
-            <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/FasterLobbyCreation/images/CancerRemoval/cancer_button.png' alt='Cancer Button'>
         </div>
     `
 });

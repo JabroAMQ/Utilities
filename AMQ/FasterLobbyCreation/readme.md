@@ -16,18 +16,18 @@ When loading the lobby's settings from the saved settings panel (not from code),
     <img src='images/RoomNameFromSavedSettings/example.png' width='600' height='120'/>
 </div>
 
-## AMQ Cancer Removal
+## AMQ Auto Modifiers
 
 Automatically look for unpleasant modifiers when hosting a lobby and change their values if needed.
 
 <div>
-    <img src='images/CancerRemoval/example.png' width='500' height='180'/>
+    <img src='images/AutoModifiers/example.png' width='500' height='180'/>
 </div>
 
 You can configure which modifiers are considered unpleasant from the game's main settings modal:
 
 <div>
-    <img src='images/CancerRemoval/settings.png' width='500' height='270'>
+    <img src='images/AutoModifiers/settings.png' width='500' height='270'>
 </div>
 
 The possible values of a modifier are:
@@ -47,13 +47,6 @@ The script looks for unpleasant modifiers (and change their value if procceed) w
 - The settings are modified by the host (if they are using this script).
 - The player using this script is promoted to host while in lobby (not during game).
 
-### Turning off the script from in game
-
-The player is free to turn off the script from in-game so the settings are not modified by the script anymore by clicking on the "Cancer" button that can be found in the footer of the lobby settings modal:
-
-<div>
-    <img src='images/CancerRemoval/cancer_button.png' width='500' height='500'/>
-</div>
 
 # Requirements
 
