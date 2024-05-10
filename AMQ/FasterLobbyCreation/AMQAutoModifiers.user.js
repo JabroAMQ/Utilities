@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Auto Modifiers
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.6
+// @version      0.6.1
 // @description  Check for unpleasant lobby's modifiers values and change them if proceeds
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
@@ -13,7 +13,7 @@
 // ==/UserScript==
 
 
-const VERSION = '0.6';          // Documentation purposes only. Its value should match with the @version one from the userscript header
+const VERSION = '0.6.1';        // Documentation purposes only. Its value should match with the @version one from the userscript header
 const DELAY = 500;              // Manual delay among functions (in milliseconds) to ensure instructions are executed in a fashion order
 let ignoreScript;               // Whether this script should be ignored when modifying the lobby settings
 let modifiers;                  // The values of the modifiers to be checked
@@ -89,33 +89,24 @@ class Modifiers {
 
 
 function addModifiersListeners() {
-    addHostLobbyListener();         // TODO: create a proper event listener (which is the event name we have to listen to??)
-    addChangeSettingsListener();    // TODO: create a proper event listener (which is the event name we have to listen to??)
+    addHostLobbyListener();
+    addChangeSettingsListener();
     addHostPromotionListener();
 }
 
 function addHostLobbyListener() {
-    // Modified behavour of the "Host Lobby" button
-    // NOTE: ideally rather than modifying the onclick behavour, we should add an event listener to add the additional behavour
-    $('#mhHostButton').removeAttr('onclick');
-    $('#mhHostButton').click(() => {
-        roomBrowser.host();             // Original "onclick" behavour
-        checkSettings();                // Added behavour
+    $('#mhHostButton').click(function() {
+        checkSettings();
     });
 }
 
 function addChangeSettingsListener() {
-    // Modified behavour of the "Change Lobby Settings" button
-    // NOTE: ideally rather than modifying the onclick behavour, we should add an event listener to add the additional behavour
-    $('#mhChangeButton').removeAttr('onclick');
-    $('#mhChangeButton').click(() => {
-        lobby.changeGameSettings();     // Original "onclick" behavour
-        checkSettings();                // Added behavour
+    $('#mhChangeButton').click(function() {
+        checkSettings();
     });
 }
 
 function addHostPromotionListener() {
-    // Added behavour when being promoted to host while in lobby
     new Listener('Host Promotion', (payload) => {
         const newHost = payload.newHost;
         if (newHost === selfName && lobby.inLobby)
@@ -281,12 +272,6 @@ function loadConfig() {
     const dubSongs = getCookie('Dub Songs');
     const fullSongRange = getCookie('Full Song Range');
 
-    /*
-    Possible modifiers values:
-    - ON: Ensure the modifier is set to true (and set it to true if not)
-    - OFF: Ensure the modifier is set to false (and set it to false if not)
-    - IGNORE: Does not modify the value of the modifiers (keep it as true if it's set to true and keep it as false if it's set to false)
-    */
     const skipGuessingValue = skipGuessing == 'ON' ? Modifiers.ON
                             : skipGuessing == 'OFF' ? Modifiers.OFF
                             : Modifiers.IGNORE;
