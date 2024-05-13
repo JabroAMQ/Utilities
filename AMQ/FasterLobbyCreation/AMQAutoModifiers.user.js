@@ -1,35 +1,35 @@
 // ==UserScript==
 // @name         AMQ Auto Modifiers
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.6.1
+// @version      0.7
 // @description  Check for unpleasant lobby's modifiers values and change them if proceeds
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
 // @grant        none
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
+// @require      https://github.com/Minigamer42/scripts/raw/master/lib/commands.js
 // @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQAutoModifiers.user.js
 // @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQAutoModifiers.user.js
 // ==/UserScript==
 
 
-const VERSION = '0.6.1';        // Documentation purposes only. Its value should match with the @version one from the userscript header
-const DELAY = 500;              // Manual delay among functions (in milliseconds) to ensure instructions are executed in a fashion order
-let ignoreScript;               // Whether this script should be ignored when modifying the lobby settings
-let modifiers;                  // The values of the modifiers to be checked
+const VERSION = '0.7';
+const DELAY = 500;
+let ignoreScript;
+let modifiers;
 
 
-// Do not load the script in the login page
 if (document.getElementById('loginPage'))
     return;
 
-// Wait until the LOADING... screen is hidden and load script
 const loadInterval = setInterval(() => {
     if ($('#loadingScreen').hasClass('hidden')) {
         clearInterval(loadInterval);
         loadConfig();
         addModifiersListeners();
         addModifiersSettingsTab();
+        addModifiersCommands();
     }
 }, DELAY);
 
@@ -195,7 +195,6 @@ function addModifiersSettingsTabBodyContent() {
                     saveConfig();
                 });
 
-            // Add options to the select box
             ['ON', 'OFF', 'IGNORE'].forEach(option => {
                 const optionElement = $('<option>')
                     .text(option)
@@ -217,8 +216,48 @@ function addModifiersSettingsTabBodyContent() {
 }
 
 
-function checkSettings() {
-    if (ignoreScript)
+function addModifiersCommands() {
+    AMQ_addCommand({
+        command: 'modifiers',
+        callback: toggleModifiers,
+        description: 'Toggle unpleasant lobby modifiers checking'
+    });
+
+    AMQ_addCommand({
+        command: 'modifiers_check',
+        callback: manualCheckSettings,
+        description: 'Force an unpleasant lobby modifiers checking'
+    });
+}
+
+function toggleModifiers() {
+    ignoreScript = !ignoreScript;
+    saveConfig();
+
+    const notification = ignoreScript
+        ? 'The lobby\'s modifiers won\'t be checked by the script anymore.'
+        : 'The lobby\'s modifiers will now be modified by the script if proceeds.'
+    gameChat.systemMessage(notification);
+}
+
+
+function manualCheckSettings() {
+    if (lobby.hostName != selfName) {
+        gameChat.systemMessage('Script cannot be used if you are not the lobby host');
+        return;
+    }
+    if (!lobby.inLobby) {
+        gameChat.systemMessage('Script cannot be used while playing a game (go back to lobby first)');
+        return;
+    }
+
+    gameChat.systemMessage('Checking modifiers, if you don\'t see any other message, there is not any unpleasant modifier.');
+    checkSettings(force=true);
+}
+
+
+function checkSettings(force=false) {
+    if (!force && ignoreScript)
         return;
 
     setTimeout(() => {
@@ -253,11 +292,11 @@ function getLobbyModifiersValues() {
     return currentValues;
 }
 
-function sendChatMessage(content) {
-    const chatInput = document.getElementById('gcInput');
-    chatInput.value = content;
-    const enterEvent = new KeyboardEvent('keypress', { key: 'Enter', keyCode: 13 });
-    chatInput.dispatchEvent(enterEvent);
+function sendChatMessage(message) {
+    const oldMessage = gameChat.$chatInputField.val();
+    gameChat.$chatInputField.val(message);
+    gameChat.sendMessage();
+    gameChat.$chatInputField.val(oldMessage);
 }
 
 
@@ -397,6 +436,14 @@ AMQ_addScriptData({
                 <li>- The lobby is created.</li>
                 <li>- The host (using this script) modifies the lobby settings.</li>
                 <li>- The player (using this script) is promoted to host while in the lobby.</li>
+            </ul>
+        </div>
+
+        <div>
+            <p>Chat commands:</p>
+            <ul>
+                <li>- /modifiers: Toggle unpleasant lobby modifiers checking</li>
+                <li>- /modifiers_check: Force an unpleasant lobby modifiers checking</li>
             </ul>
         </div>
     `

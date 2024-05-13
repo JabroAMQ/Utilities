@@ -18,11 +18,21 @@ When loading the lobby's settings from the saved settings panel (not from code),
 
 ## AMQ Auto Modifiers
 
+### Description 
+
 Automatically look for unpleasant modifiers when hosting a lobby and change their values if needed.
 
 <div>
     <img src='images/AutoModifiers/example.png' width='500' height='180'/>
 </div>
+
+The script looks for unpleasant modifiers (and change their value if procceed) when:
+
+- The lobby is created.
+- The settings are modified by the host (if they are using this script).
+- The player using this script is promoted to host while in lobby (not during game).
+
+### Configuration
 
 You can configure which modifiers are considered unpleasant from the game's main settings modal:
 
@@ -41,11 +51,14 @@ The possible values of a modifier are:
 > [!NOTE]
 > The script uses cookies to remember your unpleasant modifiers configuration for future sessions, meaning that you only need to configure it once (unless you remove the cookies from your web browser).
 
-The script looks for unpleasant modifiers (and change their value if procceed) when:
+### Chat commands
 
-- The lobby is created.
-- The settings are modified by the host (if they are using this script).
-- The player using this script is promoted to host while in lobby (not during game).
+- `/modifiers`: Enable/disable the unpleasant lobby modifiers checking. Support cookies (persistent).
+- `/modifiers_check`: Force a modifiers check. Usefull if you've been promoted to host while in game (the host left the room), or if you have this script disable (by using `/modifiers` previously).
+
+> [!TIP]
+> You can use `/help` to get a list with all the commands from this script as well as commands from other scripts that support [Minigamer42's commands script](https://github.com/Minigamer42/scripts/blob/master/lib/commands.js) so you don't have to remember their names.
+> <div><img src='images/AutoModifiers/help.png' width='500' height='180'></div>
 
 
 # Requirements
