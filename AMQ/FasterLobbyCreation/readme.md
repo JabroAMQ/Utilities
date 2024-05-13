@@ -55,6 +55,7 @@ The possible values of a modifier are:
 
 - `/modifiers`: Enable/disable the unpleasant lobby modifiers checking. Support cookies (persistent).
 - `/modifiers_check`: Force a modifiers check. Usefull if you've been promoted to host while in game (the host left the room), or if you have this script disable (by using `/modifiers` previously).
+- `/modifiers_config`: Open the modifiers tab from the main settings modal (the one displayed in the [Configuration](#configuration) section).
 
 > [!TIP]
 > You can use `/help` to get a list with all the commands from this script as well as commands from other scripts that support [Minigamer42's commands script](https://github.com/Minigamer42/scripts/blob/master/lib/commands.js) so you don't have to remember their names.
@@ -63,4 +64,4 @@ The possible values of a modifier are:
 
 # Requirements
 
-[Tampermonkey](https://www.tampermonkey.net/) (or any other alternative option) for installing the AMQ script.
+[Tampermonkey](https://www.tampermonkey.net/) (or any other alternative option) for installing the AMQ script(s).

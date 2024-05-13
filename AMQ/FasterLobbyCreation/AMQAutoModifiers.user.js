@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Auto Modifiers
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.7
+// @version      0.7.1
 // @description  Check for unpleasant lobby's modifiers values and change them if proceeds
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
@@ -14,7 +14,7 @@
 // ==/UserScript==
 
 
-const VERSION = '0.7';
+const VERSION = '0.7.1';
 const DELAY = 500;
 let ignoreScript;
 let modifiers;
@@ -228,6 +228,12 @@ function addModifiersCommands() {
         callback: manualCheckSettings,
         description: 'Force an unpleasant lobby modifiers checking'
     });
+
+    AMQ_addCommand({
+        command: 'modifiers_config',
+        callback: openModifiersConfigTab,
+        description: 'Open the modifiers tab from the main game settings modal'
+    });
 }
 
 function toggleModifiers() {
@@ -251,8 +257,20 @@ function manualCheckSettings() {
         return;
     }
 
-    gameChat.systemMessage('Checking modifiers, if you don\'t see any other message, there is not any unpleasant modifier.');
+    gameChat.systemMessage('Checking modifiers, if you don\'t see any other message, there is not any unpleasant modifier');
     checkSettings(force=true);
+}
+
+function openModifiersConfigTab() {
+    // Simulate a click event on the "settings" element from the "menu bar option container"
+    const settingsListItem = document.getElementById('optionListSettings');
+    settingsListItem.click();
+
+    // Simulate a click event on the "modifiers" tab from the "settings" modal
+    const modifiersTab = document.querySelector('.tab.modifiers');
+    modifiersTab.click();
+
+    gameChat.systemMessage('You need to use "/modifiers_check" to apply your new unpleasant modifiers configuration to the current lobby settings');
 }
 
 
@@ -444,6 +462,7 @@ AMQ_addScriptData({
             <ul>
                 <li>- /modifiers: Toggle unpleasant lobby modifiers checking</li>
                 <li>- /modifiers_check: Force an unpleasant lobby modifiers checking</li>
+                <li>- /modifiers_config: Open the modifiers tab from the main settings modal</li>
             </ul>
         </div>
     `
