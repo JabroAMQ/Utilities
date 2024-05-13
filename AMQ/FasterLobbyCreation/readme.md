@@ -59,7 +59,7 @@ The possible values of a modifier are:
 
 > [!TIP]
 > You can use `/help` to get a list with all the commands from this script as well as commands from other scripts that support [Minigamer42's commands script](https://github.com/Minigamer42/scripts/blob/master/lib/commands.js) so you don't have to remember their names.
-> <div><img src='images/AutoModifiers/help.png' width='500' height='180'></div>
+> <div><img src='images/AutoModifiers/help.png' width='500' height='260'></div>
 
 
 # Requirements
