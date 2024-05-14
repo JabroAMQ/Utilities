@@ -13,6 +13,7 @@
 // ==/UserScript==
 
 const VERSION = '0.1.1';
+const DELAY = 500;
 
 
 if (document.getElementById('loginPage'))
@@ -23,7 +24,7 @@ let loadInterval = setInterval(() => {
         clearInterval(loadInterval);
         roomNameFromSavedSettings();
     }
-}, 500);
+}, DELAY);
 
 
 function roomNameFromSavedSettings() {
