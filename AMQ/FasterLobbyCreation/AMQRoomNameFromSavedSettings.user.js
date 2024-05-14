@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Room Name from Saved Settings
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.1.1
 // @description  Automatically set the room name to the one stored when loading settings from saved settings
 // @author       Jabro
 // @match        https://animemusicquiz.com/*
@@ -12,11 +12,12 @@
 // @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQRoomNameFromSavedSettings.user.js
 // ==/UserScript==
 
-// Do not load the script in the login page
+const VERSION = '0.1.1';
+
+
 if (document.getElementById('loginPage'))
     return;
 
-// Wait for elements to be loaded
 let loadInterval = setInterval(() => {
     if ($('#loadingScreen').hasClass('hidden')) {
         clearInterval(loadInterval);
@@ -26,10 +27,10 @@ let loadInterval = setInterval(() => {
 
 
 function roomNameFromSavedSettings() {
-    var savedSettings = document.querySelectorAll('.mhLoadEntryName.clickAble');
+    const savedSettings = document.querySelectorAll('.mhLoadEntryName.clickAble');
     savedSettings.forEach(function(entry) {
         entry.addEventListener('click', function() {
-            var roomName = entry.innerText;
+            const roomName = entry.innerText;
             document.getElementById('mhRoomNameInput').value = roomName;
         });
     });
@@ -40,7 +41,7 @@ AMQ_addScriptData({
     name: 'AMQ Room Name from Saved Settings',
     author: 'Jabro',
     link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQRoomNameFromSavedSettings.user.js',
-    version: 0.1,
+    version: VERSION,
     description: `
         <div>
             <p>Automatically set the room name to the one stored when loading settings from saved settings:</p>
