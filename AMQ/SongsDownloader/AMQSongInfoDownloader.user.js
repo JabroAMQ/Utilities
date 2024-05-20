@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Song Info Downloader
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.5
+// @version      0.5.1
 // @description  Download some info from the songs that played while playing AMQ
 // @author       Jabro, Spitzell
 // @match        https://animemusicquiz.com/*
@@ -12,75 +12,41 @@
 // @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/AMQSongInfoDownloader.user.js
 // ==/UserScript==
 
-const VERSION = '0.5';    // Documentation purposes only. Make sure this value matches with the @version one from the userscript header
 
-AMQ_addScriptData({
-    name: 'AMQ Song Info Downloader',
-    author: 'Jabro & Spitzell',
-    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/AMQSongInfoDownloader.user.js',
-    version: VERSION,
-    description: `
-        <p>Allow the player to download a TXT file with some info about the songs that played.</p>
-        <p>You can download the TXT file at any point during the game:</p>
-        <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/SongsDownloader/images/download_button.png' alt='DownloadButton'>
-        <p>You can also modify how the script behaves:</p>
-        <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/SongsDownloader/images/open_configuration.png' alt='OpeningConfiguration'>
-        <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/SongsDownloader/images/configuration.png' alt='ConfigurationOptions'>
-    `
-});
-
-/*
-TODO LIST:
-- Add more functionallity (event listeners), and add these new options to the Configuration Tab:
-    - autoDownloasOnLeavingLobby (while playing game only)
-    - autoDownloadOnKickedFromLobby
-    - autoDownloadOnServerRestart
-
-- Prettify Configuration Tab
-*/
-
+const VERSION = '0.5.1';
+const DELAY = 500;
 const DOMAINS = {
     'EU': 'https://nl.catbox.video/',
     'NA1': 'https://ladist1.catbox.video/',
     'NA2': 'https://vhdist1.catbox.video/'
 };
 
+let selectedDomain;
+let autoDownloadOnQuizOver;
+let clearSongsInfoOnNewQuiz;
 let quizReadyListener;
 let quizOverListener;
-let selectedDomain = 'EU';
-let autoDownloadOnQuizOver = false;
-let clearSongsInfoOnNewQuiz = false;
 let allSongs = [];
 
 
-// Do not load the script in the login page
 if (document.getElementById('loginPage'))
     return;
 
-// Wait until the LOADING... screen is hidden and load script
 let loadInterval = setInterval(() => {
     if ($('#loadingScreen').hasClass('hidden')) {
         clearInterval(loadInterval);
         loadUserConfig();
-        setup();
+        addDownloaderListeners();
+        addDownloaderSettingsTab();
+        createDownloadButton();
     }
-}, 500);
+}, DELAY);
 
-function setup() {
-    setupDownloadButton();
-    setupListeners();
-    addDownloaderSettingsTab();
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-//////////////////////////  DOWNLOAD SONG INFO STUFF   /////////////////////////
-////////////////////////////////////////////////////////////////////////////////
 
 class SongInfo {
 
     constructor(result) {
-        let newSong = result.songInfo;
+        const newSong = result.songInfo;
         this.animeName = newSong.animeNames.romaji.replaceAll(',', '');
         this.songName = newSong.songName.replaceAll(',', '');
         this.songArtist = newSong.artist;
@@ -90,49 +56,25 @@ class SongInfo {
     }
 
     getSongInfo() {
-        let songUrl = `${DOMAINS[selectedDomain]}${this.songUrlPath}`;
+        const songUrl = `${DOMAINS[selectedDomain]}${this.songUrlPath}`;
         return `${this.animeName},${this.songType},${songUrl},${this.songName},${this.songArtist}`;
     }
-
 }
 
 
-function setupDownloadButton() {
-    const buttonWidth = 30;
-    const buttonMarginRight = 5;
-
-    let downloadButton = $(`
-        <div id='downloadButton' class='clickAble qpOption'>
-            <i aria-hidden='true' class='fa fa-download qpMenuItem'></i>
-        </div>`)
-        .css({
-            width: `${buttonWidth}px`,
-            height: '100%',
-            'margin-right': `${buttonMarginRight}px`
-        })
-        .click(function () {
-            downloadSongsInfo();
-        })
-        .popover({
-			placement: 'bottom',
-			content: 'Download Song Info',
-			trigger: 'hover'
-	    });
-
-    let currentWidth = $('#qpOptionContainer').width();
-    let extraWidth = buttonWidth + buttonMarginRight;
-    $('#qpOptionContainer').width(currentWidth + extraWidth);
-    $('#qpOptionContainer > div').append(downloadButton);
-}
-
-
-function setupListeners() {
+function addDownloaderListeners() {
     // Get song data on answer reveal
-    let answerResultsListener = new Listener('answer results', result => {
-        let newSongInfo = new SongInfo(result)
+    new Listener('answer results', result => {
+        const newSongInfo = new SongInfo(result)
         allSongs.push(newSongInfo);
+    }).bindListener();
+
+    // Download the songs once the quiz is over
+    quizOverListener = new Listener('quiz over', () => {
+        downloadSongsInfo();
     });
-    answerResultsListener.bindListener();
+    if (autoDownloadOnQuizOver)
+        quizOverListener.bindListener();
 
     // Reset song list for the new round
     quizReadyListener = new Listener('quiz ready', () => {
@@ -141,22 +83,12 @@ function setupListeners() {
     if (clearSongsInfoOnNewQuiz)
         quizReadyListener.bindListener();
 
-    // Download the songs once the quiz is over
-    quizOverListener = new Listener('quiz over', () => {
-        downloadSongsInfo();
-    });
-    if (autoDownloadOnQuizOver)
-        quizOverListener.bindListener();
+    /* TODO?:
+        - autoDownloadOnLeavingLobby (while playing game only)
+        - autoDownloadOnKickedFromLobby
+        - autoDownloadOnServerRestart
+    */
 }
-
-function updateClearSongsInfoOnNewQuizListener() {
-    clearSongsInfoOnNewQuiz ? quizReadyListener.bindListener() : quizReadyListener.unbindListener();
-}
-
-function updateAutoDownloadOnQuizOverListener() {
-    autoDownloadOnQuizOver ? quizOverListener.bindListener() : quizOverListener.unbindListener();
-}
-
 
 function downloadSongsInfo() {
     // Make sure there are songs to avoid downloading an empty TXT file
@@ -176,10 +108,6 @@ function clearSongsInfo() {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//////////////////////////  CONFIGURATION TAB STUFF   //////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
 function addDownloaderSettingsTab() {
     // Create the "Downloader" tab in settings
     $('#settingModal .tabContainer')
@@ -192,38 +120,21 @@ function addDownloaderSettingsTab() {
         );
 
     // Create the body base for "Downloader" tab
-    let downloaderTabContent = $('<div></div>')
+    const downloaderTabContent = $('<div></div>')
         .attr('id', 'settingsDownloaderContainer')
         .addClass('settingContentContainer hide');
     $('#settingModal .modal-body').append(downloaderTabContent);
 
-
-    // Create the "Change Prefered Host" select box for "Downloader" tab
-    addSelectBox('Change prefered host', Object.keys(DOMAINS), (value) => {
-        selectedDomain = value;
-        saveUserConfig();
-    }, selectedDomain, 'settingsDownloaderContainer');
-
-    // Create the "Autodownload on Quiz End" checkbox for "Downloader" tab
-    addCheckBox('Autodownload on quiz end', (checked) => {
-        autoDownloadOnQuizOver = checked;
-        saveUserConfig();
-        updateAutoDownloadOnQuizOverListener();
-    }, autoDownloadOnQuizOver, 'settingsDownloaderContainer');
-
-    // Create the "Reset Songlist on Quiz Start" checkbox for "Downloader" tab
-    addCheckBox('Reset songlist on quiz start', (checked) => {
-        clearSongsInfoOnNewQuiz = checked;
-        saveUserConfig();
-        updateClearSongsInfoOnNewQuizListener();
-    }, clearSongsInfoOnNewQuiz, 'settingsDownloaderContainer');
-
+    addDownloaderSettingsTabBodyContent();
 
     // Bind a click event listener to resize the settings modal width.
     // We can't change its width directly as we want it to dynamically
     // adjust to the modal-tab width, and we can't get it while the modal is hidden
     $('#settingModal').on('shown.bs.modal', function () {
-        adjustModalWidth();
+        const modalContent = $('#settingModal .modal-dialog');
+        const modalTab = $('#settingModal .tabContainer');
+        const desiredWidth = `${modalTab.width()}px`;
+        modalContent.css('width', desiredWidth);
     });
 
     // Bind a click event listener to show the content of the "Downloader" tab when clicked
@@ -243,101 +154,133 @@ function addDownloaderSettingsTab() {
     });
 }
 
+function addDownloaderSettingsTabBodyContent() {
+    // Create the main container for the "Downloader" tab body
+    const mainContainer = document.createElement('div');
+    mainContainer.id = 'mainDownloaderContainer';
+    document.getElementById('settingsDownloaderContainer').appendChild(mainContainer);
 
-function addSelectBox(label, options, onChangeCallback, defaultValue, containerId) {
-    let id = label.replace(/\s/g, '');
+    // Create and append the selectbox container
+    const selectboxContainer = document.createElement('div');
+    selectboxContainer.id = 'selectboxContainer';
+    mainContainer.appendChild(selectboxContainer);
+    selectboxContainer.appendChild(createPreferredHostSelectBox());
 
-    let selectContainer = $('<div>')
-        .css({
-            'margin-top': '15px',
-            'margin-bottom': '20px',
-            'margin-left': '15px',
-            'display': 'flex',
-            'align-items': 'center'
-        });
+    // Create and append the checkboxes container
+    const checkBoxContainer = document.createElement('div');
+    checkBoxContainer.id = 'checkBoxContainer';
+    mainContainer.appendChild(checkBoxContainer);
+    checkBoxContainer.appendChild(createCheckBox(autoDownloadOnQuizOver, quizOverListener, 'Autodownload on quiz end'));
+    checkBoxContainer.appendChild(createCheckBox(clearSongsInfoOnNewQuiz, quizReadyListener, 'Reset songlist on quiz start'));
+}
 
-    let select = $('<select>')
-        .attr('id', id)
-        .css({
-            'margin-right': '10px',
-            'width': '70px',
-            'color': 'black',
-        })
-        .val(defaultValue);
+function createPreferredHostSelectBox() {
+    // Create a content container for the select
+    const container = document.createElement('div');
+    container.className = 'downloaderSubContainer';
 
+    // Create the select
+    const select = document.createElement('select');
+    select.className = 'downloaderSelect';
+    select.value = selectedDomain;
+
+    // Create the select's label
+    const label = document.createElement('label');
+    label.className = 'downloaderLabel';
+    label.textContent = 'Change Prefered Host';
+
+    // Add the options to the select
+    const options = Object.keys(DOMAINS);
     options.forEach(option => {
-        let optionElement = $('<option>').text(option)
-            .attr('value', option)
-            .css({
-                'color': 'black'
-            });
-
-        if (option === defaultValue)
-            optionElement.attr('selected', 'selected');
-        select.append(optionElement);
+        const optionElement = document.createElement('option');
+        optionElement.className = 'downloaderOption';
+        optionElement.value = option;
+        optionElement.text = option;
+        optionElement.selected = option === selectedDomain;
+        select.appendChild(optionElement);
     });
 
-    select.on('change', function () {
-        onChangeCallback($(this).val());
+    // Listen for changes
+    select.addEventListener('change', function () {
+        selectedDomain = this.value;
+        saveUserConfig();
     });
 
-    let selectLabel = $(`<label for='${id}'>${label}</label>`)
-        .css({
-            'font-size': '14px',
-            'margin-right': '10px'
-        });
-
-    selectContainer.append(selectLabel, select);
-    $('#' + containerId).append(selectContainer);
+    // Add the label and the select to the container, and return the container
+    container.append(label, select);
+    return container;   
 }
 
-function addCheckBox(label, onChangeCallback, defaultValue, containerId) {
-    let id = label.replace(/\s/g, '');
+function createCheckBox(currentValue, listener, labelText) {
+    // Create a content container for the checkbox
+    const container = document.createElement('div');
+    container.className = 'downloaderSubContainer';
 
-    let checkboxContainer = $('<div>')
-        .css({
-            'margin-top': '15px',
-            'margin-left': '15px',
-            'display': 'flex',
-            'align-items': 'bottom'
-        });
+    // Create the checkbox
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'downloaderCheckbox';
+    checkbox.checked = currentValue;
 
-    let checkbox = $(`<input type='checkbox' id='${id}' name='${id}'>`)
+    // Create the checkbox's label
+    const label = document.createElement('label');
+    label.className = 'downloaderLabel';
+    label.textContent = labelText;
+
+    // Listen for changes
+    checkbox.addEventListener('change', function() {
+        const newValue = this.checked;
+        newValue ? listener.bindListener() : listener.unbindListener();
+    });
+
+    // Add the label and the checkbox to the container, and return the container
+    container.append(checkbox, label);
+    return container;
+}
+
+
+function createDownloadButton() {
+    const buttonWidth = 30;
+    const buttonMarginRight = 5;
+
+    const downloadButton = $(`
+        <div id='downloadButton' class='clickAble qpOption'>
+            <i aria-hidden='true' class='fa fa-download qpMenuItem'></i>
+        </div>`)
         .css({
-            'margin-right': '10px',
-            'width': '20px',
-            'height': '20px'
+            width: `${buttonWidth}px`,
+            height: '100%',
+            'margin-right': `${buttonMarginRight}px`
         })
-        .prop('checked', defaultValue);
+        .click(function () {
+            downloadSongsInfo();
+        })
+        .popover({
+			placement: 'bottom',
+			content: 'Download Song Info',
+			trigger: 'hover'
+	    });
 
-    checkbox.on('change', function () {
-        onChangeCallback($(this).prop('checked'));
-    });
-
-    let checkboxLabel = $(`<label for='${id}'>${label}</label>`)
-        .css({
-            'font-size': '14px'
-        });
-
-    checkboxContainer.append(checkbox, checkboxLabel);
-    $('#' + containerId).append(checkboxContainer);
+    const currentWidth = $('#qpOptionContainer').width();
+    const extraWidth = buttonWidth + buttonMarginRight;
+    $('#qpOptionContainer').width(currentWidth + extraWidth);
+    $('#qpOptionContainer > div').append(downloadButton);
 }
 
 
-function adjustModalWidth() {
-    // Modify the overall settings modal's width dimension so that the added tab doesn't exceed it
-    let modalContent = $('#settingModal .modal-dialog');
-    let modalTab = $('#settingModal .tabContainer');
-    let desiredWidth = `${modalTab.width()}px`;
-    modalContent.css('width', desiredWidth);
+// Cookies stuff: https://stackoverflow.com/a/24103596/20214407
+function loadUserConfig() {
+    selectedDomain = getCookie('selectedDomain') || 'EU';
+    autoDownloadOnQuizOver = getCookie('autoDownloadOnQuizOver') === 'true';
+    clearSongsInfoOnNewQuiz = getCookie('clearSongsInfoOnNewQuiz') === 'true';
 }
 
+function saveUserConfig() {
+    setCookie('selectedDomain', selectedDomain, 9999);
+    setCookie('autoDownloadOnQuizOver', autoDownloadOnQuizOver, 9999);
+    setCookie('clearSongsInfoOnNewQuiz', clearSongsInfoOnNewQuiz, 9999);
+}
 
-///////////////////////////////////////////////////////////////////
-//////////////////////////  COOKIES STUFF   ///////////////////////
-///////////////////////////////////////////////////////////////////
-
-// https://stackoverflow.com/a/24103596/20214407
 function getCookie(name) {
     let nameEQ = name + '=';
     let ca = document.cookie.split(';');
@@ -362,14 +305,64 @@ function setCookie(name, value, days) {
 }
 
 
-function loadUserConfig() {
-    selectedDomain = getCookie('selectedDomain') || selectedDomain;
-    autoDownloadOnQuizOver = getCookie('autoDownloadOnQuizOver') === 'true';
-    clearSongsInfoOnNewQuiz = getCookie('clearSongsInfoOnNewQuiz') === 'true';
-}
+AMQ_addStyle(`
+    #mainDownloaderContainer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+    }
 
-function saveUserConfig() {
-    setCookie('selectedDomain', selectedDomain, 9999);
-    setCookie('autoDownloadOnQuizOver', autoDownloadOnQuizOver, 9999);
-    setCookie('clearSongsInfoOnNewQuiz', clearSongsInfoOnNewQuiz, 9999);
-}
+    #selectboxContainer, #checkBoxContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 48%;
+    }
+
+    .downloaderSubContainer {
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+    }
+
+    .downloaderSelect {
+        margin-right: 10px;
+        width: 60px;
+        color: black;
+    }
+    
+    .downloaderLabel {
+        display: inline;
+        font-size: 14px;
+        margin-top: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .downloaderOption {
+        color: black;
+    }
+
+    .downloaderCheckbox {
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+    }
+`);
+
+
+
+AMQ_addScriptData({
+    name: 'AMQ Song Info Downloader',
+    author: 'Jabro & Spitzell',
+    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/AMQSongInfoDownloader.user.js',
+    version: VERSION,
+    description: `
+        <p>Allow the player to download a TXT file with some info about the songs that played.</p>
+        <p>You can download the TXT file at any point during the game:</p>
+        <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/SongsDownloader/images/download_button.png' alt='DownloadButton'>
+        <p>You can also modify how the script behaves:</p>
+        <img src='https://github.com/JabroAMQ/Utilities/raw/main/AMQ/SongsDownloader/images/configuration.png' alt='ConfigurationOptions'>
+    `
+});

@@ -39,9 +39,7 @@ This script consist of 2 parts:
 
 - When you click on it, a file like [songsInfo.txt](songsInfo.txt) will be downloaded (in your default Downloads directory) with the information of all the songs that played while you were in the lobby.
 
-- You can also modify how the AMQ script behaves. Your configuration will automatically be applied and save for future sessions: 
-
-![OpenConfiguration](images/open_configuration.png)
+- You can also modify how the AMQ script behaves. Your configuration will automatically be applied and saved for future sessions: 
 
 ![ScriptConfiguration](images/configuration.png)
 
