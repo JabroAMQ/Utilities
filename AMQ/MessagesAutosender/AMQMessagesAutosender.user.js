@@ -60,7 +60,7 @@ function addNewMessagePanel() {
 
     // Add a panel-separator to the "New Message" panel
     const separator = document.createElement('div');
-    separator.id = 'panelSeparator';
+    separator.className = 'panelSeparator';
     const newMessagePanel = savedMessagesWindow.panels[0].panel
     newMessagePanel.append(separator);
 
@@ -114,7 +114,7 @@ function addMessageContainerToPanel(textFieldValue) {
 
     // Display the saved message as a button and add it to the container
     const savedMessage = document.createElement('button');
-    savedMessage.id = 'savedMessage';
+    savedMessage.className = 'savedMessage';
     savedMessage.innerHTML = textFieldValue;
     savedMessage.title = textFieldValue;
     savedMessage.onclick = function() {
@@ -124,7 +124,7 @@ function addMessageContainerToPanel(textFieldValue) {
 
     // Create a delete button to remove the saved message and add it to the container
     const deleteButton = document.createElement('button');
-    deleteButton.id = 'deleteSavedMessageButton';
+    deleteButton.className = 'deleteSavedMessageButton';
     deleteButton.innerHTML = 'Delete';
     deleteButton.onclick = function (event) {
         event.stopPropagation();
@@ -264,7 +264,6 @@ function setCookie(name, value, days) {
 
 
 AMQ_addStyle(`
-    /* "New Message" panel */
     #newMessageContainer {
         display: flex;
         justify-content: center;
@@ -289,15 +288,6 @@ AMQ_addStyle(`
     }
 
 
-    /* Panel separator */
-    #panelSeparator {
-        width: 100%;
-        height: 2px;
-        background-color: black;
-    }
-
-    
-    /* "Saved Message" panel */
     #savedMessageContainer {
         display: flex;
         justify-content: center;
@@ -306,7 +296,7 @@ AMQ_addStyle(`
         height: 10%;
     }
 
-    #savedMessage {
+    .savedMessage {
         color: black;
         width: 75%;
         margin-left: 5%;
@@ -316,12 +306,18 @@ AMQ_addStyle(`
         background-color: white;
     }
 
-    #deleteSavedMessageButton {
+    .deleteSavedMessageButton {
         color: black;
         width: 15%;
         margin-right: 5%;
     }
 
+
+    .panelSeparator {
+        width: 100%;
+        height: 2px;
+        background-color: black;
+    }
 `);
 
 
