@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         AMQ Song Info Downloader
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.5.1
+// @version      0.5.2
 // @description  Download some info from the songs that played while playing AMQ
 // @author       Jabro, Spitzell
-// @match        https://animemusicquiz.com/*
+// @match        https://*.animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
 // @grant        none
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
@@ -13,7 +13,7 @@
 // ==/UserScript==
 
 
-const VERSION = '0.5.1';
+const VERSION = '0.5.2';
 const DELAY = 500;
 const DOMAINS = {
     'EU': 'https://nl.catbox.video/',

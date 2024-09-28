@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         AMQ Messages Autosender
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.4.1
+// @version      0.4.2
 // @description  Allow the user to store some messages and autosend them when clicked
 // @author       Jabro
-// @match        https://animemusicquiz.com/*
+// @match        https://*.animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
 // @grant        none
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
@@ -13,7 +13,7 @@
 // @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/MessagesAutosender/AMQMessagesAutosender.user.js
 // ==/UserScript==
 
-const VERSION = '0.4.1';
+const VERSION = '0.4.2';
 const DELAY = 500;
 const MAX_MESSAGE_LENGTH = 150;
 let savedMessagesWindow;
