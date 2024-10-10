@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Song Info Downloader
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.5.2
+// @version      0.5.3
 // @description  Download some info from the songs that played while playing AMQ
 // @author       Jabro, Spitzell
 // @match        https://*.animemusicquiz.com/*
@@ -13,12 +13,12 @@
 // ==/UserScript==
 
 
-const VERSION = '0.5.2';
+const VERSION = '0.5.3';
 const DELAY = 500;
 const DOMAINS = {
-    'EU': 'https://nl.catbox.video/',
-    'NA1': 'https://ladist1.catbox.video/',
-    'NA2': 'https://vhdist1.catbox.video/'
+    'EU': 'https://eudist.animemusicquiz.com/',
+    'NA1': 'https://nawdist.animemusicquiz.com/',
+    'NA2': 'https://naedist.animemusicquiz.com/'
 };
 
 let selectedDomain;

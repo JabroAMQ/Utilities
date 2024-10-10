@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import time
 from typing import Final, NamedTuple
 from datetime import datetime
 
@@ -11,6 +12,8 @@ import eyed3
 # Modify if needed
 INPUT_FILE_PATH: Final[str] = os.path.join(os.getcwd(), 'songsInfo.txt')
 OUTPUT_DIRECTORY_PATH: Final[str] = os.path.join(os.getcwd(), 'output')
+SLEEP: Final[bool] = True
+SLEEP_TIME: Final[int] = 5
 
 
 class Song(NamedTuple):
@@ -72,7 +75,7 @@ def process_anime_name(anime_name: str, song_type: str) -> str:
 
 def save_as_mp3(anime_name: str, song_url: str, song_name: str, song_artist: str) -> None:
     """Download the MP3 file from the given URL and save it with the provided song info."""
-    counter = 1
+    counter = 0
     output_file_path = os.path.join(OUTPUT_DIRECTORY_PATH, f'{anime_name}.mp3')
 
     # Avoid overwriting files
@@ -86,7 +89,6 @@ def save_as_mp3(anime_name: str, song_url: str, song_name: str, song_artist: str
 
     print(f'Downloading: {anime_name} || {song_name} || {song_artist}')
 
-    # According to kitty you don't get rate limited
     response = requests.get(song_url)
     with open(output_file_path, 'wb') as fd:
         fd.write(response.content)
@@ -108,5 +110,7 @@ if __name__ == '__main__':
     songs = process_file_content()
     for song in songs:
         save_as_mp3(*song)
+        if SLEEP:
+            time.sleep(SLEEP_TIME)
 
     print(f'\nDone! It took: {str(datetime.now() - start_time)}')

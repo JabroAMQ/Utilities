@@ -58,32 +58,21 @@ python main.py
 
 # Limitations
 
-## Catbox
+## New servers
 
 > [!NOTE]
-> [Catbox](https://catbox.moe/), the site from where the songs are downloaded from, doesn't seem to rate limit your requests directly, but please do not try to download hundreds of songs at once.
+> I don't know if Egerod's new servers rate limit you. I've added a sleep time between requests to make sure the script works. I'll eventually improve it i guess
 
-If you are going to, please modify the [main.py](main.py) file to wait a bit between songs downloading.
-
-Something like:
+You can manually remove the sleep time by setting to `False` the `SLEEP` variable which can be found just under the import statements:
 
 ```
-import time                                                     # ADD THIS LINE
-
 ...
 
-if __name__ == '__main__':
+# Modify if needed
+INPUT_FILE_PATH: Final[str] = os.path.join(os.getcwd(), 'songsInfo.txt')
+OUTPUT_DIRECTORY_PATH: Final[str] = os.path.join(os.getcwd(), 'output')
+SLEEP: Final[bool] = True
+SLEEP_TIME: Final[int] = 5
 
-    start_time = datetime.now()
-
-    # Create the output directory if it doesn't exist yet
-    os.makedirs(OUTPUT_DIRECTORY_PATH, exist_ok=True)
-
-    songs = process_file_content()
-    for song in songs:
-        save_as_mp3(*song)
-        time.sleep(5)                                           # ADD THIS LINE
-
-    print(f'\nDone! It took: {str(datetime.now() - start_time)}')
-
+...
 ```
