@@ -64,11 +64,25 @@ function setup() {
                 let node = mutation.addedNodes[i];
                 if (node.nodeType !== 1) continue; // only element nodes
 
+                // Only process nodes that contain a chat message
+                let messageNode = node.querySelector('.gcMessage');
+                if (!messageNode) continue;
+
                 // Replace any emoji codes in the message text
                 let html = node.innerHTML;
                 for (const [code, url] of Object.entries(CUSTOM_EMOJIS_DICT)) {
                     if (html.includes(code)) {
-                        let imgTag = `<img src="${url}" alt="${code}" class="customEmoji" style="height:1.5em; vertical-align:middle;">`;
+                        let imgTag = `<img class="amqEmoji emote"
+                                        alt="${code}"
+                                        draggable="false"
+                                        src="${url}"
+                                        sizes="28px"
+                                        data-emotename="${code}"
+                                        data-emoteusesrcset="true"
+                                        data-original-title=""
+                                        title=""
+                                        onerror="this.outerHTML='${code}'"
+                                    >`;
                         html = html.replaceAll(code, imgTag);
                     }
                 }
