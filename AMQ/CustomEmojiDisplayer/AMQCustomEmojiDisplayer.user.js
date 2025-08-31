@@ -77,10 +77,6 @@ function setup() {
                                         draggable="false"
                                         src="${url}"
                                         sizes="28px"
-                                        data-emotename="${code}"
-                                        data-emoteusesrcset="true"
-                                        data-original-title=""
-                                        title=""
                                         onerror="this.outerHTML='${code}'"
                                     >`;
                         html = html.replaceAll(code, imgTag);
