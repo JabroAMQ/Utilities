@@ -38,7 +38,7 @@ function read_custom_emojis() {
             try {
                 const data = JSON.parse(response.responseText);
                 for (const [key, file] of Object.entries(data)) {
-                    CUSTOM_EMOJIS_DICT[`:${key}:`] = file;
+                    CUSTOM_EMOJIS_DICT[`${key}`] = file; // replacing without ":", change if desired
                 }
                 console.log('Custom emojis loaded:', CUSTOM_EMOJIS_DICT);
                 setup();
