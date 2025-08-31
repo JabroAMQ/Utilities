@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Room Name from Saved Settings
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.1.2
+// @version      0.1.3
 // @description  Automatically set the room name to the one stored when loading settings from saved settings
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
@@ -12,7 +12,7 @@
 // @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQRoomNameFromSavedSettings.user.js
 // ==/UserScript==
 
-const VERSION = '0.1.2';
+const VERSION = '0.1.3';
 const DELAY = 500;
 
 
