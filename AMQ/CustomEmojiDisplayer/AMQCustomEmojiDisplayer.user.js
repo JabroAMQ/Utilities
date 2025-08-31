@@ -32,7 +32,7 @@ let loadInterval = setInterval(() => {
 
 function read_custom_emojis() {
     GM_xmlhttpRequest({
-        method: "GET",
+        method: 'GET',
         url: CUSTOM_EMOJIS_URL,
         onload: function (response) {
             try {
@@ -40,21 +40,21 @@ function read_custom_emojis() {
                 for (const [key, file] of Object.entries(data)) {
                     CUSTOM_EMOJIS_DICT[`:${key}:`] = file;
                 }
-                console.log("Custom emojis loaded:", CUSTOM_EMOJIS_DICT);
+                console.log('Custom emojis loaded:', CUSTOM_EMOJIS_DICT);
                 setup();
             } catch (err) {
-                console.error("Failed to parse emojis.json:", err);
+                console.error('Failed to parse emojis.json:', err);
             }
         },
         onerror: function (err) {
-            console.error("Error loading emojis.json:", err);
+            console.error('Error loading emojis.json:', err);
         }
     });
 }
 
 
 function setup() {
-    let gameChatNode = document.getElementById("gcMessageContainer");
+    let gameChatNode = document.getElementById('gcMessageContainer');
 
     let gameChatObserver = new MutationObserver(mutations => {
         mutations.forEach(mutation => {
@@ -78,7 +78,7 @@ function setup() {
                 let chat = gameChat.$chatMessageContainer;
                 let atBottom = chat.scrollTop() + chat.innerHeight() >= chat[0].scrollHeight - 25;
                 if (atBottom) {
-                    chat.scrollTop(chat.prop("scrollHeight"));
+                    chat.scrollTop(chat.prop('scrollHeight'));
                 }
             }
         });
