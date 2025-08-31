@@ -6,7 +6,8 @@
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
-// @grant        none
+// @grant        GM_xmlhttpRequest
+// @connect      raw.githubusercontent.com
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
 // @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/CustomEmojiDisplayer/AMQCustomEmojiDisplayer.user.js
 // @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/CustomEmojiDisplayer/AMQCustomEmojiDisplayer.user.js
@@ -15,7 +16,6 @@
 const VERSION = '0.0';
 const DELAY = 500;
 const CUSTOM_EMOJIS_URL = 'https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/CustomEmojiDisplayer/emojis.json';
-
 const CUSTOM_EMOJIS_DICT = {};
 
 
@@ -31,19 +31,25 @@ let loadInterval = setInterval(() => {
 
 
 function read_custom_emojis() {
-    fetch(CUSTOM_EMOJIS_URL)
-        .then(response => {
-            if (!response.ok) throw new Error("Failed to load emojis.json");
-            return response.json();
-        })
-        .then(data => {
-            for (const [key, file] of Object.entries(data)) {
-                CUSTOM_EMOJIS_DICT[`:${key}:`] = file;
+    GM_xmlhttpRequest({
+        method: "GET",
+        url: CUSTOM_EMOJIS_URL,
+        onload: function (response) {
+            try {
+                const data = JSON.parse(response.responseText);
+                for (const [key, file] of Object.entries(data)) {
+                    CUSTOM_EMOJIS_DICT[`:${key}:`] = file;
+                }
+                console.log("Custom emojis loaded:", CUSTOM_EMOJIS_DICT);
+                setup();
+            } catch (err) {
+                console.error("Failed to parse emojis.json:", err);
             }
-            console.log("Custom emojis loaded:", CUSTOM_EMOJIS_DICT);
-            setup();
-        })
-        .catch(err => console.error("Error loading emojis.json:", err));
+        },
+        onerror: function (err) {
+            console.error("Error loading emojis.json:", err);
+        }
+    });
 }
 
 
@@ -53,7 +59,7 @@ function setup() {
     let gameChatObserver = new MutationObserver(mutations => {
         mutations.forEach(mutation => {
             if (!mutation.addedNodes) return;
-            
+
              for (let i = 0; i < mutation.addedNodes.length; i++) {
                 let node = mutation.addedNodes[i];
                 if (node.nodeType !== 1) continue; // only element nodes
