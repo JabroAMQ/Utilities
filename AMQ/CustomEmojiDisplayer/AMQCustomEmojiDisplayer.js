@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AMQ Custom Emoji Displayer
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/JabroAMQ/
 // @version      0.0
 // @description  Change a specifc emoji code to display a custom emoji image
 // @author       Jabro

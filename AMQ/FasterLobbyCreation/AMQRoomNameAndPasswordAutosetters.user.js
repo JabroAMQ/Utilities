@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AMQ Room Name and Password Autosetters
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/JabroAMQ/
 // @version      0.1.2
 // @description  Automatically set the room's name and password (if any) to the last ones you used so that you don't have to write them again each time you host a lobby
 // @author       Jabro

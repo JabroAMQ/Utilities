@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AMQ Room Name from Saved Settings
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/JabroAMQ/
 // @version      0.1.2
 // @description  Automatically set the room name to the one stored when loading settings from saved settings
 // @author       Jabro
