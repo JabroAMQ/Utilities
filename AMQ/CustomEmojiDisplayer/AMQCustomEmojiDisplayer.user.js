@@ -15,7 +15,7 @@
 
 const VERSION = '0.0';
 const DELAY = 500;
-const CUSTOM_EMOJIS_URL = 'https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/CustomEmojiDisplayer/emojis.json';
+const CUSTOM_EMOJIS_URL = 'https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/CustomEmojiDisplayer/emojis.json?nocache=' + Date.now();
 const CUSTOM_EMOJIS_DICT = {};
 
 
