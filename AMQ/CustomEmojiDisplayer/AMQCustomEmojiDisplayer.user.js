@@ -109,7 +109,8 @@ AMQ_addScriptData({
     version: VERSION,
     description: `
         <div>
-            <p>Placeholder</p>
+            <p>When a message is sent to game chat, custom emoji text is replaced by its matching image</p>
+            <p>Still BETA version, use at your own risk :P</p>
         </div>
     `
 });
