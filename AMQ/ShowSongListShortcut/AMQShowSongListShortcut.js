@@ -7,6 +7,8 @@
 // @match        https://*.animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
 // @grant        none
+// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/ShowSongListShortcut/AMQShowSongListShortcut.user.js
+// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/ShowSongListShortcut/AMQShowSongListShortcut.user.js
 // ==/UserScript==
 
 const DELAY = 500;
