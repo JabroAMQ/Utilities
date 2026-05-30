@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Shortcuts
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.2
+// @version      0.3
 // @description  Some window shortcuts to improve the game experience
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
@@ -9,16 +9,17 @@
 // @grant        none
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
 // @require      https://github.com/Minigamer42/scripts/raw/master/lib/commands.js
-// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/Shortcuts/AMQShortcuts.js
-// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/Shortcuts/AMQShortcuts.js
+// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/Shortcuts/AMQShortcuts.user.js
+// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/Shortcuts/AMQShortcuts.user.js
 // ==/UserScript==
 
-const VERSION = '0.2';
+const VERSION = '0.3';
 const DELAY = 500;
 
 const shortcuts = [
+    { key: 'i', callback: showScriptsInfo, description: 'Open/Close Joseph\'s "Installed Userscripts" Modal' },
+    { key: 'm', callback: showSettingsListTab, description: 'Open/Close the Anime List tab from the Settings modal' },
     { key: 'q', callback: showSongList, description: 'Open/Close the song list' },
-    { key: 'm', callback: showSettingsListTab, description: 'Open/Close the Anime List tab from the Settings modal' }
 ];
 
 function showSongList() {
@@ -35,6 +36,11 @@ function showSettingsListTab() {
     // Simulate a click event on the "Anime List" tab from the "Settings" modal
     const animeListTab = document.getElementById('smAnimeListTab');
     animeListTab.click();
+}
+
+function showScriptsInfo() {
+    const installedUserscriptsButton = document.getElementById('mpInstalled');
+    installedUserscriptsButton.click();
 }
 
 
@@ -87,8 +93,9 @@ AMQ_addScriptData({
     description: `
         <div>
             <p>Some window shortcuts to improve the game experience</p>
-            <p><strong>Ctrl + Q</strong>: Open/Close the song list</p>
+            <p><strong>Ctrl + I</strong>: Open/Close Joseph's "Installed Userscripts" modal</p>
             <p><strong>Ctrl + M</strong>: Open/Close the Anime List tab from the Settings modal</p>
+            <p><strong>Ctrl + Q</strong>: Open/Close the song list</p>
         </div>
     `
 });
