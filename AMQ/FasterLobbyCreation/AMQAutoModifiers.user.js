@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Auto Modifiers
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.8
+// @version      0.8.1
 // @description  Check for unpleasant lobby's modifiers values (and chantings) and change them if proceeds
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
@@ -14,7 +14,7 @@
 // ==/UserScript==
 
 
-const VERSION = '0.8';
+const VERSION = '0.8.1';
 const DELAY = 500;
 let ignoreScript;
 let modifiers;
@@ -299,7 +299,7 @@ function checkSettings(force=false) {
 
         if (unpleasantModifiers) {
             setTimeout(() => {
-                sendChatMessage('**Script:** Unpleasant modifiers detected...');
+                sendChatMessage('**Script:** Unpleasant settings detected...');
                 setTimeout(() => {
                     lobby.changeGameSettings();
                     setTimeout(() => {
