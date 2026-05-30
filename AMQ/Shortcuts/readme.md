@@ -5,8 +5,9 @@ An userscript for AMQ that provides some window shortcuts to improve the game ex
 ## Available Shotcuts:
 
 > [!NOTE]
-> - `Ctrl + Q`: Open/Close the song list.
+> - `Ctrl + I`: Open/Close Joseph\'s "Installed Userscripts" modal.
 > - `Ctrl + M`: Open/Close the Anime List tab from the Settings modal.
+> - `Ctrl + Q`: Open/Close the song list.
 
 ## Chat commands:
 

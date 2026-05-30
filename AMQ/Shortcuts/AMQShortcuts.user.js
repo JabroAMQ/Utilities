@@ -17,7 +17,7 @@ const VERSION = '0.3';
 const DELAY = 500;
 
 const shortcuts = [
-    { key: 'i', callback: showScriptsInfo, description: 'Open/Close Joseph\'s "Installed Userscripts" Modal' },
+    { key: 'i', callback: showScriptsInfo, description: 'Open/Close Joseph\'s "Installed Userscripts" modal' },
     { key: 'm', callback: showSettingsListTab, description: 'Open/Close the Anime List tab from the Settings modal' },
     { key: 'q', callback: showSongList, description: 'Open/Close the song list' },
 ];
