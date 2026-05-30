@@ -4,15 +4,19 @@
 
 A set of independent userscripts for AMQ that make hosting a lobby a couple of seconds faster.
 
+## [Shortcuts](AMQ/Shortcuts/)
+
+An userscript for AMQ that provides some window shortcuts to improve the game experience
+
 ## [Messages Autosender](AMQ/MessagesAutosender/)
 
-A javascript userscript for AMQ that allow the player to save custom messages and, once they are clicked, autosend them to game chat.
+An userscript for AMQ that allow the player to save custom messages and, once they are clicked, autosend them to game chat.
 
 ## [Songs Downloader](AMQ/SongsDownloader/)
 
 Contains:
 
-- A javascript userscript for AMQ that allows you to download a TXT file with some info about the songs that played while you were playing.
+- An userscript for AMQ that allows you to download a TXT file with some info about the songs that played while you were playing.
 
 - A python script that takes as input the downloaded TXT file, downloading all the songs from the file in MP3 format while tagging them with song name and artist info.
 
