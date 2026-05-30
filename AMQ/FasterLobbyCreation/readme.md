@@ -23,7 +23,7 @@ When loading the lobby's settings from the saved settings panel (not from code),
 Automatically look for unpleasant modifiers when hosting a lobby and change their values if needed.
 
 <div>
-    <img src='images/AutoModifiers/example.png' width='500' height='180'/>
+    <img src='images/AutoModifiers/example.png' width='500' height='375'/>
 </div>
 
 The script looks for unpleasant modifiers (and change their value if procceed) when:
@@ -37,7 +37,7 @@ The script looks for unpleasant modifiers (and change their value if procceed) w
 You can configure which modifiers are considered unpleasant from the game's main settings modal:
 
 <div>
-    <img src='images/AutoModifiers/settings.png' width='500' height='240'>
+    <img src='images/AutoModifiers/settings.png' width='500' height='350'>
 </div>
 
 The possible values of a modifier are:
