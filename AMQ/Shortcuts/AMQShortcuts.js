@@ -9,8 +9,8 @@
 // @grant        none
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
 // @require      https://github.com/Minigamer42/scripts/raw/master/lib/commands.js
-// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/Shortcuts/AMQShortcuts.user.js
-// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/Shortcuts/AMQShortcuts.user.js
+// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/Shortcuts/AMQShortcuts.js
+// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/Shortcuts/AMQShortcuts.js
 // ==/UserScript==
 
 const VERSION = '0.2';
