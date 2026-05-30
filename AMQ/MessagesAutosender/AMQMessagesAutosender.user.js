@@ -322,7 +322,7 @@ AMQ_addStyle(`
 
 
 AMQ_addScriptData({
-    name: 'AMQ Messages Autosender',
+    name: 'Messages Autosender',
     author: 'Jabro',
     link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/MessagesAutosender/AMQMessagesAutosender.user.js',
     version: VERSION,

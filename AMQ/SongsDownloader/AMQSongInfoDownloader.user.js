@@ -354,7 +354,7 @@ AMQ_addStyle(`
 
 
 AMQ_addScriptData({
-    name: 'AMQ Song Info Downloader',
+    name: 'Song Info Downloader',
     author: 'Jabro & Spitzell',
     link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/SongsDownloader/AMQSongInfoDownloader.user.js',
     version: VERSION,

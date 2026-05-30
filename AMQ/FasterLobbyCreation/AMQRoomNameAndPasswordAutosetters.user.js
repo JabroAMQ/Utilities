@@ -91,7 +91,7 @@ function setCookie(name, value, days) {
 
 
 AMQ_addScriptData({
-    name: 'AMQ Last Room Name and Password Autosetter',
+    name: 'Last Room Name and Password Autosetter',
     author: 'Jabro',
     link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQRoomNameAndPasswordAutosetters.user.js',
     version: VERSION,

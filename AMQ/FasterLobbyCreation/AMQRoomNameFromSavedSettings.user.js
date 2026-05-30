@@ -39,7 +39,7 @@ function roomNameFromSavedSettings() {
 
 
 AMQ_addScriptData({
-    name: 'AMQ Room Name from Saved Settings',
+    name: 'Room Name from Saved Settings',
     author: 'Jabro',
     link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQRoomNameFromSavedSettings.user.js',
     version: VERSION,

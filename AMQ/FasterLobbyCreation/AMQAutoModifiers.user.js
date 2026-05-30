@@ -442,7 +442,7 @@ AMQ_addStyle(`
 `);
 
 AMQ_addScriptData({
-    name: 'AMQ Auto Modifiers',
+    name: 'Auto Modifiers',
     author: 'Jabro',
     link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQAutoModifiers.user.js',
     version: VERSION,
@@ -468,11 +468,9 @@ AMQ_addScriptData({
 
         <div>
             <p>Chat commands:</p>
-            <ul>
-                <li>- /modifiers: Toggle unpleasant lobby modifiers checking</li>
-                <li>- /modifiers_check: Force an unpleasant lobby modifiers checking</li>
-                <li>- /modifiers_config: Open the modifiers tab from the main settings modal</li>
-            </ul>
+            <p><strong>- /modifiers</strong>: Toggle unpleasant lobby modifiers checking</p>
+            <p><strong>- /modifiers_check</strong>: Force an unpleasant lobby modifiers checking</p>
+            <p><strong>- /modifiers_config</strong>: Open the modifiers tab from the main settings modal</p>
         </div>
     `
 });
