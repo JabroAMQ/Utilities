@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         AMQ Auto Modifiers
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.7.2
-// @description  Check for unpleasant lobby's modifiers values and change them if proceeds
+// @version      0.8
+// @description  Check for unpleasant lobby's modifiers values (and chantings) and change them if proceeds
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
@@ -14,7 +14,7 @@
 // ==/UserScript==
 
 
-const VERSION = '0.7.2';
+const VERSION = '0.8';
 const DELAY = 500;
 let ignoreScript;
 let modifiers;
@@ -163,56 +163,71 @@ function addModifiersSettingsTab() {
 
 function addModifiersSettingsTabBodyContent() {
     const modifiersTabContent = $('#modifiersContainer');
+
+    const baseModifiers = modifiers.modifiers.slice(0, -3);
+    const chantingModifiers = modifiers.modifiers.slice(-3);
+
+    // Modifiers section
+    const mainTitle = $('<h3>')
+        .text('Modifiers')
+        .addClass('modifiersGroupTitle')
+        .css({'text-align': 'center', 'margin': '15px 0'});
+    modifiersTabContent.append(mainTitle);
     
     // Place the modifiers in groups of 3
-    for (let i = 0; i < modifiers.modifiers.length; i += 3) {
-        const row = $('<div>').addClass('modifierRow');
-
-        for (let j = i; j < i + 3 && j < modifiers.modifiers.length; j++) {
-            const modifier = modifiers.modifiers[j];
+    for (let i = 0; i < baseModifiers.length; i += 3) {
+        const modifiersRow = $('<div>').addClass('modifierRow');
+        for (let j = i; j < i + 3 && j < baseModifiers.length; j++) {
+            const modifier = baseModifiers[j];
             const modifierContainer = $('<div>').addClass('modifierContainer');
+            const label = $('<label>').text(modifier.name).addClass('modifierLabel');
+            const selectBox = $('<select>').addClass('modifierSelectBox');
 
-            const label = $('<label>')
-                .text(modifier.name)
-                .addClass('modifierLabel');
-
-            const selectBox = $('<select>')
-                .addClass('modifierSelectBox')
-                .attr('data-checkbox-selector', modifier.checkboxId)
-                .on('change', function() {
-                    const selectedValue = $(this).val();
-                    switch (selectedValue) {
-                        case 'ON':
-                            modifier.value = Modifiers.ON;
-                            break;
-                        case 'OFF':
-                            modifier.value = Modifiers.OFF;
-                            break;
-                        default:
-                            modifier.value = Modifiers.IGNORE;
-                            break;
-                    }
-                    saveConfig();
-                });
-
+            // Populate options and mark saved selection from cookies
             ['ON', 'OFF', 'IGNORE'].forEach(option => {
-                const optionElement = $('<option>')
-                    .text(option)
-                    .attr('value', option);
+                selectBox.append($('<option>').text(option).val(option).prop('selected', option === modifier.value));
+            });
 
-                // Set the default selected option based on the current value of the modifier
-                if (option.toUpperCase() === modifier.value) {
-                    optionElement.prop('selected', true);
-                }
-
-                selectBox.append(optionElement);
+            // Trigger cookie update when select changes
+            selectBox.on('change', function() {
+                modifier.value = $(this).val();
+                saveConfig();
             });
 
             modifierContainer.append(label, selectBox);
-            row.append(modifierContainer);
+            modifiersRow.append(modifierContainer);
         }
-        modifiersTabContent.append(row);
+        modifiersTabContent.append(modifiersRow);
     }
+
+    // Chanting section
+    const chantingTitle = $('<h3>')
+        .text('Chantings')
+        .addClass('modifiersGroupTitle')
+        .css({'text-align': 'center', 'margin': '40px 0 15px 0'});
+    modifiersTabContent.append(chantingTitle);
+
+    const chantingRow = $('<div>').addClass('modifierRow');
+    chantingModifiers.forEach(modifier => {
+        const chantingContainer = $('<div>').addClass('modifierContainer');
+        const label = $('<label>').text(modifier.name).addClass('modifierLabel');
+        const selectBox = $('<select>').addClass('modifierSelectBox');
+        
+        // Populate options and mark saved selection from cookies
+        ['ON', 'OFF', 'IGNORE'].forEach(opt => {
+            selectBox.append($('<option>').text(opt).val(opt).prop('selected', opt === modifier.value));
+        });
+
+        // Trigger cookie update when select changes
+        selectBox.on('change', function() {
+            modifier.value = $(this).val();
+            saveConfig();
+        });
+
+        chantingContainer.append(label, selectBox);
+        chantingRow.append(chantingContainer); 
+    });
+    modifiersTabContent.append(chantingRow);
 }
 
 
@@ -299,13 +314,19 @@ function checkSettings(force=false) {
 
 function getLobbyModifiersValues() {
     const currentValues = [
+        // Modifiers
         lobby.settings.modifiers.skipGuessing,
         lobby.settings.modifiers.skipReplay,
         lobby.settings.modifiers.queueing,
         lobby.settings.modifiers.duplicates,
         lobby.settings.modifiers.rebroadcastSongs,
         lobby.settings.modifiers.dubSongs,
-        lobby.settings.modifiers.fullSongRange
+        lobby.settings.modifiers.fullSongRange,
+
+        // Chantings
+        lobby.settings.openingCategories.chanting,
+        lobby.settings.endingCategories.chanting,
+        lobby.settings.insertCategories.chanting
     ]
     return currentValues;
 }
@@ -318,49 +339,37 @@ function sendChatMessage(message) {
 }
 
 
-// Cookies stuff: https://stackoverflow.com/a/24103596/20214407
 function loadConfig() {
     const ignoreScriptString = getCookie('Ignore Script');
-    const skipGuessing = getCookie('Skip Guessing');
-    const skipResults = getCookie('Skip Results');
-    const queueing = getCookie('Queueing');
-    const duplicateShows = getCookie('Duplicate Shows');
-    const rebroadcastSongs = getCookie('Rebroadcast Songs');
-    const dubSongs = getCookie('Dub Songs');
-    const fullSongRange = getCookie('Full Song Range');
-
-    const skipGuessingValue = skipGuessing == 'ON' ? Modifiers.ON
-                            : skipGuessing == 'OFF' ? Modifiers.OFF
-                            : Modifiers.IGNORE;
-    const skipResultsValue = skipResults == 'ON' ? Modifiers.ON
-                            : skipResults == 'OFF' ? Modifiers.OFF
-                            : Modifiers.IGNORE;
-    const queueingValue = queueing == 'ON' ? Modifiers.ON
-                            : queueing == 'OFF' ? Modifiers.OFF
-                            : Modifiers.IGNORE;
-    const duplicateShowsValue = duplicateShows == 'ON' ? Modifiers.ON
-                            : duplicateShows == 'OFF' ? Modifiers.OFF
-                            : Modifiers.IGNORE;
-    const rebroadcastSongsValue = rebroadcastSongs == 'ON' ? Modifiers.ON
-                            : rebroadcastSongs == 'OFF' ? Modifiers.OFF
-                            : Modifiers.IGNORE;
-    const dubSongsValue = dubSongs == 'ON' ? Modifiers.ON
-                            : dubSongs == 'OFF' ? Modifiers.OFF
-                            : Modifiers.IGNORE;
-    const fullSongRangeValue = fullSongRange == 'ON' ? Modifiers.ON
-                            : fullSongRange == 'OFF' ? Modifiers.OFF
-                            : Modifiers.IGNORE;
-
     ignoreScript = ignoreScriptString === 'true';
-    modifiers = new Modifiers([
-        { name: 'Skip Guessing', checkboxId: '#mhGuessSkipping', value: skipGuessingValue },
-        { name: 'Skip Results', checkboxId: '#mhReplaySkipping', value: skipResultsValue },
-        { name: 'Queueing', checkboxId: '#mhQueueing', value: queueingValue },
-        { name: 'Duplicate Shows', checkboxId: '#mhDuplicateShows', value: duplicateShowsValue },
-        { name: 'Rebroadcast Songs', checkboxId: '#mhRebroadcastSongs', value: rebroadcastSongsValue },
-        { name: 'Dub Songs', checkboxId: '#mhDubSongs', value: dubSongsValue },
-        { name: 'Full Song Range', checkboxId: '#mhFullSongRange', value: fullSongRangeValue }
-    ]);
+
+    // Helper to parse cookie strings into Modifiers enum values
+    const parseModifierValue = (cookieName) => {
+        const cookieVal = getCookie(cookieName);
+        if (cookieVal === 'ON') return Modifiers.ON;
+        if (cookieVal === 'OFF') return Modifiers.OFF;
+        return Modifiers.IGNORE;
+    };
+
+    const modifierData = [
+        // [ Name,                    Checkbox ID       ]
+        [ 'Skip Guessing',        '#mhGuessSkipping'    ],
+        [ 'Skip Results',         '#mhReplaySkipping'   ],
+        [ 'Queueing',             '#mhQueueing'         ],
+        [ 'Duplicate Shows',      '#mhDuplicateShows'   ],
+        [ 'Rebroadcast Songs',    '#mhRebroadcastSongs' ],
+        [ 'Dub Songs',            '#mhDubSongs'         ],
+        [ 'Full Song Range',      '#mhFullSongRange'    ],
+        [ 'Openings',             '#mhOpeningChanting'  ],
+        [ 'Endings',              '#mhEndingChanting'   ],
+        [ 'Inserts',              '#mhInsertChanting'   ]
+    ];
+
+    modifiers = new Modifiers(modifierData.map(([name, checkboxId]) => ({
+        name,
+        checkboxId,
+        value: parseModifierValue(name)
+    })));
 }
 
 function saveConfig() {
