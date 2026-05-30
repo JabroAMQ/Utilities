@@ -21,6 +21,22 @@ const shortcuts = [
     { key: 'm', callback: showSettingsListTab, description: 'Open/Close the Anime List tab from the Settings modal' }
 ];
 
+function showSongList() {
+    if (typeof songHistoryWindow !== 'undefined' && typeof songHistoryWindow.trigger === 'function') {
+        songHistoryWindow.trigger();
+    }
+}
+
+function showSettingsListTab() {
+    // Simulate a click event on the "Settings" element from the "menu bar option container"
+    const settingsListItem = document.getElementById('optionListSettings');
+    settingsListItem.click();
+
+    // Simulate a click event on the "Anime List" tab from the "Settings" modal
+    const animeListTab = document.getElementById('smAnimeListTab');
+    animeListTab.click();
+}
+
 
 if (document.getElementById('loginPage'))
     return;
@@ -60,22 +76,6 @@ function showShortcutsInfo() {
     for (const shortcut of shortcuts) {
         gameChat.systemMessage(`Ctrl + ${shortcut.key.toUpperCase()}: ${shortcut.description}`);
     }
-}
-
-function showSongList() {
-    if (typeof songHistoryWindow !== 'undefined' && typeof songHistoryWindow.trigger === 'function') {
-        songHistoryWindow.trigger();
-    }
-}
-
-function showSettingsListTab() {
-    // Simulate a click event on the "Settings" element from the "menu bar option container"
-    const settingsListItem = document.getElementById('optionListSettings');
-    settingsListItem.click();
-
-    // Simulate a click event on the "Anime List" tab from the "Settings" modal
-    const animeListTab = document.getElementById('smAnimeListTab');
-    animeListTab.click();
 }
 
 
