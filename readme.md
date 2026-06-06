@@ -6,7 +6,7 @@ A set of independent userscripts for AMQ that make hosting a lobby a couple of s
 
 ## [Shortcuts](AMQ/Shortcuts/)
 
-An userscript for AMQ that provides some window shortcuts to improve the game experience.
+An userscript for AMQ that provides some shortcuts to improve the game experience.
 
 ## [Messages Autosender](AMQ/MessagesAutosender/)
 

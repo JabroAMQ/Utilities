@@ -1,6 +1,6 @@
 # Script description
 
-An userscript for AMQ that provides some window shortcuts to improve the game experience.
+An userscript for AMQ that provides some shortcuts to improve the game experience.
 
 ## Available Shotcuts:
 

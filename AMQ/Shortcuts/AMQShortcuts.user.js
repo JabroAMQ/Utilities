@@ -2,7 +2,7 @@
 // @name         AMQ Shortcuts
 // @namespace    https://github.com/JabroAMQ/
 // @version      0.4.0
-// @description  Some window shortcuts to improve the game experience
+// @description  Some shortcuts to improve the game experience
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
