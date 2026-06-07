@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Shortcuts
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.5.2
+// @version      0.5.3
 // @description  Some shortcuts to improve the game experience
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
@@ -12,8 +12,6 @@
 // @updateURL    https://github.com/JabroAMQ/Utilities/raw/main/AMQ/Shortcuts/AMQShortcuts.user.js
 // ==/UserScript==
 
-const VERSION = '0.5.2';
-const DELAY = 500;
 
 // TODO
 // - readme.md
@@ -39,6 +37,8 @@ const shortcuts = [
 ];
 
 let friend_name = localStorage.getItem('AMQ_Shortcut_FriendName') ?? null;
+
+const DELAY = 500;
 
 
 if (document.getElementById('loginPage'))
