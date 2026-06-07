@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Shortcuts
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.5.0
+// @version      0.5.1
 // @description  Some shortcuts to improve the game experience
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
@@ -12,7 +12,7 @@
 // @updateURL    https://github.com/JabroAMQ/Utilities/raw/main/AMQ/Shortcuts/AMQShortcuts.user.js
 // ==/UserScript==
 
-const VERSION = '0.5.0';
+const VERSION = '0.5.1';
 const DELAY = 500;
 
 // TODO
