@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Shortcuts
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.4.0
+// @version      0.4.1
 // @description  Some shortcuts to improve the game experience
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
@@ -12,7 +12,7 @@
 // @updateURL    https://github.com/JabroAMQ/Utilities/raw/main/AMQ/Shortcuts/AMQShortcuts.user.js
 // ==/UserScript==
 
-const VERSION = '0.4.0';
+const VERSION = '0.4.1';
 const DELAY = 500;
 
 // TODO
@@ -249,6 +249,11 @@ function showShortcutsTab() {
 }
 
 function checkFriendOnline() {
+    if (!friend_name) {
+        console.log("No friend name configured for this shortcut.");
+        return;
+    }
+
     const onlineFriends = document.querySelectorAll('#friendOnlineList .socialTabFriendPlayerEntry');
     for (const friend of onlineFriends) {
         const name = friend.querySelector('.stPlayerNameContainer h4')?.textContent.trim();
@@ -267,14 +272,29 @@ function checkFriendOnline() {
                 const startChatButton = document.querySelector('.ppFooterContainer .startChat');
                 if (startChatButton) {
                     startChatButton.click();
-                    profileButton.click();      // Close the profile after opening the chat
+
+                    setTimeout(() => {
+                        const chatBoxes = document.querySelectorAll('.chatBoxContainer');
+                        
+                        for (const box of chatBoxes) {
+                            const chatTargetName = box.querySelector('.chatTopBar p')?.textContent.trim();
+                            
+                            if (chatTargetName === friend_name) {
+                                const textarea = box.querySelector('.textAreaContainer textarea');
+                                if (textarea) {
+                                    textarea.focus();
+                                }
+                                break;
+                            }
+                        }
+                    }, DELAY);
+
                 } else {
                     console.log("Start Chat button not found on screen.");
-                    profileButton.click();      // Close the profile if the start chat button isn't found
-                    return;
                 }
             }, DELAY);
 
+            profileButton.click();      // Close the profile after opening the chat
             return;
         }
     };
