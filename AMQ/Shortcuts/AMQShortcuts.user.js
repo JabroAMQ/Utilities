@@ -1,17 +1,17 @@
 // ==UserScript==
 // @name         AMQ Shortcuts
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.5.3
+// @version      0.6.0
 // @description  Some shortcuts to improve the game experience
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
 // @grant        none
 // @require      https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/Shortcuts/baseShortcut.js
+// @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
 // @downloadURL  https://github.com/JabroAMQ/Utilities/raw/main/AMQ/Shortcuts/AMQShortcuts.user.js
 // @updateURL    https://github.com/JabroAMQ/Utilities/raw/main/AMQ/Shortcuts/AMQShortcuts.user.js
 // ==/UserScript==
-
 
 // TODO
 // - readme.md
@@ -19,26 +19,27 @@
 // - Shortcut for selecting the chat input inside a lobby
 
 const descriptions = {
-    checkFriendOnline: 'Check if the friend (name below) is online, opening their dm if so',
+    voteSkip: 'Vote to skip the current song',
+    showSongList: 'Open/Close the song list',
     showScriptsInfo: 'Open/Close Joseph\'s "Installed Userscripts" modal',
     showSettingsListTab: 'Open/Close the Anime List tab from the Settings modal',
     showShortcutsTab: 'Open/Close the Shortcuts tab from the Settings modal',
-    showSongList: 'Open/Close the song list',
-    voteSkip: 'Vote to skip the current song',
+    checkUserOnline: 'Check if the user (name below) is online, opening their dm if so',
 };
 
 const shortcuts = [
     { id: 'voteSkip', callback: voteSkip, description: descriptions.voteSkip },
     { id: 'showSongList', callback: showSongList, description: descriptions.showSongList },
+    { id: 'showScriptsInfo', callback: showScriptsInfo, description: descriptions.showScriptsInfo },
     { id: 'showSettingsListTab', callback: showSettingsListTab, description: descriptions.showSettingsListTab },
     { id: 'showShortcutsTab', callback: showShortcutsTab, description: descriptions.showShortcutsTab },
-    { id: 'checkFriendOnline', callback: checkFriendOnline, description: descriptions.checkFriendOnline, renderExtraInfo: addCheckFriendOnlineExtraInfo }, 
-    { id: 'showScriptsInfo', callback: showScriptsInfo, description: descriptions.showScriptsInfo },
+    { id: 'checkUserOnline', callback: checkUserOnline, description: descriptions.checkUserOnline, renderExtraInfo: addCheckUserOnlineExtraInfo }, 
 ];
 
-let friend_name = localStorage.getItem('AMQ_Shortcut_FriendName') ?? null;
+let userName = localStorage.getItem('AMQ_Shortcut_UserName') ?? null;
 
-const DELAY = 500;
+const VERSION = '0.6.0';
+const DELAY = 300;
 
 
 if (document.getElementById('loginPage'))
@@ -52,13 +53,13 @@ const loadInterval = setInterval(() => {
 }, DELAY);
 
 function loadShortcuts() {
-    if (!window.ShortcutManager) {
-        console.error("ShortcutManager library could not be loaded via @require.");
+    if (!window.ShortcutsManager) {
+        console.error("ShortcutsManager library could not be loaded via @require.");
         return;
     }
 
     shortcuts.forEach(shortcut => {
-        window.ShortcutManager.register({
+        window.ShortcutsManager.register({
             id: shortcut.id,
             description: shortcut.description,
             callback: shortcut.callback,
@@ -66,17 +67,13 @@ function loadShortcuts() {
         });
     });
 
-    window.ShortcutManager.init();
+    window.ShortcutsManager.init();
 }
 
 
 function voteSkip() {
-    const qpInputVoteSkip = document.getElementById('qpInputVoteSkip');
-    if (qpInputVoteSkip) {
-        qpInputVoteSkip.click();
-    }
+    $('#qpInputVoteSkip').click();
 }
-
 
 function showSongList() {
     if (typeof songHistoryWindow !== 'undefined' && typeof songHistoryWindow.trigger === 'function') {
@@ -84,130 +81,115 @@ function showSongList() {
     }
 }
 
+function showScriptsInfo() {
+    const installedUserscriptsButton = document.getElementById('mpInstalled');
+    installedUserscriptsButton.click();
+}
 
 function showSettingsListTab() {
-    const settingsListItem = document.getElementById('optionListSettings');
-    settingsListItem.click();
-
-    const animeListTab = document.getElementById('smAnimeListTab');
-    animeListTab.click();
+    $('#optionListSettings').click();
+    $('#smAnimeListTab').click();
 }
-
 
 function showShortcutsTab() {
-    const settingsListItem = document.getElementById('optionListSettings');
-    settingsListItem.click();
-
-    const shortcutsTab = document.getElementById('smShortcutsTab');
-    shortcutsTab.click();
+    $('#optionListSettings').click();
+    $('#smShortcutsTab').click();
 }
 
 
-function checkFriendOnline() {
-    if (!friend_name) {
-        console.log("No friend name configured for this shortcut.");
+function checkUserOnline() {
+    if (!userName) {
+        console.log("No user name configured for this shortcut.");
+        return;
+    }
+    if (typeof socialTab !== 'undefined' && socialTab.chatBar && typeof socialTab.chatBar.startChat === 'function') {
+        socialTab.chatBar.startChat(userName);
+    } else {
+        console.error("AMQ socialTab.chatBar API is not available.");
         return;
     }
 
-    const onlineFriends = document.querySelectorAll('#friendOnlineList .socialTabFriendPlayerEntry');
-    for (const friend of onlineFriends) {
-        const name = friend.querySelector('.stPlayerNameContainer h4')?.textContent.trim();
+    setTimeout(() => {
+        let chatOpened = false;
 
-        if (name === friend_name) {
-            const profileButton = friend.querySelector('.stPlayerProfileButton');
-            if (profileButton) {
-                profileButton.click();
-            }
-            else {
-                console.log("Profile button not found for friend:", friend_name);
-                return;
-            }
+        $('.chatBoxContainer').each(function() {
+            const chatTargetName = $(this).find('.chatTopBar p').text().trim();
+            
+            if (chatTargetName.toLowerCase() === userName.toLowerCase()) {
+                chatOpened = true;
+                const $chatBox = $(this);
+                const offlineLayer = $chatBox.find('.disableChatLayer.offlineLayer');
 
-            setTimeout(() => {
-                const startChatButton = document.querySelector('.ppFooterContainer .startChat');
-                if (startChatButton) {
-                    startChatButton.click();
+                if (offlineLayer.length && !offlineLayer.hasClass('invisible')) {
+                    // User offline
+                    $chatBox.find('.chatTopBar .playerProfile').click();
 
                     setTimeout(() => {
-                        const chatBoxes = document.querySelectorAll('.chatBoxContainer');
-                        
-                        for (const box of chatBoxes) {
-                            const chatTargetName = box.querySelector('.chatTopBar p')?.textContent.trim();
+                        const amqAlertActive = $('.swal2-container').is(':visible');
+                        if (amqAlertActive) {
+                            // Warning in screen -> The user does not exist
+                            // NOTE: The sweet alert content is actually not being updated, why? Anyway, the warning is clear enough so it should not be a problem
+                            $('#swal2-title').text('User Not Found');
+                            $('#swal2-html-container').text(`The player "${userName}" does not exist in AMQ.`);
+
+                            $chatBox.find('.chatTopBar .glyphicon-remove').click();
+
+                        } else {
+                            // No warning in screen -> The user is offline
+                            $chatBox.find('.chatTopBar .glyphicon-remove').click();
                             
-                            if (chatTargetName === friend_name) {
-                                const textarea = box.querySelector('.textAreaContainer textarea');
-                                if (textarea) {
-                                    textarea.focus();
-                                }
-                                break;
-                            }
+                            Swal.fire({
+                                title: 'Search result',
+                                text: `${userName} is currently offline.`,
+                                showConfirmButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'OK'
+                            });
                         }
                     }, DELAY);
 
                 } else {
-                    console.log("Start Chat button not found on screen.");
+                    // User online
+                    $chatBox.find('.textAreaContainer textarea').focus();
                 }
-            }, DELAY);
+                return false;
+            }
+        });
 
-            profileButton.click();      // Close the profile after opening the chat
-            return;
-        }
-    };
-
-    // Check if the friend is in the offline list (this is to ensure the name doesn't have typos)
-    const offlineFriends = document.querySelectorAll('#friendOfflineList .socialTabFriendPlayerEntry');
-    for (const friend of offlineFriends) {
-        const name = friend.querySelector('.stPlayerNameContainer h4')?.textContent.trim();
-
-        if (name === friend_name) {
+        if (!chatOpened) {
             Swal.fire({
                 title: 'Search result',
-                text: `${friend_name} is not online`,
+                text: `Could not open chat with "${userName}". Please try again.`,
                 showConfirmButton: true,
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             });
-            return;
         }
-    };
 
-    // Send warning if the user is not found
-    Swal.fire({
-        title: 'Search result',
-        text: `${friend_name} is not in your friend list... Are you sure the name is correct?`,
-        showConfirmButton: true,
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'OK'
-    });
+    }, DELAY);
 }
 
-function addCheckFriendOnlineExtraInfo(row) {
-    const friendSettingContainer = $('<div></div>').addClass('amq-shortcut-extra-container');
+function addCheckUserOnlineExtraInfo(row) {
+    const userSettingContainer = $('<div></div>').addClass('amq-shortcut-extra-container');
 
-    const friendInput = $('<input>')
+    const userInput = $('<input>')
         .attr('type', 'text')
         .addClass('form-control text-center amq-shortcut-extra-input')
-        .val(friend_name ?? '')
+        .val(userName ?? '')
         .attr('placeholder', "None (Type a name...)");
 
-    friendInput.on('input', function() {
+    userInput.on('input', function() {
         const value = $(this).val().trim();
 
         if (value === '') {
-            friend_name = null;
-            localStorage.removeItem('AMQ_Shortcut_FriendName');
+            userName = null;
+            localStorage.removeItem('AMQ_Shortcut_UserName');
         } else {
-            friend_name = value;
-            localStorage.setItem('AMQ_Shortcut_FriendName', value);
+            userName = value;
+            localStorage.setItem('AMQ_Shortcut_UserName', value);
         }
     });
 
-    friendSettingContainer.append(friendInput);
-    row.append(friendSettingContainer);
-}
-
-
-function showScriptsInfo() {
-    const installedUserscriptsButton = document.getElementById('mpInstalled');
-    installedUserscriptsButton.click();
+    userSettingContainer.append(userInput);
+    row.append(userSettingContainer);
 }
