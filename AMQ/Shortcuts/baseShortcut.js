@@ -2,7 +2,7 @@
 // This code is fetched automatically
 // Do not attempt to add it to tampermonkey
  
-if (!window.ShortcutManager) {
+if (!window.ShortcutsManager) {
 
     // Logic for managing shortcuts
     const registeredShortcuts = [];
