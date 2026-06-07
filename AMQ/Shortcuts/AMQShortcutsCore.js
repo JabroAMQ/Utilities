@@ -43,37 +43,13 @@ if (!window.ShortcutsManager) {
 
     // Shortcuts tab UI
     function addShortcutsSettingsTab() {
-        if ($('#smShortcutsTab').length > 0) return;
-
-        $('#settingModal .tabContainer').append(
-            $('<div></div>')
-                .attr('id', 'smShortcutsTab')
-                .addClass('tab shortcuts clickAble')
-                .attr('onClick', "options.selectTab('shortcutsContainer', this)")
-                .append($('<h5></h5>').text('Shortcuts'))
-        );
-
-        const shortcutsTabContent = $('<div></div>')
-            .attr('id', 'shortcutsContainer')
-            .addClass('settingContentContainer customScrollbar hide');
-        $('#settingModal .modal-body').append(shortcutsTabContent);
-
-        $('#settingModal').on('shown.bs.modal', function () {
-            const modalContent = $('#settingModal .modal-dialog');
-            const modalTab = $('#settingModal .tabContainer');
-            modalContent.css('width', `${modalTab.width()}px`);
-        });
-
-        $('#settingModal .tabContainer').on('click', '.shortcuts', function () {
-            shortcutsTabContent.removeClass('hide');
-            addShortcutsSettingsTabBodyContent();
-        });
-
-        $('#settingModal .tabContainer').on('click', '.tab:not(.shortcuts)', function () {
-            if (!shortcutsTabContent.hasClass('hide')) {
-                shortcutsTabContent.addClass('hide');
-                $('#settingModal .tabContainer .tab').removeClass('selected');
-                $(this).addClass('selected');
+        window.AMQ_SettingsUI.createNewSettingsTab({
+            tabId: 'smShortcutsTab',
+            containerId: 'shortcutsContainer',
+            tabClass: 'shortcuts',
+            tabTitle: 'Shortcuts',
+            onTabOpen: function() {
+                addShortcutsSettingsTabBodyContent();
             }
         });
     }
@@ -159,6 +135,17 @@ if (!window.ShortcutsManager) {
 
 
     // Public API for registering shortcuts
+    function loadExternalScript(url) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = url;
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error(`Failed to load script: ${url}`));
+            document.head.appendChild(script);
+        });
+    }
+
     window.ShortcutsManager = {
         register: function(shortcutConfig) {
             /* 
@@ -179,9 +166,15 @@ if (!window.ShortcutsManager) {
             loadShortcutCache(shortcutConfig.id);
         },
 
-        init: function() {
+        init: async function() {
             setupKeyboardGlobalListener();
-            addShortcutsSettingsTab();
+            
+            try {
+                await loadExternalScript("https://githubusercontent.com/JabroAMQ/Utilities/blob/main/AMQ/AMQSettingsUI.js");                
+                addShortcutsSettingsTab();
+            } catch (error) {
+                console.error("Could not initialize Shortcuts UI due to helper script error:", error);
+            }
         }
     };
 }
