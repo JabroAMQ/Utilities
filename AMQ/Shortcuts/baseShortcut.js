@@ -144,7 +144,7 @@ if (!window.ShortcutManager) {
         };
     }
 
-    _AMQ_addStyle(`
+    AMQ_addStyle(`
         #shortcutsContainer { max-height: 450px; overflow-y: auto; padding-bottom: 20px; }
         .amq-shortcuts-form-container { max-width: 450px; margin: 25px auto 0 auto; padding: 0 10px; }
         .amq-shortcut-card { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 20px; padding: 14px 15px; background-color: rgba(0, 0, 0, 0.2); border: 1px solid #444; border-radius: 4px; }
