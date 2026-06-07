@@ -1,0 +1,187 @@
+// Creates the Shortcuts tab in the Settings modal if it doesn't exist and creates the logic for registering shortcuts, saving them in localStorage
+// This code is fetched automatically
+// Do not attempt to add it to tampermonkey
+ 
+if (!window.ShortcutManager) {
+
+    // Logic for managing shortcuts
+    const registeredShortcuts = [];
+    const cachedKeys = {};
+
+    function loadShortcutCache(shortcutId) {
+        const savedKeys = JSON.parse(localStorage.getItem('AMQ_CustomShortcuts') || '{}');
+        if (savedKeys.hasOwnProperty(shortcutId)) {
+            cachedKeys[shortcutId] = savedKeys[shortcutId];
+        } else {
+            cachedKeys[shortcutId] = null;
+        }
+    }
+
+    function saveShortcutKey(shortcutId, newKey) {
+        const cleanKey = newKey ? newKey.toLowerCase() : null;
+        cachedKeys[shortcutId] = cleanKey;
+        
+        const savedKeys = JSON.parse(localStorage.getItem('AMQ_CustomShortcuts') || '{}');
+        savedKeys[shortcutId] = cleanKey;
+        localStorage.setItem('AMQ_CustomShortcuts', JSON.stringify(savedKeys));
+    }
+
+    function setupKeyboardGlobalListener() {
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey) {
+                const pressedKey = e.key.toLowerCase();
+                const activeShortcut = registeredShortcuts.find(s => cachedKeys[s.id] !== null && cachedKeys[s.id] === pressedKey);
+                
+                if (activeShortcut) {
+                    e.preventDefault();
+                    activeShortcut.callback();
+                }
+            }
+        });
+    }
+
+
+    // Shortcuts tab UI
+    function addShortcutsSettingsTab() {
+        if ($('#smShortcutsTab').length > 0) return;
+
+        $('#settingModal .tabContainer').append(
+            $('<div></div>')
+                .attr('id', 'smShortcutsTab')
+                .addClass('tab shortcuts clickAble')
+                .attr('onClick', "options.selectTab('shortcutsContainer', this)")
+                .append($('<h5></h5>').text('Shortcuts'))
+        );
+
+        const shortcutsTabContent = $('<div></div>')
+            .attr('id', 'shortcutsContainer')
+            .addClass('settingContentContainer customScrollbar hide');
+        $('#settingModal .modal-body').append(shortcutsTabContent);
+
+        $('#settingModal').on('shown.bs.modal', function () {
+            const modalContent = $('#settingModal .modal-dialog');
+            const modalTab = $('#settingModal .tabContainer');
+            modalContent.css('width', `${modalTab.width()}px`);
+        });
+
+        $('#settingModal .tabContainer').on('click', '.shortcuts', function () {
+            shortcutsTabContent.removeClass('hide');
+            addShortcutsSettingsTabBodyContent();
+        });
+
+        $('#settingModal .tabContainer').on('click', '.tab:not(.shortcuts)', function () {
+            if (!shortcutsTabContent.hasClass('hide')) {
+                shortcutsTabContent.addClass('hide');
+                $('#settingModal .tabContainer .tab').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+    }
+
+    function addShortcutsSettingsTabBodyContent() {
+        const shortcutsTabContent = $('#shortcutsContainer');
+        shortcutsTabContent.empty(); 
+        
+        const formContainer = $('<div></div>').addClass('amq-shortcuts-form-container');
+
+        registeredShortcuts.forEach(shortcut => {
+            const currentKey = cachedKeys[shortcut.id];
+            const displayValue = currentKey ? `Ctrl + ${currentKey.toUpperCase()}` : 'None';
+
+            const row = $('<div></div>').addClass('amq-shortcut-card');
+            const label = $('<label></label>').text(shortcut.description).addClass('amq-shortcut-description');
+            const inputContainer = $('<div></div>').addClass('amq-shortcut-input-container');
+            
+            const input = $('<input>')
+                .attr('type', 'text')
+                .attr('readonly', true)
+                .addClass('form-control text-center amq-shortcut-key-input')
+                .addClass(currentKey ? 'amq-shortcut-key-active' : 'amq-shortcut-key-disabled')
+                .val(displayValue)
+                .attr('placeholder', 'Press a key...');
+
+            input.on('keydown', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (e.key === 'Backspace' || e.key === 'Delete') {
+                    saveShortcutKey(shortcut.id, null);
+                    $(this).val('None').removeClass('amq-shortcut-key-active').addClass('amq-shortcut-key-disabled');
+                    $(this).blur();
+                    return;
+                }
+                
+                if (['Control', 'Shift', 'Alt', 'Meta'].includes(e.key)) return;
+
+                const pressedKey = e.key.toLowerCase();
+                if (pressedKey.length === 1) {
+                    saveShortcutKey(shortcut.id, pressedKey);
+                    $(this).val(`Ctrl + ${pressedKey.toUpperCase()}`).removeClass('amq-shortcut-key-disabled').addClass('amq-shortcut-key-active');
+                    $(this).blur(); 
+                }
+            });
+
+            inputContainer.append(input);
+            row.append(label).append(inputContainer);
+
+            if (typeof shortcut.renderExtraInfo === 'function') {
+                shortcut.renderExtraInfo(row);
+            }
+
+            formContainer.append(row);
+        });
+
+        shortcutsTabContent.append(formContainer);
+    }
+
+    // Only creates AMQ_addStyle if the userscript implementing this library does not implements god TheJoseph98's amqScriptInfo.js
+    if (typeof AMQ_addStyle !== 'function') {
+        window.AMQ_addStyle = function(css) {
+            let style = document.createElement("style");
+            style.type = "text/css";
+            style.appendChild(document.createTextNode(css));
+            document.head.appendChild(style);
+        };
+    }
+
+    _AMQ_addStyle(`
+        #shortcutsContainer { max-height: 450px; overflow-y: auto; padding-bottom: 20px; }
+        .amq-shortcuts-form-container { max-width: 450px; margin: 25px auto 0 auto; padding: 0 10px; }
+        .amq-shortcut-card { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 20px; padding: 14px 15px; background-color: rgba(0, 0, 0, 0.2); border: 1px solid #444; border-radius: 4px; }
+        .amq-shortcut-description { font-weight: normal; font-size: 13px; color: #ccc; margin: 0 0 10px 0; line-height: 1.4; }
+        .amq-shortcut-input-container { margin: 0; display: flex; justify-content: center; }
+        .amq-shortcut-key-input { width: 120px; cursor: pointer; background-color: #1b1b1b !important; font-weight: bold; border: 1px solid #555; }
+        .amq-shortcut-key-active { color: #449d44; }
+        .amq-shortcut-key-disabled { color: #999; }
+        .amq-shortcut-extra-container { margin-top: 12px; width: 100%; max-width: 220px; display: flex; flex-direction: column; align-items: center; }
+        .amq-shortcut-extra-input { background-color: #1b1b1b !important; color: #fff; border: 1px solid #555; font-size: 12px; height: 28px; padding: 4px; }
+    `);
+
+
+    // Public API for registering shortcuts
+    window.ShortcutsManager = {
+        register: function(shortcutConfig) {
+            /* 
+               shortcutConfig data structure example:
+               { 
+                 id: "checkFriendOnline", 
+                 description: "Check if friend...", 
+                 callback: function, 
+                 renderExtraInfo: function(row) [Optional] 
+               }
+            */
+            if (!shortcutConfig.id || !shortcutConfig.callback) return;
+
+            // TODO: How to handle duplicate IDs? For now, we just ignore them
+            if (registeredShortcuts.some(s => s.id === shortcutConfig.id)) return;
+
+            registeredShortcuts.push(shortcutConfig);
+            loadShortcutCache(shortcutConfig.id);
+        },
+
+        init: function() {
+            setupKeyboardGlobalListener();
+            addShortcutsSettingsTab();
+        }
+    };
+}
