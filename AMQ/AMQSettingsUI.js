@@ -42,8 +42,12 @@ if (!window.AMQ_SettingsUI) {
 
             // 5. Hide tab event when clicking ANY other tab
             $('#settingModal .tabContainer').on('click', '.tab', function () {
-                if (!$(this).hasClass(config.tabClass)) {
+                const $clickedTab = $(this);
+                if (!$clickedTab.hasClass(config.tabClass)) {
                     tabContent.addClass('hide');
+                    $(`#${config.tabId}`).removeClass('selected');
+                } else {
+                    $clickedTab.addClass('selected');
                 }
             });
         }

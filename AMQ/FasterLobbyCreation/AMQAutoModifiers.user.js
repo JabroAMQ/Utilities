@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         AMQ Auto Modifiers
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.8.1
+// @version      0.8.2
 // @description  Check for unpleasant lobby's modifiers values (and chantings) and change them if proceeds
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
 // @grant        none
+// @require      https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/AMQSettingsUI.js
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
 // @require      https://github.com/Minigamer42/scripts/raw/master/lib/commands.js
 // @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQAutoModifiers.user.js
@@ -14,7 +15,7 @@
 // ==/UserScript==
 
 
-const VERSION = '0.8.1';
+const VERSION = '0.8.2';
 const DELAY = 500;
 let ignoreScript;
 let modifiers;
@@ -116,53 +117,20 @@ function addHostPromotionListener() {
 
 
 function addModifiersSettingsTab() {
-    // Create the "Modifiers" tab in settings
-    $('#settingModal .tabContainer')
-        .append($('<div></div>')
-            .addClass('tab modifiers clickAble')
-            .attr('onClick', "options.selectTab('modifiersContainer', this)")
-            .append($('<h5></h5>')
-                .text('Modifiers')
-            )
-        );
-
-    // Create the body base for "Modifiers" tab
-    const modifiersTabContent = $('<div></div>')
-        .attr('id', 'modifiersContainer')
-        .addClass('settingContentContainer hide');
-    $('#settingModal .modal-body').append(modifiersTabContent);
-
-    addModifiersSettingsTabBodyContent();
-
-    // Bind a click event listener to resize the settings modal width.
-    // We can't change its width directly as we want it to dynamically
-    // adjust to the modal-tab width, and we can't get it while the modal is hidden
-    $('#settingModal').on('shown.bs.modal', function () {
-        const modalContent = $('#settingModal .modal-dialog');
-        const modalTab = $('#settingModal .tabContainer');
-        const desiredWidth = `${modalTab.width()}px`;
-        modalContent.css('width', desiredWidth);
-    });
-
-    // Bind a click event listener to show the content of the "Modifiers" tab when clicked
-    $('#settingModal .tabContainer').on('click', '.modifiers', function () {
-        modifiersTabContent.removeClass('hide');
-    });
-
-    // Bind a click event listener to hide the "Modifiers" tab when another tab is clicked
-    $('#settingModal .tabContainer').on('click', '.tab:not(.modifiers)', function () {
-        if (!modifiersTabContent.hasClass('hide')) {
-            modifiersTabContent.addClass('hide');
-
-            // Manually unselect the "Modifiers" tab and select the one that was clicked (doesn't work well by default)
-            $('#settingModal .tabContainer .tab').removeClass('selected');
-            $(this).addClass('selected');
+    window.AMQ_SettingsUI.createNewSettingsTab({
+        tabId: 'smModifiersTab',
+        containerId: 'modifiersContainer',
+        tabClass: 'modifiers',
+        tabTitle: 'Modifiers', 
+        onTabOpen: function() {
+            addModifiersSettingsTabBodyContent();
         }
     });
 }
 
 function addModifiersSettingsTabBodyContent() {
     const modifiersTabContent = $('#modifiersContainer');
+    modifiersTabContent.empty();
 
     const baseModifiers = modifiers.modifiers.slice(0, -3);
     const chantingModifiers = modifiers.modifiers.slice(-3);
@@ -409,10 +377,6 @@ function setCookie(name, value, days) {
 
 
 AMQ_addStyle(`
-    .modifiersContainer {
-        margin-top: 10px;
-    }
-
     .modifierRow {
         display: flex;
         justify-content: space-between;
