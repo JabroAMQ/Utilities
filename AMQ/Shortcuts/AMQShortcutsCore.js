@@ -170,7 +170,7 @@ if (!window.ShortcutsManager) {
             setupKeyboardGlobalListener();
             
             try {
-                await loadExternalScript("https://githubusercontent.com/JabroAMQ/Utilities/blob/main/AMQ/AMQSettingsUI.js");                
+                await loadExternalScript("https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/AMQSettingsUI.js");                
                 addShortcutsSettingsTab();
             } catch (error) {
                 console.error("Could not initialize Shortcuts UI due to helper script error:", error);
