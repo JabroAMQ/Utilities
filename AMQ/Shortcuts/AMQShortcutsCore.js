@@ -82,6 +82,14 @@ if (!window.ShortcutsManager) {
         
         const formContainer = $('<div></div>').addClass('amq-shortcuts-form-container');
 
+        // Header
+        const headerInfo = $('<div></div>')
+            .addClass('amq-shortcuts-header-info')
+            .append($('<p></p>').html('You can press <kbd>Esc</kbd> to close the settings modal'))
+            .append($('<p></p>').html('You can press <kbd>Shift</kbd> + <kbd>Tab</kbd> to cycle between tabs'));
+        formContainer.append(headerInfo);
+
+        // Body
         registeredShortcuts.forEach(shortcut => {
             const currentKey = cachedKeys[shortcut.id];
             const displayValue = currentKey ? `Ctrl + ${currentKey.toUpperCase()}` : 'None';
