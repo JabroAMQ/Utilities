@@ -28,6 +28,28 @@ if (!window.ShortcutsManager) {
 
     function setupKeyboardGlobalListener() {
         document.addEventListener('keydown', (e) => {
+            // Default shortcuts logic (Shift + Tab navigation in Settings)
+            if (e.shiftKey && e.key === 'Tab') {
+                const $settingsModal = $('#settingModal');
+
+                if ($settingsModal.is(':visible')) {
+                    e.preventDefault();
+                    const $allTabs = $settingsModal.find('.tabContainer .tab');
+                    if ($allTabs.length === 0) return;
+
+                    const $activeTab = $allTabs.filter('.selected');
+                    let nextIndex = 0;
+                    if ($activeTab.length > 0) {
+                        const currentIndex = $allTabs.index($activeTab);
+                        nextIndex = (currentIndex + 1) % $allTabs.length;
+                    }
+
+                    $allTabs.eq(nextIndex).click();
+                    return;
+                }
+            }
+
+            // Custom shortcuts logic (Ctrl + [Key])
             if (e.ctrlKey) {
                 const pressedKey = e.key.toLowerCase();
                 const activeShortcut = registeredShortcuts.find(s => cachedKeys[s.id] !== null && cachedKeys[s.id] === pressedKey);
@@ -170,7 +192,7 @@ if (!window.ShortcutsManager) {
             setupKeyboardGlobalListener();
             
             try {
-                await loadExternalScript("https://cdn.jsdelivr.net/gh/JabroAMQ/Utilities@main/AMQ/AMQSettingsUI.js?v=" + Date.now());             
+                await loadExternalScript("https://cdn.jsdelivr.net/gh/JabroAMQ/Utilities@main/AMQ/AMQSettingsUI.js");             
                 addShortcutsSettingsTab();
             } catch (error) {
                 console.error("Could not initialize Shortcuts UI due to helper script error:", error);
