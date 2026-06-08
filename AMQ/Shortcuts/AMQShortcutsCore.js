@@ -151,16 +151,104 @@ if (!window.ShortcutsManager) {
     }
 
     AMQ_addStyle(`
-        #shortcutsContainer { max-height: 450px; overflow-y: auto; padding-bottom: 20px; }
-        .amq-shortcuts-form-container { max-width: 450px; margin: 25px auto 0 auto; padding: 0 10px; }
-        .amq-shortcut-card { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 20px; padding: 14px 15px; background-color: rgba(0, 0, 0, 0.2); border: 1px solid #444; border-radius: 4px; }
-        .amq-shortcut-description { font-weight: normal; font-size: 13px; color: #ccc; margin: 0 0 10px 0; line-height: 1.4; }
-        .amq-shortcut-input-container { margin: 0; display: flex; justify-content: center; }
-        .amq-shortcut-key-input { width: 120px; cursor: pointer; background-color: #1b1b1b !important; font-weight: bold; border: 1px solid #555; }
-        .amq-shortcut-key-active { color: #449d44; }
-        .amq-shortcut-key-disabled { color: #999; }
-        .amq-shortcut-extra-container { margin-top: 12px; width: 100%; max-width: 220px; display: flex; flex-direction: column; align-items: center; }
-        .amq-shortcut-extra-input { background-color: #1b1b1b !important; color: #fff; border: 1px solid #555; font-size: 12px; height: 28px; padding: 4px; }
+        #shortcutsContainer {
+            max-height: 450px;
+            overflow-y: auto;
+            padding-bottom: 20px;
+        }
+
+        .amq-shortcuts-form-container {
+            max-width: 450px;
+            margin: 25px auto 0 auto;
+            padding: 0 10px;
+        }
+
+         .amq-shortcuts-header-info {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid #444;
+            border-top: 1px solid #444;
+        }
+
+        .amq-shortcuts-header-info p {
+            margin: 4px 0;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .amq-shortcuts-header-info kbd {
+            background-color: #1b1b1b;
+            color: #449d44;
+            border: 1px solid #555;
+            border-radius: 3px;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.2), 0 0 0 2px #222 inset;
+            padding: 2px 5px;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .amq-shortcut-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 14px 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid #444;
+            border-radius: 4px;
+        }
+
+        .amq-shortcut-description {
+            font-weight: normal;
+            font-size: 13px;
+            color: #ccc;
+            margin: 0 0 10px 0;
+            line-height: 1.4;
+        }
+
+        .amq-shortcut-input-container {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .amq-shortcut-key-input {
+            width: 120px;
+            cursor: pointer;
+            background-color: #1b1b1b !important;
+            font-weight: bold;
+            border: 1px solid #555;
+        }
+
+        .amq-shortcut-key-active {
+            color: #449d44;
+        }
+
+        .amq-shortcut-key-disabled {
+            color: #999;
+        }
+
+        .amq-shortcut-extra-container {
+            margin-top: 12px;
+            width: 100%;
+            max-width: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .amq-shortcut-extra-input {
+            background-color: #1b1b1b !important;
+            color: #fff;
+            border: 1px solid #555;
+            font-size: 12px;
+            height: 28px;
+            padding: 4px;
+        }
     `);
 
 
