@@ -101,15 +101,23 @@ if (!window.ShortcutsManager) {
             const input = $('<input>')
                 .attr('type', 'text')
                 .attr('readonly', true)
+                .attr('tabindex', '-1')
                 .addClass('form-control text-center amq-shortcut-key-input')
                 .addClass(currentKey ? 'amq-shortcut-key-active' : 'amq-shortcut-key-disabled')
                 .val(displayValue)
                 .attr('placeholder', 'Press a key...');
 
             input.on('keydown', function(e) {
+                // Allow users to exit the input with Escape or Shift + Tab without changing the shortcut
+                if (e.key === 'Escape' || (e.shiftKey && e.key === 'Tab')) {
+                    $(this).blur();
+                    return;
+                }
+                
                 e.preventDefault();
                 e.stopPropagation();
                 
+                // Allow users to clear the shortcut with Backspace or Delete
                 if (e.key === 'Backspace' || e.key === 'Delete') {
                     saveShortcutKey(shortcut.id, null);
                     $(this).val('None').removeClass('amq-shortcut-key-active').addClass('amq-shortcut-key-disabled');
