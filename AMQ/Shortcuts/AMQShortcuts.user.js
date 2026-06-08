@@ -25,8 +25,8 @@ const descriptions = {
     voteSkip: 'Vote to skip the current song',
     showSongList: 'Open/Close the song list',
     showScriptsInfo: 'Open/Close Joseph\'s "Installed Userscripts" modal',
-    showSettingsListTab: 'Open/Close the Anime List tab from the Settings modal',
-    showShortcutsTab: 'Open/Close the Shortcuts tab from the Settings modal',
+    showSettingsListTab: 'Open the Anime List tab from the Settings modal',
+    showShortcutsTab: 'Open the Shortcuts tab from the Settings modal',
     checkUserOnline: 'Check if the user (name below) is online, opening their dm if so',
 };
 
