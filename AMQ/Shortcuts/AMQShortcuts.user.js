@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Shortcuts
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.6.2
+// @version      0.6.3
 // @description  Some shortcuts to improve the game experience
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
@@ -18,7 +18,7 @@
 // - Shortcut for selecting the answer input in quiz
 // - Shortcut for selecting the chat input inside a lobby
 
-const VERSION = '0.6.2';
+const VERSION = '0.6.3';
 const DELAY = 300;
 
 const descriptions = {
