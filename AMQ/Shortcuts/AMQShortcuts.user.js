@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Shortcuts
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.6.0
+// @version      0.6.1
 // @description  Some shortcuts to improve the game experience
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
@@ -17,6 +17,9 @@
 // - readme.md
 // - Shortcut for selecting the answer input in quiz
 // - Shortcut for selecting the chat input inside a lobby
+
+const VERSION = '0.6.1';
+const DELAY = 300;
 
 const descriptions = {
     voteSkip: 'Vote to skip the current song',
@@ -37,9 +40,6 @@ const shortcuts = [
 ];
 
 let userName = localStorage.getItem('AMQ_Shortcut_UserName') ?? null;
-
-const VERSION = '0.6.0';
-const DELAY = 300;
 
 
 if (document.getElementById('loginPage'))
@@ -87,12 +87,16 @@ function showScriptsInfo() {
 }
 
 function showSettingsListTab() {
-    $('#optionListSettings').click();
+    if (!$('#settingModal').is(':visible')) {
+        $('#optionListSettings').click();
+    }
     $('#smAnimeListTab').click();
 }
 
 function showShortcutsTab() {
-    $('#optionListSettings').click();
+    if (!$('#settingModal').is(':visible')) {
+        $('#optionListSettings').click();
+    }
     $('#smShortcutsTab').click();
 }
 
