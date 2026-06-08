@@ -30,6 +30,7 @@ if (!window.ShortcutsManager) {
         document.addEventListener('keydown', (e) => {
             // Default shortcuts logic (Shift + Tab navigation in Settings)
             if (e.shiftKey && e.key === 'Tab') {
+                console.log("Shift + Tab detected");
                 const $settingsModal = $('#settingModal');
 
                 if ($settingsModal.is(':visible')) {
