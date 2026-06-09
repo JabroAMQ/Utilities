@@ -160,13 +160,13 @@ if (!window.ShortcutsManager) {
 
     AMQ_addStyle(`
         #shortcutsContainer {
-            max-height: 450px;
+            max-height: 650px;
             overflow-y: auto;
             padding-bottom: 20px;
         }
 
         .amq-shortcuts-form-container {
-            max-width: 450px;
+            max-width: 500px;
             margin: 25px auto 0 auto;
             padding: 0 10px;
         }
