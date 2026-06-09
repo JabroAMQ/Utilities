@@ -109,7 +109,9 @@ if (!window.ShortcutsManager) {
 
             input.on('keydown', function(e) {
                 // Allow users to exit the input with Escape or Shift + Tab without changing the shortcut
-                if (e.key === 'Escape' || (e.shiftKey && e.key === 'Tab')) {
+                const isEscape = e.key === 'Escape' || e.key === 'Esc';
+                const isShiftTab = e.shiftKey && e.key === 'Tab';
+                if (isEscape || isShiftTab) {
                     $(this).blur();
                     return;
                 }
