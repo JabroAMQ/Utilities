@@ -1,3 +1,9 @@
+<p align="right">
+  <a href="./README.md">Overview</a> | 
+  <b>Keyboard Shortcuts Reference</b>
+</p>
+<hr />
+
 # Google Chrome & Windows Keyboard Shortcuts Reference
 
 This document serves as a reference guide for `Ctrl + [Key]` combinations in Google Chrome (Windows/Linux).
