@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Shortcuts
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.6.3
+// @version      0.7.0
 // @description  Some shortcuts to improve the game experience
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
@@ -18,11 +18,13 @@
 // - Shortcut for selecting the answer input in quiz
 // - Shortcut for selecting the chat input inside a lobby
 
-const VERSION = '0.6.3';
+const VERSION = '0.7.0';
 const DELAY = 300;
 
 const descriptions = {
     voteSkip: 'Vote to skip the current song',
+    focusAnswerInput: 'Select the answer box input',
+    focusChatInput: 'Select the lobby chat box input',
     showSongList: 'Open/Close the song list',
     showScriptsInfo: 'Open/Close Joseph\'s "Installed Userscripts" modal',
     showSettingsListTab: 'Open the Anime List tab from the Settings modal',
@@ -32,6 +34,8 @@ const descriptions = {
 
 const shortcuts = [
     { id: 'voteSkip', callback: voteSkip, description: descriptions.voteSkip },
+    { id: 'focusAnswerInput', callback: focusAnswerInput, description: descriptions.focusAnswerInput },
+    { id: 'focusChatInput', callback: focusChatInput, description: descriptions.focusChatInput},
     { id: 'showSongList', callback: showSongList, description: descriptions.showSongList },
     { id: 'showScriptsInfo', callback: showScriptsInfo, description: descriptions.showScriptsInfo },
     { id: 'showSettingsListTab', callback: showSettingsListTab, description: descriptions.showSettingsListTab },
@@ -73,6 +77,30 @@ function loadShortcuts() {
 
 function voteSkip() {
     $('#qpInputVoteSkip').click();
+}
+
+function focusAnswerInput() {
+    if (typeof quiz !== 'undefined' && quiz.answerInput && quiz.answerInput.typingInput) {
+        const $input = quiz.answerInput.typingInput.$input;
+
+        // Make sure we are not in "Multiple Choice" mode...
+        if ($input && $input.is(':visible')) {
+            quiz.answerInput.typingInput.$input.focus()
+
+            // We could also select the current input to delete it, but we can do this using `Ctrl + A` (default "shortcut") right after calling focusAnswerInput()
+            // quiz.answerInput.typingInput.$input.select()
+        }
+    } else {
+        console.log("Quiz answer input is not available right now. Make sure you are in a quiz round.");
+    }
+}
+
+function focusChatInput() {
+    if (typeof gameChat !== 'undefined' && gameChat.$chatInputField) {
+        gameChat.$chatInputField.focus()
+    } else {
+        console.log("Lobby chat input is not available right now.");
+    }
 }
 
 function showSongList() {
