@@ -20,7 +20,7 @@ These keys have no native assignment in Chrome or are useless for AMQ purposes. 
 | `Ctrl + J` | Open Downloads Tab |
 | `Ctrl + K` | Insert Link (Rich Text, Useless Inside AMQ) |
 | `Ctrl + M` | None |
-| `Ctrl + Q` :warning: | Closes browser on Mac |
+| `Ctrl + Q` :warning: | Close browser on Mac |
 | `Ctrl + U` | View Page Source |
 
 ## :warning: Overridable, but not recommended :warning:
