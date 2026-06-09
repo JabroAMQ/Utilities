@@ -13,11 +13,6 @@
 // @updateURL    https://github.com/JabroAMQ/Utilities/raw/main/AMQ/Shortcuts/AMQShortcuts.user.js
 // ==/UserScript==
 
-// TODO
-// - readme.md
-// - Shortcut for selecting the answer input in quiz
-// - Shortcut for selecting the chat input inside a lobby
-
 const VERSION = '0.7.0';
 const DELAY = 300;
 
