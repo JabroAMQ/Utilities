@@ -129,9 +129,31 @@ if (!window.ShortcutsManager) {
 
                 const pressedKey = e.key.toLowerCase();
                 if (pressedKey.length === 1) {
+                    // Collision check
+                    for (const id in cachedKeys) {
+                        if (id !== shortcut.id && cachedKeys[id] === pressedKey) {
+                            const conflictingShortcut = registeredShortcuts.find(s => s.id === id);
+                            const conflictingDesc = conflictingShortcut ? conflictingShortcut.description : "Unknown action";
+                            
+                            Swal.fire({
+                                target: '#settingModal',
+                                icon: 'warning',
+                                title: 'Key Already Assigned',
+                                html: `The key combination <kbd>Ctrl</kbd> + <kbd>${pressedKey.toUpperCase()}</kbd> is already assigned to:<br><br><b>${conflictingDesc}</b><br><br>Please clear or modify that shortcut first.`,
+                                showConfirmButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'OK'
+                            });
+                            
+                            $(this).blur();
+                            return;
+                        }
+                    }
+
+                    // Save the key if available
                     saveShortcutKey(shortcut.id, pressedKey);
                     $(this).val(`Ctrl + ${pressedKey.toUpperCase()}`).removeClass('amq-shortcut-key-disabled').addClass('amq-shortcut-key-active');
-                    $(this).blur(); 
+                    $(this).blur();
                 }
             });
 
