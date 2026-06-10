@@ -70,14 +70,13 @@ if (!window.ShortcutsManager) {
             containerId: 'shortcutsContainer',
             tabClass: 'shortcuts',
             tabTitle: 'Shortcuts',
-            onTabOpen: function() {
-                addShortcutsSettingsTabBodyContent();
+            onTabOpen: function(container) {
+                addShortcutsSettingsTabBodyContent(container);
             }
         });
     }
 
-    function addShortcutsSettingsTabBodyContent() {
-        const shortcutsTabContent = $('#shortcutsContainer');
+    function addShortcutsSettingsTabBodyContent(shortcutsTabContent) {
         shortcutsTabContent.empty(); 
         
         const formContainer = $('<div></div>').addClass('amq-shortcuts-form-container');
@@ -310,7 +309,7 @@ if (!window.ShortcutsManager) {
             setupKeyboardGlobalListener();
             
             try {
-                await loadExternalScript("https://cdn.jsdelivr.net/gh/JabroAMQ/Utilities@main/AMQ/AMQSettingsUI.js");             
+                await loadExternalScript("https://cdn.jsdelivr.net/gh/JabroAMQ/Utilities@main/AMQ/SettingsUI/AMQSettingsUI.js");             
                 addShortcutsSettingsTab();
             } catch (error) {
                 console.error("Could not initialize Shortcuts UI due to helper script error:", error);

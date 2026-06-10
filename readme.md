@@ -8,17 +8,13 @@ A set of independent userscripts for AMQ that make hosting a lobby a couple of s
 
 An userscript for AMQ that provides some shortcuts to improve the game experience.
 
-## [Messages Autosender](AMQ/MessagesAutosender/)
+## [SettingsUI](AMQ/SettingsUI/)
 
-An userscript for AMQ that allow the player to save custom messages and, once they are clicked, autosend them to game chat.
+A regular script meant to be referenced from userscripts that centalize the creation of a new tab in the AMQ Settings modal.
 
-## [Songs Downloader](AMQ/SongsDownloader/)
+## [Deprecated](AMQ/Deprecated/)
 
-Contains:
-
-- An userscript for AMQ that allows you to download a TXT file with some info about the songs that played while you were playing.
-
-- A python script that takes as input the downloaded TXT file, downloading all the songs from the file in MP3 format while tagging them with song name and artist info.
+Old scripts that aren't very useful. Might update them eventually.
 
 
 # AniList
