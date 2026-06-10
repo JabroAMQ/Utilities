@@ -1,6 +1,7 @@
 <p align="right">
-  <b>Overview</b> | <a href="./SHORTCUTS.md">Keyboard Shortcuts Reference</a>
+  <b>Overview</b> | <a href="./SHORTCUTS.md">Keyboard Shortcuts Reference</a> | <a href="./DEVELOPER.md">Developer Guide</a>
 </p>
+<hr />
 
 # AMQ Custom Shortcuts
 

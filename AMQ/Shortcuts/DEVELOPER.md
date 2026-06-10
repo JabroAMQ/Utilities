@@ -1,3 +1,8 @@
+<p align="right">
+  <a href="./README.md">Overview</a> | <a href="./SHORTCUTS.md">Keyboard Shortcuts Reference</a> | <b>Developer Guide</b>
+</p>
+<hr />
+
 # How to create your own shortcuts
 
 You can reference `AMQShortcutsCore.js` to add custom keyboard shortcuts to AMQ.
