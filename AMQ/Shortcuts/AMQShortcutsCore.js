@@ -298,25 +298,15 @@ if (!window.ShortcutsManager) {
 
     window.ShortcutsManager = {
         register: function(shortcutConfig) {
-            /* 
-               shortcutConfig data structure example:
-               { 
-                 id: "checkFriendOnline", 
-                 description: "Check if friend...", 
-                 callback: function, 
-                 renderExtraInfo: function(row) [Optional] 
-               }
-            */
             if (!shortcutConfig.id || !shortcutConfig.callback) return;
-
-            // TODO: How to handle duplicate IDs? For now, we just ignore them
             if (registeredShortcuts.some(s => s.id === shortcutConfig.id)) return;
-
             registeredShortcuts.push(shortcutConfig);
             loadShortcutCache(shortcutConfig.id);
         },
 
         init: async function() {
+            if (window.ShortcutsManagerInitialized) return;
+            window.ShortcutsManagerInitialized = true;
             setupKeyboardGlobalListener();
             
             try {
