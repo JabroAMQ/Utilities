@@ -21,8 +21,6 @@ You can bind your own custom `Ctrl + Key` combinations directly within the new *
 
 ## Available shortcuts:
 
-<hr>
-
 ### Vote to skip the current song
 
 Simulate a click on the "VoteSkip" button in game

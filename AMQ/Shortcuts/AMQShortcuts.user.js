@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Shortcuts
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.7.0
+// @version      1.0.0
 // @description  Some shortcuts to improve the game experience
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
@@ -13,7 +13,7 @@
 // @updateURL    https://github.com/JabroAMQ/Utilities/raw/main/AMQ/Shortcuts/AMQShortcuts.user.js
 // ==/UserScript==
 
-const VERSION = '0.7.0';
+const VERSION = '1.0.0';
 const DELAY = 300;
 
 const descriptions = {
@@ -221,3 +221,27 @@ function addCheckUserOnlineExtraInfo(row) {
     userSettingContainer.append(userInput);
     row.append(userSettingContainer);
 }
+
+AMQ_addScriptData({
+    name: 'Shortcuts',
+    author: 'Jabro',
+    link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/Shortcuts/AMQShortcuts.user.js',
+    version: VERSION,
+    description: `
+        <div style="max-width: 500px; line-height: 1.4;">
+            <p>A customizable keyboard shortcuts userscript to streamline your gameplay, chat, and navigation.</p>
+            <p>You can bind your own custom <code>Ctrl + Key</code> combinations directly within the new Shortcuts tab inside the Settings modal.</p>
+            <img src="https://github.com/JabroAMQ/Utilities/raw/main/AMQ/Shortcuts/images/shortcutsTab.png" alt="Shortcuts tab" style="max-width: 100%; height: auto; margin: 10px 0; border-radius: 4px;" />
+        </div>
+
+        <div style="margin-top: 15px; border-top: 1px solid #444; padding-top: 10px;">
+            <ul style="padding-left: 20px; margin: 5px 0;">
+                <li>You cannot bind the same key to two different actions (the game will alert you).</li>
+                <li>You can unbind any key by pressing the <code>Backspace</code> or <code>Delete</code> keys.</li>
+            </ul>
+            <p style="margin-top: 10px;">
+                💡 Check out the <a href="https://github.com/JabroAMQ/Utilities/blob/main/AMQ/Shortcuts/SHORTCUTS.md" target="_blank" rel="noopener noreferrer" style="color: #61afef; text-decoration: underline;">recommended key setups</a>.
+            </p>
+        </div>
+    `
+});
