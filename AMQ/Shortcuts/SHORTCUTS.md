@@ -1,8 +1,6 @@
 <p align="right">
-  <a href="./README.md">Overview</a> | 
-  <b>Keyboard Shortcuts Reference</b>
+  <b>Keyboard Shortcuts Reference</b> | <a href="./README.md">Overview</a>
 </p>
-<hr />
 
 # Google Chrome & Windows Keyboard Shortcuts Reference
 
