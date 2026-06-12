@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Room Name from Saved Settings
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.1.4
+// @version      1.0.0
 // @description  Automatically set the room name to the one stored when loading settings from saved settings
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
@@ -12,31 +12,25 @@
 // @updateURL    https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/FasterLobbyCreation/AMQRoomNameFromSavedSettings.user.js
 // ==/UserScript==
 
-const VERSION = '0.1.4';
+const VERSION = '1.0.0';
 const DELAY = 500;
 
-
-if (document.getElementById('loginPage'))
-    return;
-
+if (document.getElementById('loginPage')) return;
 let loadInterval = setInterval(() => {
     if ($('#loadingScreen').hasClass('hidden')) {
         clearInterval(loadInterval);
-        roomNameFromSavedSettings();
+        initRoomNameFromSavedSettings();
     }
 }, DELAY);
 
-
-function roomNameFromSavedSettings() {
-    const savedSettings = document.querySelectorAll('.mhLoadEntryName.clickAble');
-    savedSettings.forEach(function(entry) {
-        entry.addEventListener('click', function() {
-            const roomName = entry.innerText;
-            document.getElementById('mhRoomNameInput').value = roomName;
-        });
+function initRoomNameFromSavedSettings() {
+    $('#mhLoadListEntryContainer').on('click', '.mhLoadEntryNameContainer', function() {
+        const roomName = $(this).find('.mhLoadEntryName').text().trim();
+        if (roomName) {
+            $('#mhRoomNameInput').val(roomName);
+        }
     });
 }
-
 
 AMQ_addScriptData({
     name: 'Room Name from Saved Settings',
@@ -44,9 +38,9 @@ AMQ_addScriptData({
     link: 'https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQRoomNameFromSavedSettings.user.js',
     version: VERSION,
     description: `
-        <div>
-            <p>Automatically set the room name to the one stored when loading settings from saved settings:</p>
-            <img src='https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/FasterLobbyCreation/images/RoomNameFromSavedSettings/example.png' alt='example'>
+        <div style="max-width: 500px;">
+            <p>Automatically set the room name to the one stored when loading settings from saved settings.</p>
+            <img src="https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/FasterLobbyCreation/images/RoomNameFromSavedSettings/example.png" alt="example" style="max-width: 100%; height: auto; margin-top: 5px; border-radius: 4px;" />
         </div>
     `
 });

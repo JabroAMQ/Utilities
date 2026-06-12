@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         AMQ Room Name and Password Autosetters
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.1.4
-// @description  Automatically set the room's name and password (if any) to the last ones you used so that you don't have to write them again each time you host a lobby
+// @version      1.0.0
+// @description  Automatically set the room's name and password (if any) to the last ones to avoid writting them each time you host a lobby
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
@@ -12,16 +12,13 @@
 // @updateURL    https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/FasterLobbyCreation/AMQRoomNameAndPasswordAutosetters.user.js
 // ==/UserScript==
 
-const VERSION = '0.1.4';
+const VERSION = '1.0.0';
 const DELAY = 500;
 let lastRoomName;
 let lastRoomPassword;
 let wasLastRoomPrivate;
 
-
-if (document.getElementById('loginPage'))
-    return;
-
+if (document.getElementById('loginPage')) return;
 const loadInterval = setInterval(() => {
     if ($('#loadingScreen').hasClass('hidden')) {
         clearInterval(loadInterval);
@@ -31,14 +28,23 @@ const loadInterval = setInterval(() => {
     }
 }, DELAY);
 
-
 function loadRoomDataListener() {
     $('#roomBrowserHostButton').click(function() {
-        document.getElementById('mhRoomNameInput').value = lastRoomName;
+        // Set the room name
+        $('#mhRoomNameInput').val(lastRoomName);
+
+        // Make the room public/private
+        if (wasLastRoomPrivate && !$('#mhPrivateRoom').prop('checked')) {
+            $('#mhPrivateRoom').click();
+        } else if (!wasLastRoomPrivate && $('#mhPrivateRoom').prop('checked')) {
+            $('#mhPrivateRoom').click();
+        }
+
+        // Set the password, if the room is private
         if (wasLastRoomPrivate) {
-            document.getElementById('mhPrivateRoom').checked = true;
-            document.getElementById('mhPasswordInput').classList.remove('hide');
-            document.getElementById('mhPasswordInput').value = lastRoomPassword;
+            $('#mhPasswordInput').val(lastRoomPassword);
+        } else {
+            $('#mhPasswordInput').val('');
         }
     });
 }
@@ -48,47 +54,21 @@ function saveRoomDataListeners() {
     $('#mhChangeButton').click(function() { saveConfig(); });
 }
 
-
-// Cookies stuff: https://stackoverflow.com/a/24103596/20214407
 function loadConfig() {
-    lastRoomName = getCookie('lastRoomName') || '';
-    lastRoomPassword = getCookie('lastRoomPassword') || '';
-    wasLastRoomPrivate = getCookie('wasLastRoomPrivate') === 'true';
+    lastRoomName = localStorage.getItem('AMQ_lastRoomName') || '';
+    lastRoomPassword = localStorage.getItem('AMQ_lastRoomPassword') || '';
+    wasLastRoomPrivate = localStorage.getItem('AMQ_wasLastRoomPrivate') === 'true';
 }
 
 function saveConfig() {
-    lastRoomName = document.getElementById('mhRoomNameInput').value
-    lastRoomPassword = document.getElementById('mhPasswordInput').value
-    wasLastRoomPrivate = lastRoomPassword != ''
+    wasLastRoomPrivate = $('#mhPrivateRoom').prop('checked');
+    lastRoomName = $('#mhRoomNameInput').val();
+    lastRoomPassword = wasLastRoomPrivate ? $('#mhPasswordInput').val() : '';
 
-    setCookie('lastRoomName', lastRoomName, 9999);
-    setCookie('lastRoomPassword', lastRoomPassword, 9999);
-    setCookie('wasLastRoomPrivate', wasLastRoomPrivate, 9999);
+    localStorage.setItem('AMQ_lastRoomName', lastRoomName);
+    localStorage.setItem('AMQ_lastRoomPassword', lastRoomPassword);
+    localStorage.setItem('AMQ_wasLastRoomPrivate', wasLastRoomPrivate);
 }
-
-function getCookie(name) {
-    const nameEQ = name + '=';
-    const ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) === ' ')
-            c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0)
-            return c.substring(nameEQ.length, c.length);
-    }
-    return null;
-}
-
-function setCookie(name, value, days) {
-    let expires = '';
-    if (days) {
-        const date = new Date();
-        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-        expires = '; expires=' + date.toUTCString();
-    }
-    document.cookie = name + '=' + value + expires + '; path=/';
-}
-
 
 AMQ_addScriptData({
     name: 'Last Room Name and Password Autosetter',
