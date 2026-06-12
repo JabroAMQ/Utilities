@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Auto Modifiers
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.8.2
+// @version      0.8.3
 // @description  Check for unpleasant lobby's modifiers values (and chantings) and change them if proceeds
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
@@ -9,13 +9,13 @@
 // @grant        none
 // @require      https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/SettingsUI/AMQSettingsUI.js
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
-// @require      https://github.com/Minigamer42/scripts/raw/master/lib/commands.js
-// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQAutoModifiers.user.js
-// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQAutoModifiers.user.js
+// @require      https://raw.githubusercontent.com//Minigamer42/scripts/master/lib/commands.js
+// @downloadURL  https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/FasterLobbyCreation/AMQAutoModifiers.user.js
+// @updateURL    https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/FasterLobbyCreation/AMQAutoModifiers.user.js
 // ==/UserScript==
 
 
-const VERSION = '0.8.2';
+const VERSION = '0.8.3';
 const DELAY = 500;
 let ignoreScript;
 let modifiers;

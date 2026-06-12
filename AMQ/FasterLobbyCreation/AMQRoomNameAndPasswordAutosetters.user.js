@@ -1,18 +1,18 @@
 // ==UserScript==
 // @name         AMQ Room Name and Password Autosetters
 // @namespace    https://github.com/JabroAMQ/
-// @version      0.1.3
+// @version      0.1.4
 // @description  Automatically set the room's name and password (if any) to the last ones you used so that you don't have to write them again each time you host a lobby
 // @author       Jabro
 // @match        https://*.animemusicquiz.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=animemusicquiz.com
 // @grant        none
 // @require      https://raw.githubusercontent.com/joske2865/AMQ-Scripts/master/common/amqScriptInfo.js
-// @downloadURL  https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQRoomNameAndPasswordAutosetters.user.js
-// @updateURL    https://github.com/JabroAMQ/Utilities/blob/main/AMQ/FasterLobbyCreation/AMQRoomNameAndPasswordAutosetters.user.js
+// @downloadURL  https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/FasterLobbyCreation/AMQRoomNameAndPasswordAutosetters.user.js
+// @updateURL    https://raw.githubusercontent.com/JabroAMQ/Utilities/main/AMQ/FasterLobbyCreation/AMQRoomNameAndPasswordAutosetters.user.js
 // ==/UserScript==
 
-const VERSION = '0.1.3';
+const VERSION = '0.1.4';
 const DELAY = 500;
 let lastRoomName;
 let lastRoomPassword;
